@@ -25,24 +25,33 @@ description: "Task list template for feature implementation"
 - **Mobile**: `api/src/`, `ios/src/` or `android/src/`
 - Paths shown below assume single project - adjust based on plan.md structure
 
-<!-- 
+<!--
   ============================================================================
   IMPORTANT: The tasks below are SAMPLE TASKS for illustration purposes only.
-  
+
   The /sp.tasks command MUST replace these with actual tasks based on:
   - User stories from spec.md (with their priorities P1, P2, P3...)
   - Feature requirements from plan.md
   - Entities from data-model.md
   - Endpoints from contracts/
-  
+
   Tasks MUST be organized by user story so each story can be:
   - Implemented independently
   - Tested independently
   - Delivered as an MVP increment
-  
+
   DO NOT keep these sample tasks in the generated tasks.md file.
   ============================================================================
 -->
+
+## Constitution Alignment
+
+>All tasks in this list MUST align with the project constitution:
+>- **Accuracy**: All technical implementations must be verified against official documentation and peer-reviewed sources
+>- **Clarity**: Implementation approach must be clearly documented and understandable to the target audience
+>- **Reproducibility**: Build, deployment, and development processes must be reproducible across environments
+>- **Rigour**: Follow industry-standard practices and peer-reviewed technical approaches
+>- **Engagement**: Include examples, documentation, and tools that enhance the learning experience
 
 ## Phase 1: Setup (Shared Infrastructure)
 
@@ -77,6 +86,8 @@ Examples of foundational tasks (adjust based on your project):
 
 **Goal**: [Brief description of what this story delivers]
 
+**Constitution Compliance**: [Explain how this user story adheres to project constitution principles]
+
 **Independent Test**: [How to verify this story works on its own]
 
 ### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
@@ -103,6 +114,8 @@ Examples of foundational tasks (adjust based on your project):
 
 **Goal**: [Brief description of what this story delivers]
 
+**Constitution Compliance**: [Explain how this user story adheres to project constitution principles]
+
 **Independent Test**: [How to verify this story works on its own]
 
 ### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
@@ -124,6 +137,8 @@ Examples of foundational tasks (adjust based on your project):
 ## Phase 5: User Story 3 - [Title] (Priority: P3)
 
 **Goal**: [Brief description of what this story delivers]
+
+**Constitution Compliance**: [Explain how this user story adheres to project constitution principles]
 
 **Independent Test**: [How to verify this story works on its own]
 

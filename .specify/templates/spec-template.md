@@ -1,9 +1,18 @@
 # Feature Specification: [FEATURE NAME]
 
-**Feature Branch**: `[###-feature-name]`  
-**Created**: [DATE]  
-**Status**: Draft  
+**Feature Branch**: `[###-feature-name]`
+**Created**: [DATE]
+**Status**: Draft
 **Input**: User description: "$ARGUMENTS"
+
+## Constitution Alignment Check
+
+This feature specification MUST align with the project constitution principles:
+- **Accuracy**: All technical claims must be verified against official documentation and peer-reviewed sources
+- **Clarity**: Content must be understandable to the target audience (advanced high school to early college)
+- **Reproducibility**: Examples and instructions must be testable and produce consistent results
+- **Rigour**: Follow industry-standard practices and peer-reviewed technical sources
+- **Engagement**: Include visual elements and practical exercises to enhance learning
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -11,7 +20,7 @@
   IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
   Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
   you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
+
   Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
   Think of each story as a standalone slice of functionality that can be:
   - Developed independently
@@ -25,6 +34,8 @@
 [Describe this user journey in plain language]
 
 **Why this priority**: [Explain the value and why it has this priority level]
+
+**Constitution Compliance**: [Explain how this user story adheres to project constitution principles]
 
 **Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
 
@@ -41,6 +52,8 @@
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
+**Constitution Compliance**: [Explain how this user story adheres to project constitution principles]
+
 **Independent Test**: [Describe how this can be tested independently]
 
 **Acceptance Scenarios**:
@@ -54,6 +67,8 @@
 [Describe this user journey in plain language]
 
 **Why this priority**: [Explain the value and why it has this priority level]
+
+**Constitution Compliance**: [Explain how this user story adheres to project constitution principles]
 
 **Independent Test**: [Describe how this can be tested independently]
 
@@ -85,7 +100,7 @@
 ### Functional Requirements
 
 - **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
+- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
@@ -105,6 +120,12 @@
 <!--
   ACTION REQUIRED: Define measurable success criteria.
   These must be technology-agnostic and measurable.
+
+  All success criteria must align with the project constitution:
+  - Technical examples must reproduce results on test hardware or cloud setup
+  - Content must meet citation standards (minimum 50% peer-reviewed sources)
+  - Content must be accessible to target audience
+  - Content must include visual diagrams and practical exercises
 -->
 
 ### Measurable Outcomes

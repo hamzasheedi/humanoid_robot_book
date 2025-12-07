@@ -1,55 +1,88 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- 
+Sync Impact Report:
+- Version change: 1.0.0 → 1.1.0
+- Modified principles: Added 5 principles from user input
+- Added sections: Core Principles (5), Key Standards, Constraints, Success Criteria, Validation and Cascading Rules
+- Templates requiring updates: [.specify/templates/plan-template.md] ⚠ pending, [.specify/templates/spec-template.md] ⚠ pending, [.specify/templates/tasks-template.md] ⚠ pending
+- Follow-up TODOs: None
+-->
+# Textbook for Physical AI & Humanoid Robotics Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Accuracy
+All technical claims, algorithms, and instructions must be verified against official documentation, primary sources (ROS 2, NVIDIA Isaac, Gazebo, Unity), and peer-reviewed robotics literature.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Clarity
+Content must be understandable to advanced high school to early college students (grades 10–12), with computer science or engineering background.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Reproducibility
+Code examples, simulations, and exercises must run as described in the instructions on supported hardware or cloud setups.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Rigor
+Preference for peer-reviewed or official technical sources; industry-standard practices must be followed.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Engagement
+Include visual diagrams, step-by-step tutorials, and practical exercises to reinforce embodied intelligence concepts.
 
-### [PRINCIPLE_6_NAME]
+## Key Standards
 
+### Technical Accuracy
+All ROS 2, Gazebo, Unity, and NVIDIA Isaac commands or scripts must be tested and verified on the stated hardware or cloud setup.
 
-[PRINCIPLE__DESCRIPTION]
+### Citation
+Minimum 50% of references must be peer-reviewed publications, official SDK/API documentation, or authoritative textbooks. Citation format: IEEE or APA style.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### Plagiarism
+Zero tolerance. All content must be original or properly cited.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Code & Simulation Clarity
+Code snippets must include explanations of input/output, expected behavior, and error handling.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Hardware/Software Specifications
+Explicitly state requirements for each module (GPU, CPU, RAM, OS, Edge AI kits, sensors, robot models).
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### Learning Outcomes Alignment
+Each chapter/module must clearly map to specific learning outcomes and weekly objectives.
+
+## Constraints
+
+### Book Length
+250–350 pages, including diagrams, tutorials, and exercises.
+
+### Modules
+Must cover ROS 2, Digital Twin (Gazebo & Unity), NVIDIA Isaac, VLA integration, and Capstone project.
+
+### Hardware/Cloud
+Provide separate instructions for On-Premise Lab, Ether Lab (Cloud-native), and Economy Jetson Student Kit.
+
+### Simulation & Deployment
+All examples must include steps for both simulated and physical deployment.
+
+### Accessibility
+Include alternative instructions for students without high-end RTX GPUs (cloud options).
+
+## Success Criteria
+
+- All technical examples reproduce results on test hardware or cloud setup.
+- Citations meet minimum standards, plagiarism = 0%.
+- Students following the book can complete the Capstone project (simulated humanoid with conversational AI).
+- Diagrams and tutorials enhance clarity and engagement (tested via peer/student review).
+- Book deployed on Docusaurus and GitHub Pages using Spec-Kit Plus, fully navigable.
+
+## Validation and Cascading Rules
+
+### Specification Alignment
+All module specifications must include: required hardware, simulation instructions, ROS 2 package templates, sensor integration, and expected outcomes.
+
+### Plan Alignment
+Lesson plans, weekly breakdowns, and exercises must reflect hardware and cloud constraints, including VLA latency issues.
+
+### Implementation Alignment
+Code examples and diagrams must strictly follow tested pipelines; deviation requires explicit note and justification.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution governs all project decisions and supersedes any conflicting practices. Amendment requires explicit documentation of rationale and approval by project leads. All specifications, plans, and implementations must verify compliance with these principles. Complexity must be justified with clear benefits to the learning experience.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.1.0 | **Ratified**: TODO(RATIFICATION_DATE): Date of original adoption | **Last Amended**: 2025-12-08
