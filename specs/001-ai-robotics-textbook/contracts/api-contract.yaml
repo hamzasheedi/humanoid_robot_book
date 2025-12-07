@@ -1,0 +1,213 @@
+# API Contract: Textbook Content Management
+
+## Overview
+This API contract defines the interfaces for managing content in the AI Robotics Textbook. While the primary textbook will be static documentation, these APIs could be used for interactive components, assessment tracking, or dynamic content delivery.
+
+## Base URL
+```
+https://api.robotics-textbook.com/v1
+```
+
+## Endpoints
+
+### Get Module Information
+```
+GET /modules/{moduleId}
+```
+
+#### Description
+Retrieve detailed information about a specific textbook module.
+
+#### Path Parameters
+- `moduleId` (string, required): The unique identifier for the module (e.g., "ros2-fundamentals", "digital-twin", "nvidia-isaac", "vla")
+
+#### Response
+```json
+{
+  "id": "ros2-fundamentals",
+  "title": "ROS 2 Fundamentals",
+  "description": "Introduction to ROS 2 concepts, nodes, topics, and services",
+  "learningObjectives": [
+    "Understand ROS 2 architecture",
+    "Create and manage ROS 2 nodes",
+    "Work with topics and services"
+  ],
+  "prerequisites": [
+    "Basic Python programming",
+    "Understanding of robotics concepts"
+  ],
+  "duration": 10,
+  "difficulty": "intermediate",
+  "lessons": [
+    {
+      "id": "ros2-introduction",
+      "title": "Introduction to ROS 2",
+      "order": 1,
+      "duration": 30,
+      "contentUrl": "/modules/ros2/introduction.md"
+    }
+  ],
+  "assessments": [
+    {
+      "id": "ros2-quiz-1",
+      "title": "ROS 2 Concepts Quiz",
+      "type": "multiple-choice"
+    }
+  ],
+  "assets": [
+    {
+      "id": "ros2-architecture-diagram",
+      "name": "ROS 2 Architecture",
+      "type": "diagram",
+      "url": "/assets/diagrams/ros2-architecture.png"
+    }
+  ]
+}
+```
+
+### Get Lesson Content
+```
+GET /modules/{moduleId}/lessons/{lessonId}
+```
+
+#### Description
+Retrieve content for a specific lesson within a module.
+
+#### Path Parameters
+- `moduleId` (string, required): The unique identifier for the module
+- `lessonId` (string, required): The unique identifier for the lesson
+
+#### Response
+```json
+{
+  "id": "ros2-introduction",
+  "title": "Introduction to ROS 2",
+  "moduleId": "ros2-fundamentals",
+  "order": 1,
+  "duration": 30,
+  "objectives": [
+    "Understand ROS 2 architecture",
+    "Identify key ROS 2 concepts"
+  ],
+  "content": "# Introduction to ROS 2\n\nROS 2 (Robot Operating System 2) is ...",
+  "exercises": [
+    {
+      "id": "exercise-1",
+      "title": "Identify ROS 2 Components",
+      "type": "practical",
+      "instructions": "List the main components of ROS 2 architecture",
+      "expectedOutcome": "Students should be able to list nodes, topics, services, and actions"
+    }
+  ],
+  "assets": [
+    {
+      "id": "ros2-architecture-diagram",
+      "name": "ROS 2 Architecture",
+      "type": "diagram",
+      "url": "/assets/diagrams/ros2-architecture.png"
+    }
+  ]
+}
+```
+
+### Submit Assessment
+```
+POST /assessments/{assessmentId}/submit
+```
+
+#### Description
+Submit responses to an assessment and receive scoring.
+
+#### Path Parameters
+- `assessmentId` (string, required): The unique identifier for the assessment
+
+#### Request Body
+```json
+{
+  "userId": "user-12345",
+  "responses": [
+    {
+      "questionId": "q1",
+      "answer": "b"
+    },
+    {
+      "questionId": "q2",
+      "answer": "true"
+    }
+  ]
+}
+```
+
+#### Response
+```json
+{
+  "assessmentId": "ros2-quiz-1",
+  "userId": "user-12345",
+  "score": 85,
+  "maxScore": 100,
+  "passingScore": 70,
+  "passed": true,
+  "feedback": [
+    {
+      "questionId": "q1",
+      "correct": true,
+      "explanation": "Explanation for correct answer"
+    },
+    {
+      "questionId": "q2",
+      "correct": false,
+      "explanation": "Explanation for incorrect answer"
+    }
+  ]
+}
+```
+
+### Get Simulation Configuration
+```
+GET /simulations/{simulationId}/config
+```
+
+#### Description
+Retrieve configuration parameters for a specific simulation environment.
+
+#### Path Parameters
+- `simulationId` (string, required): The unique identifier for the simulation (e.g., "gazebo-ros2", "unity-humanoid")
+
+#### Response
+```json
+{
+  "id": "gazebo-ros2",
+  "name": "Gazebo with ROS 2 Integration",
+  "description": "Configuration for running ROS 2 nodes with Gazebo simulation",
+  "environments": [
+    {
+      "name": "ROS 2 Humble Hawksbill",
+      "version": "humble",
+      "requirements": {
+        "os": ["Ubuntu 22.04", "Windows via WSL2"],
+        "ram": "8GB+",
+        "gpu": "Dedicated GPU recommended"
+      }
+    }
+  ],
+  "parameters": {
+    "physicsEngine": "ODE",
+    "realTimeFactor": 1.0,
+    "maxUpdateRate": 1000
+  },
+  "robotModels": [
+    {
+      "name": "Custom Humanoid Robot",
+      "urdfPath": "/assets/models/humanoid.urdf",
+      "sensors": ["imu", "lidar", "camera"]
+    }
+  ],
+  "tutorials": [
+    {
+      "id": "gazebo-basics",
+      "title": "Getting Started with Gazebo",
+      "path": "/modules/digital-twin/gazebo/introduction.md"
+    }
+  ]
+}
+```
