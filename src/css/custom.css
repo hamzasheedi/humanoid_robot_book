@@ -1,12 +1,7 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+/* Custom CSS for AI Robotics Textbook */
 
-/* You can override the default Docusaurus styling here. */
-:root {
+/* Ensure dark mode consistency across the site */
+html[data-theme='dark'] {
   --ifm-color-primary: #25c2a0;
   --ifm-color-primary-dark: #21af90;
   --ifm-color-primary-darker: #1fa588;
@@ -14,16 +9,413 @@
   --ifm-color-primary-light: #29d5b0;
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
-  --ifm-code-font-size: 95%;
 }
 
-.docusaurus-highlight-code-line {
-  background-color: rgba(0, 0, 0, 0.1);
-  display: block;
-  margin: 0 calc(-1 * var(--ifm-pre-padding));
-  padding: 0 var(--ifm-pre-padding);
+/* Blue border for cards throughout the site */
+.card {
+  border: 2px solid #007bff; /* Blue border for all cards */
 }
 
-html[data-theme='dark'] .docusaurus-highlight-code-line {
-  background-color: rgba(0, 0, 0, 0.3);
+html[data-theme='dark'] .card {
+  border: 2px solid #007bff; /* Blue border in dark mode too */
+}
+
+/* Specific card styling */
+.card-demo {
+  padding: 1rem;
+  border: 2px solid #007bff; /* Blue border for card demos */
+  border-radius: 0.5rem;
+}
+
+html[data-theme='dark'] .card-demo {
+  border: 2px solid #007bff; /* Blue border in dark mode too */
+}
+
+/* Showcase Homepage Styles - Only for the main index/homepage */
+/* Target homepage text elements to ensure they appear properly in dark mode */
+html[data-theme="dark"] main article *,
+html[data-theme="dark"] main section *,
+html[data-theme="dark"] main .container *,
+html[data-theme="dark"] main .container .section *,
+html[data-theme="dark"] main .hero__subtitle,
+html[data-theme="dark"] main .heroBanner p,
+html[data-theme="dark"] main .section p,
+html[data-theme="dark"] main .section ul,
+html[data-theme="dark"] main .section li,
+html[data-theme="dark"] main .section div,
+html[data-theme="dark"] main .featureList p,
+html[data-theme="dark"] main .featureList li,
+html[data-theme="dark"] main .featureList div,
+html[data-theme="dark"] main .col--8 *,
+html[data-theme="dark"] main .col--4 *,
+html[data-theme="dark"] main .col--6 *,
+html[data-theme="dark"] main .col--10 * {
+  color: rgba(255, 255, 255, 0.95) !important;
+  /* Ensure text is fully white in dark mode on homepage */
+}
+
+/* Override any specific text elements that might be dark */
+html[data-theme="dark"] main .container article,
+html[data-theme="dark"] main .container article .col--8,
+html[data-theme="dark"] main .container article .col--4,
+html[data-theme="dark"] main .container article .col--6,
+html[data-theme="dark"] main .container article .col--10,
+html[data-theme="dark"] main .row,
+html[data-theme="dark"] main .container.padding-horiz--md {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Showcase boxes for all main sections on homepage */
+html[data-theme="dark"] main .container.padding-horiz--md {
+  border: 2px solid #007bff; /* Distinct blue border */
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 2.5rem;
+  background-color: rgba(30, 30, 40, 0.85); /* Darker background in dark mode */
+  position: relative;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+html[data-theme="dark"] main .container.padding-horiz--md:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3);
+}
+
+/* For light mode - showcase styling */
+main .container.padding-horiz--md {
+  border: 2px solid #007bff; /* Distinct blue border */
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 2.5rem;
+  background-color: rgba(255, 255, 255, 0.95); /* Light background in light mode */
+  position: relative;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+main .container.padding-horiz--md:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 123, 255, 0.2);
+}
+
+/* Enhanced section headings with clear distinction from body content */
+main .container.padding-horiz--md h2.text--center {
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Blue gradient background */
+  padding: 15px 25px;
+  border-radius: 8px;
+  color: white !important;
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 1.8rem;
+  position: relative;
+  border: 2px solid #0056b3;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  font-size: 1.4em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  text-align: center;
+}
+
+/* Dark mode for section headings (already has good contrast due to gradient) */
+html[data-theme="dark"] main .container.padding-horiz--md h2.text--center {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white !important;
+  border: 2px solid #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Remove the separator line since we're using a full-width header background */
+main .container.padding-horiz--md h2.text--center::after {
+  display: none;
+}
+
+/* Styling for showcase content blocks */
+main .container.padding-horiz--md .row {
+  margin-top: 1.5rem;
+}
+
+/* Card-like styling for module cards specifically */
+html[data-theme="dark"] main .card-demo,
+html[data-theme="dark"] main .card {
+  border: 2px solid #007bff !important; /* Blue border for all cards on homepage */
+  border-radius: 8px;
+  background-color: rgba(40, 40, 50, 0.9) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+html[data-theme="dark"] main .card-demo:hover,
+html[data-theme="dark"] main .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4) !important;
+}
+
+/* Light mode for cards */
+main .card-demo,
+main .card {
+  border: 2px solid #007bff !important; /* Blue border for all cards on homepage */
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+main .card-demo:hover,
+main .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3) !important;
+}
+
+/* Enhanced details/summary elements for weekly breakdown */
+html[data-theme="dark"] main details {
+  background-color: rgba(35, 35, 45, 0.9) !important;
+  border: 2px solid #007bff !important;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 1rem;
+}
+
+html[data-theme="dark"] main summary {
+  color: white !important;
+  cursor: pointer;
+  padding: 10px;
+  background: linear-gradient(to right, rgba(0, 123, 255, 0.3), transparent) !important;
+  border-radius: 5px;
+  font-weight: 600;
+  outline: none;
+}
+
+main details {
+  background-color: rgba(248, 249, 250, 0.95) !important;
+  border: 2px solid #007bff !important;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 1rem;
+}
+
+main summary {
+  color: #0056b3 !important;
+  cursor: pointer;
+  padding: 10px;
+  background: linear-gradient(to right, rgba(0, 123, 255, 0.1), transparent) !important;
+  border-radius: 5px;
+  font-weight: 600;
+  outline: none;
+}
+
+/* Ensure body text is readable in both modes */
+html[data-theme="dark"] main p,
+html[data-theme="dark"] main li,
+html[data-theme="dark"] main div,
+html[data-theme="dark"] main span {
+  color: rgba(255, 255, 255, 0.87) !important;
+}
+
+main p,
+main li,
+main div,
+main span {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+/* Specific styling for module cards' Learn More buttons */
+html[data-theme="dark"] main .card .button--secondary {
+  background-color: #000000 !important; /* Black background in dark mode */
+  border-color: #000000 !important;
+  color: #ffffff !important; /* White text in dark mode */
+}
+
+html[data-theme="dark"] main .card .button--secondary:hover {
+  background-color: #333333 !important; /* Slightly lighter on hover */
+  border-color: #333333 !important;
+  transform: scale(1.05);
+}
+
+/* Light mode styling for Learn More buttons with gradient */
+main .card .button--secondary {
+  background: radial-gradient(circle at center, #62cff4 0%, #070B35 100%) !important;
+  border: none !important;
+  color: white !important;
+  padding: 10px 20px !important;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+main .card .button--secondary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode will be set as default via JavaScript */
+
+/* Specific styling for the details/summary elements (expandable sections) */
+html[data-theme="dark"] details {
+  background-color: rgba(30, 30, 30, 0.8) !important;
+  border: 1px solid #4a86e8;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+html[data-theme="dark"] summary {
+  color: white !important;
+  cursor: pointer;
+  padding: 5px;
+  background-color: rgba(26, 35, 126, 0.6);
+  border-radius: 3px;
+}
+
+details {
+  background-color: rgba(240, 240, 240, 0.7);
+  border: 1px solid #4a86e8;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 1rem;
+}
+
+summary {
+  color: #0d47a1;
+  cursor: pointer;
+  padding: 5px;
+  background-color: rgba(227, 242, 253, 0.6);
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+/* Homepage hero banner styling */
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--ifm-hero-background-color, #2b3137);
+  color: var(--ifm-hero-text-color, white);
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.getStarted {
+  margin: 0.5rem;
+}
+
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureImage {
+  height: 200px;
+  width: 200px;
+  margin-bottom: 1rem;
+}
+
+.featureSection {
+  padding: 3rem 0;
+}
+
+.featureCard {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--ifm-card-background-color, #f6f6f6);
+  margin-bottom: 1rem;
+  border: 2px solid #007bff; /* Add blue border */
+}
+
+html[data-theme='dark'] .featureCard {
+  background-color: var(--ifm-card-background-color, #2d2d2d);
+}
+
+@media screen and (min-width: 997px) {
+  .featureCard {
+    height: 100%;
+  }
+}
+
+.featureCard h3 {
+  margin-top: 0;
+}
+
+.moduleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.moduleCard {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--ifm-card-background-color, #fafafa);
+  border: 2px solid #007bff !important; /* Blue border for module cards */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+html[data-theme='dark'] .moduleCard {
+  background-color: var(--ifm-card-background-color, #2d2d2d);
+}
+
+.moduleCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+html[data-theme='dark'] .moduleCard:hover {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.heroBannerLogo {
+  max-width: 200px;
+  height: auto;
+}
+
+/* Consistent dark mode for sections */
+.section {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-color, #f9f9f9);
+  color: var(--ifm-color-emphasis-900, rgba(0, 0, 0, 0.9));
+}
+
+html[data-theme='dark'] .section {
+  background-color: var(--ifm-background-color, #171717);
+  color: var(--ifm-color-emphasis-100, rgba(255, 255, 255, 0.9));
+}
+
+/* Card styling for consistency across the site */
+.card__body {
+  padding: 1.5rem;
+  color: var(--ifm-color-emphasis-900, rgba(0, 0, 0, 0.9));
+}
+
+html[data-theme='dark'] .card__body {
+  color: var(--ifm-color-emphasis-100, rgba(255, 255, 255, 0.9));
+}
+
+.card__footer {
+  padding: 1rem 1.5rem;
+  background-color: var(--ifm-color-emphasis-100, #f8f9fa);
+  border-top: 1px solid var(--ifm-color-emphasis-300, #e9ecef);
+  border-radius: 0 0 0.5rem 0.5rem;
+  color: var(--ifm-color-emphasis-900, rgba(0, 0, 0, 0.9));
+}
+
+html[data-theme='dark'] .card__footer {
+  background-color: var(--ifm-color-emphasis-900, #2d2d2d);
+  border-top: 1px solid var(--ifm-color-emphasis-700, #454545);
+  color: var(--ifm-color-emphasis-100, rgba(255, 255, 255, 0.9));
 }

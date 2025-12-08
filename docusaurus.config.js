@@ -45,6 +45,10 @@ const config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/hamzasheedi/humanoid_robot_book/tree/main/',
+          routeBasePath: '/docs', // Serve the docs at /docs
+        },
+        pages: {
+          // Use the pages from src/pages
         },
         blog: false, // Disable blog if not needed
         theme: {
@@ -119,6 +123,13 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
+      },
+      
+      // Enable dark mode by default
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: false,  // Still allow users to switch if they prefer
+        respectPrefersColorScheme: false,  // Don't respect system preference, force dark mode
       },
     }),
 };
