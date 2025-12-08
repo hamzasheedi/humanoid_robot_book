@@ -53,15 +53,18 @@ After completing this textbook, students will be able to:
 
 ## 🚀 Getting Started
 
-1. Begin with [Module 1: ROS 2 Fundamentals](/docs/modules/ros2/introduction)
-2. Progress through each module sequentially
+1. Begin with [Module 1: The Robotic Nervous System (ROS 2)](/docs/modules/ros2/)
+2. Progress through each module sequentially:
+   - [Module 2: Digital Twin Simulation](/docs/modules/digital-twin/)
+   - [Module 3: AI-Robot Brain (NVIDIA Isaac)](/docs/modules/nvidia-isaac/)
+   - [Module 4: Vision-Language-Action (VLA)](/docs/modules/vla/)
 3. Complete exercises and assessments for each module
-4. Integrate everything in the capstone project
+4. Integrate everything in the [Capstone Project](/docs/modules/capstone/)
 
 ## 📋 Assessments and Exercises
 
-- [Module Exercises](/docs/exercises)
-- [Assessment Guides](/docs/assessments)
+- [Module Exercises](/docs/exercises/)
+- [Assessment Guides](/docs/assessments/)
 - [Capstone Project Requirements](/docs/modules/capstone/project-outline)
 
 ## 📚 Additional Resources
@@ -84,79 +87,80 @@ Students will simulate, design, and deploy humanoid robots capable of natural in
 
 ## 🔧 Core Modules
 
-### Module 1: The Robotic Nervous System (ROS 2)
+### [Module 1: The Robotic Nervous System (ROS 2 - Robot Operating System 2)](/docs/modules/ros2/)
 - Nodes, Topics, Services
 - rclpy Python bridges
 - URDF for humanoids
-- [Learn More](/docs/modules/ros2/introduction)
+- [Learn More](/docs/modules/ros2/)
 
-### Module 2: The Digital Twin (Gazebo & Unity)
+### [Module 2: The Digital Twin (Gazebo & Unity)](/docs/modules/digital-twin/)
 - Physics simulation
 - High-fidelity rendering
 - Sensor simulation (LiDAR, Depth, IMUs)
-- [Learn More](/docs/modules/digital-twin/introduction)
+- [Learn More](/docs/modules/digital-twin/)
 
-### Module 3: The AI-Robot Brain (NVIDIA Isaac)
+### [Module 3: The AI-Robot Brain (NVIDIA Isaac)](/docs/modules/nvidia-isaac/)
 - Isaac Sim & synthetic data
 - Isaac ROS & VSLAM
 - Nav2 path planning
-- [Learn More](/docs/modules/nvidia-isaac/introduction)
+- [Learn More](/docs/modules/nvidia-isaac/)
 
-### Module 4: Vision-Language-Action (VLA)
+### [Module 4: Vision-Language-Action (VLA)](/docs/modules/vla/)
 - Whisper for voice commands
 - LLM-powered action planning
 - Final Capstone: Autonomous Humanoid Robot
-- [Learn More](/docs/modules/vla/introduction)
+- [Learn More](/docs/modules/vla/)
 
-## 🎯 Learning Outcomes (Detailed)
+### [Module 5: Capstone Project](/docs/modules/capstone/)
+- Integration of all previous modules
+- Complete humanoid robot implementation
+- Voice-command planning, navigation, perception, and manipulation
+- [Learn More](/docs/modules/capstone/)
 
-Skills and knowledge students will acquire:
-- Understand Physical AI principles
-- Master ROS 2 concepts and implementation
-- Build and validate digital twin simulations
-- Design humanoid robot behaviors
-- Integrate GPT models for cognitive planning
-- Build conversational robotic systems
-- Validate systems in simulation and real-world
-- Develop end-to-end robot capabilities
+## 🎯 Learning Outcomes
+
+After completing this textbook, students will be able to:
+
+- Master ROS 2 concepts and implementation for humanoid robotics
+- Create and validate digital twin simulations in Gazebo and Unity
+- Integrate NVIDIA Isaac for AI-powered perception and navigation
+- Process natural language commands and map them to robot actions
+- Plan and execute complex tasks with humanoid robots
+- Validate robot behaviors in both simulation and physical environments
 
 ## 🧪 Assessments
 
-Evaluation throughout the course:
-- ROS package development project
-- Gazebo simulation environment creation
-- Isaac perception pipeline implementation
-- Complete humanoid robot with VLA integration
+### Module-Specific Assessments
+- [ROS 2 Exercises](/docs/modules/ros2/exercises/)
+- [Digital Twin Simulation Exercises](/docs/modules/digital-twin/exercises/)
+- [NVIDIA Isaac Exercises](/docs/modules/nvidia-isaac/exercises/)
+- [VLA Integration Exercises](/docs/modules/vla/exercises/)
 
-## 💻 Hardware Requirements
+### Capstone Project Assessment
+- [Capstone Project Requirements](/docs/modules/capstone/project-outline)
 
-Systems needed for different implementation paths:
+## 💻 Hardware Requirements & Lab Setup
 
 ### 1. Digital Twin Workstation (Required)
 - RTX GPU (4070 Ti minimum)
 - Ubuntu 22.04
 - 64GB RAM
-- [Setup Guide](/docs/modules/ros2/setup)
 
 ### 2. Physical AI Edge Kit
 - Jetson Orin Nano / NX
 - RealSense D435i
-- IMU
-- Microphone array
-- [Hardware Guide](/docs/references/hardware-specifications)
+- IMU, Microphone array
 
 ### 3. Optional Robot Lab Hardware
 - Unitree Go2
 - Unitree G1
 - Robotis OP3
 - Hiwonder TonyPi (budget option)
-- [Robot Options](/docs/references/robot-platforms)
 
 ### 4. Alternative Cloud Setup (High OpEx)
 - AWS g5 / g6 instances
 - Cloud-based Isaac Sim
 - Local Jetson for final deployment
-- [Cloud Setup](/docs/deployment-options)
 
 ## 🗓 Weekly Breakdown
 
@@ -184,5 +188,6 @@ Vision-Language-Action integration and capstone completion
 
 Begin your journey into humanoid robotics and embodied intelligence:
 
-- [Begin Your Journey](/docs/modules/ros2/introduction)
-- [Explore All Modules](/docs/modules)
+- [Begin Your Journey](/docs/modules/ros2/)
+- [Explore All Modules](/docs/modules/)
+- [Module Directory](/docs/modules/module-directory)

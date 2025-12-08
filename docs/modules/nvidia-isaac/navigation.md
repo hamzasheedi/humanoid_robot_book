@@ -94,26 +94,6 @@ def generate_launch_description():
     return launch.LaunchDescription([visual_slam_node])
 ```
 
-### Alternative: Monocular SLAM
-
-For single camera setups, configure monocular SLAM:
-
-```python
-# monocular_slam.launch.py
-# ... (similar to stereo but with remappings for single camera)
-parameters=[{
-    'use_image_transport': False,  # Set to True for image transport
-    'enable_occupancy_map': True,
-    'occupancy_map_width': 50.0,   # Meters
-    'occupancy_map_height': 50.0,  # Meters
-    'occupancy_map_resolution': 0.05,  # Meters per pixel
-}]
-remappings=[
-    ('image', '/camera/image_raw'),
-    ('camera_info', '/camera/camera_info'),
-],
-```
-
 ## Nav2 Integration with Isaac
 
 Isaac ROS enhances the standard Nav2 stack with GPU acceleration:
@@ -133,60 +113,6 @@ Isaac provides accelerated costmap processing:
 - Static map inflation
 - Obstacle layer processing
 - Voxel grid obstacle handling
-
-### Navigation Launch File
-
-```python
-# navigation.launch.py
-import launch
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import ComposableNodeContainer
-from launch_ros.descriptions import ComposableNode
-
-def generate_launch_description():
-    use_sim_time = LaunchConfiguration('use_sim_time', default='false')
-    
-    navigation_container = ComposableNodeContainer(
-        name='navigation_container',
-        namespace='',
-        package='rclcpp_components',
-        executable='component_container_mt',
-        composable_node_descriptions=[
-            ComposableNode(
-                package='isaac_ros_nav2',
-                plugin='nvidia::isaac_ros::nav2::IsaacGlobalPlannerNode',
-                name='isaac_global_planner',
-                parameters=[{
-                    'use_sim_time': use_sim_time,
-                    'transform_timeout': 0.1,
-                }],
-            ),
-            ComposableNode(
-                package='isaac_ros_nav2',
-                plugin='nvidia::isaac_ros::nav2::IsaacLocalPlannerNode',
-                name='isaac_local_planner',
-                parameters=[{
-                    'use_sim_time': use_sim_time,
-                    'controller_frequency': 20.0,
-                    'min_x_velocity_threshold': 0.001,
-                    'min_y_velocity_threshold': 0.001,
-                    'min_theta_velocity_threshold': 0.001,
-                }],
-            ),
-        ],
-        output='screen',
-    )
-
-    return launch.LaunchDescription([
-        DeclareLaunchArgument(
-            'use_sim_time',
-            default_value='false',
-            description='Use simulation time if true'
-        ),
-        navigation_container
-    ])
-```
 
 ## Configuration Files
 
@@ -313,65 +239,40 @@ if __name__ == '__main__':
     main()
 ```
 
-## VSLAM and Navigation Integration
-
-### Coordinate Systems
-- **Camera Frame**: Origin at the camera center
-- **Base Link**: Robot's center reference frame
-- **Odom Frame**: Local odometry reference (relative to start position)
-- **Map Frame**: Global map reference (fixed world frame)
-
-### TF Transformations
-Proper TF transforms are crucial for navigation:
-- Camera to base_link
-- Base_link to odom
-- Odom to map (estimated by VSLAM)
-
 ## Performance Optimization
 
-### VSLAM Performance
-- Use appropriate image resolution (640x480 recommended for real-time)
-- Optimize feature detection parameters
-- Balance accuracy with real-time requirements
+### GPU Utilization
+- Monitor GPU usage with `nvidia-smi`
+- Use TensorRT for optimized inference
+- Batch multiple inferences when possible
+- Use mixed precision (FP16) for performance gains
 
-### Navigation Performance
-- Tune local and global planner frequencies
-- Adjust costmap resolution based on robot speed
-- Optimize inflation parameters for obstacle avoidance
+### Memory Management
+- Monitor GPU memory usage
+- Use appropriate batch sizes
+- Implement proper cleanup of CUDA contexts
 
 ## Troubleshooting
 
 ### Common Issues
-- **Drift in VSLAM**: Ensure sufficient visual features and proper lighting
-- **Navigation Failures**: Check map quality and sensor data
-- **TF Issues**: Verify all required transforms are published
-- **Performance Problems**: Monitor GPU and CPU usage
+- **CUDA Errors**: Verify driver and CUDA compatibility
+- **Performance Problems**: Check GPU utilization and VRAM usage
+- **ROS Connection Issues**: Ensure correct network configuration
+- **Model Loading Failures**: Verify model file paths and formats
 
-### Debugging Strategies
-- Visualize the map in RViz2
-- Monitor the robot's path in RViz2
-- Check topic data with `ros2 topic echo`
-- Validate TF tree with `ros2 run tf2_tools view_frames`
+### Debugging Tips
+- Use Isaac Sim's visualization tools to validate navigation outputs
+- Monitor ROS topics with `ros2 topic echo`
+- Use `rqt_graph` to visualize node connections
+- Check system resource usage during navigation pipeline operation
 
 ## Exercises
 
-1. Set up VSLAM with a monocular camera and navigate through a simple map
-2. Configure costmaps with Isaac acceleration and compare performance to standard Nav2
-3. Implement a navigation task that combines perception and navigation (e.g., navigate to an object detected by perception system)
-4. Optimize parameters for a specific robot platform and environment
-
-## Advanced Topics
-
-### Multi-Session Mapping
-- Relocalization in previously built maps
-- Persistent map storage and loading
-- Map merge across multiple sessions
-
-### Dynamic Obstacle Handling
-- Integration with perception systems for dynamic obstacle detection
-- Predictive collision avoidance
-- Moving obstacle tracking
+1. Set up a basic Isaac ROS navigation pipeline in simulation
+2. Configure VSLAM with stereo cameras or RGB-D sensors
+3. Implement path planning to navigate through obstacle courses
+4. Optimize navigation parameters for specific robot platforms and environments
 
 ## Next Steps
 
-After mastering navigation, you'll be ready to implement the capstone project that combines perception, navigation, and voice commands for a complete humanoid robot system.
+After completing this navigation module, you'll be ready to combine perception and navigation capabilities with voice commands for the Vision-Language-Action systems.

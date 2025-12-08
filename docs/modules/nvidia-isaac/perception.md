@@ -1,96 +1,51 @@
 ---
-title: NVIDIA Isaac Perception Guide
+title: Isaac ROS Perception Guide
 ---
 
-# NVIDIA Isaac Perception Guide
+# Isaac ROS Perception Guide
 
-NVIDIA Isaac provides a comprehensive platform for robotics AI, including perception capabilities for object detection, segmentation, and scene understanding. This module covers setting up and using Isaac for AI-powered perception in robotics.
+Perception in robotics involves understanding the environment through sensors. Isaac ROS provides GPU-accelerated perception capabilities that include object detection, segmentation, and scene understanding. This module covers setting up and using Isaac for perception tasks in robotics applications.
 
 ## Learning Objectives
 
 After completing this module, you will be able to:
-- Install and configure NVIDIA Isaac for perception tasks
+- Install and configure Isaac ROS for perception tasks
 - Set up perception pipelines for object detection and recognition
 - Integrate Isaac perception with ROS 2
 - Implement perception-based robot behaviors
 - Optimize perception models for real-time performance
 
-## Prerequisites
+## Isaac ROS Perception Overview
 
-- NVIDIA GPU with CUDA support (minimum: GTX 1060 6GB)
-- Ubuntu 20.04 or 22.04 (for Isaac Sim)
-- ROS 2 Humble Hawksbill installed
-- Basic understanding of deep learning concepts
+Isaac ROS provides several perception packages for different tasks:
+- **Isaac ROS DetectNet**: For object detection and classification
+- **Isaac ROS Segmentation**: For semantic and instance segmentation
+- **Isaac ROS AprilTag**: For fiducial marker detection and pose estimation
+- **Isaac ROS Stereo DNN**: For depth estimation from stereo cameras
+- **Isaac ROS VSLAM**: For visual SLAM capabilities
 
-## NVIDIA Isaac Platform Overview
+## Setting up Isaac Perception Pipeline
 
-NVIDIA Isaac includes multiple components:
-- **Isaac Sim**: Robotics simulation environment built on NVIDIA Omniverse
-- **Isaac ROS**: ROS 2 packages for accelerated perception and navigation
-- **Isaac Apps**: Pre-built robotics applications
-- **Isaac Lab**: Framework for robot learning applications
-
-## Isaac ROS Installation
-
-Isaac ROS provides GPU-accelerated perception and navigation packages for ROS 2:
-
-### System Requirements
+### Prerequisites
 - NVIDIA GPU with compute capability 6.0+
 - NVIDIA driver version 470.42.01 or later
 - CUDA 11.4 or later
-- Ubuntu 20.04 or 22.04
+- Isaac Sim (optional for synthetic data generation)
 
-### Installation Steps
-
-1. Set up your development environment:
+### Installation
 ```bash
-# If using JetPack (on Jetson platforms)
+# Install Isaac ROS perception packages
 sudo apt update
-sudo apt install nvidia-jetpack
-
-# For x86 platforms with discrete GPU
-# Ensure NVIDIA drivers are installed
-nvidia-smi
+sudo apt install ros-humble-isaac-ros-*  # For all Isaac ROS packages
+# Or specific packages:
+sudo apt install ros-humble-isaac-ros-detectnet
+sudo apt install ros-humble-isaac-ros-segmentation
+sudo apt install ros-humble-isaac-ros-apriltag
 ```
 
-2. Install Isaac ROS Dependencies:
-```bash
-sudo apt update
-sudo apt install software-properties-common
-sudo add-apt-repository universe
-sudo apt update
-sudo apt install python3-rosdep python3-rosinstall python3-vcstool
-```
+### Basic Perception Pipeline
 
-3. Create a ROS workspace for Isaac packages:
-```bash
-mkdir -p ~/isaac_ros_ws/src
-cd ~/isaac_ros_ws
-```
-
-4. Install Isaac ROS packages based on your hardware:
-```bash
-# For Isaac ROS for Jetson
-sudo apt install ros-humble-isaac-ros-dev
-
-# For Isaac ROS for desktop
-sudo apt install ros-humble-isaac-ros-common
-```
-
-## Perception Pipeline Setup
-
-### Object Detection
-
-Isaac ROS provides several perception packages for object detection:
-
-1. **AprilTag Detection**: For pose estimation of fiducial markers
-2. **DetectNet**: For object classification and bounding boxes
-3. **Segmentation**: For pixel-level object classification
-4. **Realsense-ROS**: For RGB-D sensor integration (if compatible)
-
-### Setting up a Basic Perception Node
-
-Here's a simple example of setting up object detection in Isaac ROS:
+Here's an example of setting up a basic perception pipeline:
 
 ```python
 import rclpy
@@ -104,8 +59,8 @@ class IsaacPerceptionNode(Node):
     def __init__(self):
         super().__init__('isaac_perception_node')
         
-        # Publisher for image display
-        self.image_pub = self.create_publisher(Image, 'annotated_image', 10)
+        # Publisher for annotated images
+        self.annotated_image_pub = self.create_publisher(Image, 'annotated_image', 10)
         
         # Subscriber for camera images
         self.image_sub = self.create_subscription(
@@ -127,13 +82,9 @@ class IsaacPerceptionNode(Node):
         self.get_logger().info('Isaac Perception Node initialized')
 
     def image_callback(self, msg):
-        # Convert ROS image message to OpenCV image
-        cv_image = self.cv_bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
-        
-        # The image processing happens via Isaac pipelines
-        # This callback simply handles the annotated output
-        annotated_msg = self.cv_bridge.cv2_to_imgmsg(cv_image, encoding='bgr8')
-        self.image_pub.publish(annotated_msg)
+        # Process image through Isaac perception pipeline
+        # (Actual processing would happen via Isaac ROS nodes)
+        pass
 
     def detection_callback(self, msg):
         self.get_logger().info(f'Detected {len(msg.detections)} objects')
@@ -149,68 +100,21 @@ if __name__ == '__main__':
     main()
 ```
 
-## Isaac Sim for Perception Training
+## Isaac Sim for Synthetic Data Generation
 
-Isaac Sim allows creating photorealistic datasets for training perception models:
-
-### Creating Synthetic Training Data
-1. Build photorealistic environments using NVIDIA Omniverse
+Isaac Sim provides tools for generating synthetic training data:
+1. Create photorealistic environments using NVIDIA Omniverse
 2. Generate ground truth data automatically (depth, segmentation, poses)
-3. Vary lighting, textures, and object poses systematically
+3. Vary lighting, textures, and object placements systematically
 4. Export datasets in standard formats (COCO, KITTI, etc.)
 
-### Perception Model Training
-1. Use Isaac ROS Isaac ROS DNN Inference packages for deployment
-2. Leverage Isaac Sim's synthetic data generation for training
-3. Implement domain randomization for real-world transfer
+## Integration with Navigation
 
-## Integration with ROS 2
-
-### Isaac ROS Message Types
-Isaac ROS provides specialized message types:
-- `Detection2DArray` for object detection results
-- `SegmentationImage` for semantic segmentation
-- `BoundingBox3D` for 3D object detection
-- `IsaacROSStatus` for pipeline status monitoring
-
-### Launch Files
-Isaac ROS uses launch files to configure complex perception pipelines:
-
-```xml
-<!-- perception_pipeline.launch.py -->
-import launch
-from launch_ros.actions import ComposableNodeContainer
-from launch_ros.descriptions import ComposableNode
-
-def generate_launch_description():
-    perception_container = ComposableNodeContainer(
-        name='perception_container',
-        namespace='',
-        package='rclcpp_components',
-        executable='component_container_mt',
-        composable_node_descriptions=[
-            ComposableNode(
-                package='isaac_ros_detectnet',
-                plugin='nvidia::isaac_ros::detection::DetectNetNode',
-                name='detectnet',
-                parameters=[{
-                    'model_name': 'ssd_mobilenet_v2_coco',
-                    'input_width': 640,
-                    'input_height': 480,
-                    'confidence_threshold': 0.7,
-                    'max_batch_size': 1,
-                }],
-                remappings=[
-                    ('detections', 'object_detections'),
-                    ('image_input', '/camera/image_raw'),
-                ],
-            ),
-        ],
-        output='screen',
-    )
-
-    return launch.LaunchDescription([perception_container])
-```
+Perception systems feed into navigation for:
+- Obstacle detection and avoidance
+- Landmark-based localization
+- Dynamic environment understanding
+- Path adjustment based on sensed conditions
 
 ## Performance Optimization
 
@@ -221,8 +125,8 @@ def generate_launch_description():
 - Use mixed precision (FP16) for performance gains
 
 ### Memory Management
-- Monitor GPU memory usage
-- Use appropriate batch sizes
+- Monitor GPU memory usage during perception tasks
+- Use appropriate batch sizes based on available memory
 - Implement proper cleanup of CUDA contexts
 
 ## Troubleshooting
@@ -236,13 +140,13 @@ def generate_launch_description():
 ### Debugging Tips
 - Use Isaac Sim's visualization tools to validate perception outputs
 - Monitor ROS topics with `ros2 topic echo`
-- Use `rqt_graph` to visualize node connections
+- Use `rqt_image_view` to visualize image processing results
 - Check system resource usage during perception pipeline operation
 
 ## Exercises
 
 1. Set up a basic Isaac ROS perception pipeline in simulation
-2. Train a simple object detector using synthetic data from Isaac Sim
+2. Train an object detector using synthetic data from Isaac Sim
 3. Deploy the trained model on a physical robot with compatible sensors
 4. Evaluate the performance difference between synthetic and real-world data
 
