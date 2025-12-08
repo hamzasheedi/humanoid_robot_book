@@ -6,15 +6,16 @@ const SetDarkModeDefault = () => {
     if (ExecutionEnvironment.canUseDOM) {
       // Set theme preference to dark in localStorage
       localStorage.setItem('theme', 'dark');
-      
+
       // Apply dark theme immediately to avoid flash of light theme
       document.documentElement.setAttribute('data-theme', 'dark');
-      document.documentElement.style.colorScheme = 'dark';
-      
+
       // Also update any theme-switcher elements if they exist
       const themeElements = document.querySelectorAll('[data-theme-toggle]');
       themeElements.forEach(element => {
-        element.setAttribute('aria-pressed', 'true');
+        if (element.tagName === 'BUTTON') {
+          element.setAttribute('aria-pressed', 'true');
+        }
       });
     }
   }, []);
