@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
+import SetDarkModeDefault from '../components/SetDarkModeDefault';
 import styles from './index.module.css';
 
 // Define the ModuleCard component within this file
@@ -33,6 +34,7 @@ export default function Home() {
     <Layout
       title={`Physical AI & Humanoid Robotics`}
       description="AI Robotics Textbook covering ROS 2, Digital Twin simulation, NVIDIA Isaac, VLA and Capstone project">
+      <SetDarkModeDefault /> {/* Set dark mode as default */}
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">Physical AI & Humanoid Robotics</h1>
