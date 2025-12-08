@@ -249,6 +249,21 @@ main .card .button--secondary:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Specific styling for the "Explore All Modules" button to have black text in light mode */
+/* Target the button in the CTA section that links to all modules */
+main .ctaSection .buttons a.button--secondary.button--lg,
+main .container.text--center .buttons a.button--secondary.button--lg:nth-child(2),
+main .container.text--center .buttons .button--secondary.button--lg:nth-child(2) {
+  color: #000000 !important; /* Set text to black in light mode for Explore All Modules button */
+}
+
+/* Maintain white text in dark mode for proper visibility */
+html[data-theme="dark"] main .ctaSection .buttons a.button--secondary.button--lg,
+html[data-theme="dark"] main .container.text--center .buttons a.button--secondary.button--lg:nth-child(2),
+html[data-theme="dark"] main .container.text--center .buttons .button--secondary.button--lg:nth-child(2) {
+  color: #ffffff !important; /* Keep white text in dark mode to maintain readability */
+}
+
 /* Dark mode will be set as default via JavaScript */
 
 /* Specific styling for the details/summary elements (expandable sections) */
