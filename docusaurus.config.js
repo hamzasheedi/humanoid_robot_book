@@ -58,9 +58,6 @@ const config = {
     ],
   ],
 
-  // Custom pages configuration
-  // Pages are handled by the classic preset by default
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -126,6 +123,13 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
+      },
+      
+      // Enable dark mode by default
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: false,  // Still allow users to switch if they prefer
+        respectPrefersColorScheme: false,  // Don't respect system preference, force dark mode
       },
     }),
 };

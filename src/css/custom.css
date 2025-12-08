@@ -221,6 +221,36 @@ main span {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
+/* Specific styling for module cards' Learn More buttons */
+html[data-theme="dark"] main .card .button--secondary {
+  background-color: #000000 !important; /* Black background in dark mode */
+  border-color: #000000 !important;
+  color: #ffffff !important; /* White text in dark mode */
+}
+
+html[data-theme="dark"] main .card .button--secondary:hover {
+  background-color: #333333 !important; /* Slightly lighter on hover */
+  border-color: #333333 !important;
+  transform: scale(1.05);
+}
+
+/* Light mode styling for Learn More buttons with gradient */
+main .card .button--secondary {
+  background: radial-gradient(circle at center, #62cff4 0%, #070B35 100%) !important;
+  border: none !important;
+  color: white !important;
+  padding: 10px 20px !important;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+main .card .button--secondary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode will be set as default via JavaScript */
+
 /* Specific styling for the details/summary elements (expandable sections) */
 html[data-theme="dark"] details {
   background-color: rgba(30, 30, 30, 0.8) !important;
