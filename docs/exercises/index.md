@@ -1,16 +1,15 @@
 ---
-title: Exercise Directory
+title: Module Exercises
 ---
 
-# Exercise Directory
+# Module Exercises
 
-This directory contains exercises for each module in the AI Robotics Textbook:
+This directory contains exercises for various modules of the AI Robotics Textbook:
 
 ## Available Exercise Sets
 
-- [ROS 2 Exercises](./assessments/ros2/fundamentals-quiz.md)
-- [Digital Twin Exercises](./assessments/digital-twin/fundamentals-quiz.md) 
-- [NVIDIA Isaac Exercises](./assessments/nvidia-isaac/fundamentals-quiz.md)
-- [VLA Exercises](./assessments/vla/fundamentals-quiz.md)
-
-For general exercises that span multiple modules, see the assessments directory.
+- [ROS 2 Exercises](./modules/ros2/exercises/)
+- [Digital Twin Exercises](./modules/digital-twin/exercises/)
+- [NVIDIA Isaac Exercises](./modules/nvidia-isaac/exercises/)
+- [VLA Exercises](./modules/vla/exercises/)
+- [Capstone Exercises](./modules/capstone/exercises/)

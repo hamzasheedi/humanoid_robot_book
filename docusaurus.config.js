@@ -48,7 +48,8 @@ const config = {
           routeBasePath: '/docs', // Serve the docs at /docs
         },
         pages: {
-          // Use the pages from src/pages
+          path: 'src/pages',
+          routeBasePath: '/', // Serve pages at the root
         },
         blog: false, // Disable blog if not needed
         theme: {

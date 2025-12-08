@@ -1,17 +1,35 @@
 ---
-title: Module Directory
+title: Modules Directory
 ---
 
-# Module Directory
+# MODULES DIRECTORY
 
-This is the module directory landing page that lists all available modules in the AI Robotics Textbook:
+## [ROS 2 (Robot Operating System 2)](/docs/modules/ros2/)
+- ROS 2 fundamentals and implementation
+- Nodes, Topics, and Services
+- URDF for humanoid robots
+- [Get Started](/docs/modules/ros2/)
 
-## Available Modules
+## [DIGITAL-TWIN](/docs/modules/digital-twin/)
+- Physics simulation in Gazebo
+- Visual rendering in Unity
+- Sensor simulation for LiDAR, IMU, cameras
+- [Get Started](/docs/modules/digital-twin/)
 
-- [Module 1: Robotic Nervous System (ROS 2)](/docs/modules/ros2/introduction)
-- [Module 2: Digital Twin Simulation (Gazebo & Unity)](/docs/modules/digital-twin/introduction)
-- [Module 3: AI-Robot Brain (NVIDIA Isaac)](/docs/modules/nvidia-isaac/introduction)
-- [Module 4: Vision-Language-Action (VLA)](/docs/modules/vla/introduction)
-- [Module 5: Capstone Project](/docs/modules/capstone/introduction)
+## [NVIDIA-ISAAC](/docs/modules/nvidia-isaac/)
+- AI perception with Isaac Sim
+- Navigation and path planning with Nav2
+- VSLAM (Visual Simultaneous Localization and Mapping)
+- [Get Started](/docs/modules/nvidia-isaac/)
 
-Select a module to begin your learning journey.
+## [VLA (Vision-Language-Action)](/docs/modules/vla/)
+- Voice command processing with Whisper
+- Cognitive planning with LLMs
+- Multi-modal integration for robot control
+- [Get Started](/docs/modules/vla/)
+
+## [CAPSTONE](/docs/modules/capstone/)
+- Integration of all previous modules
+- Complete humanoid robot implementation
+- Voice-command planning, navigation, perception, and manipulation
+- [Get Started](/docs/modules/capstone/)

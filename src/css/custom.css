@@ -249,6 +249,21 @@ main .card .button--secondary:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Specific styling for the "Explore All Modules" button to have black text in light mode */
+/* Target the button in the CTA section that links to all modules */
+main .ctaSection .buttons a.button--secondary.button--lg,
+main .container.text--center .buttons a.button--secondary.button--lg:nth-child(2),
+main .container.text--center .buttons .button--secondary.button--lg:nth-child(2) {
+  color: #000000 !important; /* Set text to black in light mode for Explore All Modules button */
+}
+
+/* Maintain white text in dark mode for proper visibility */
+html[data-theme="dark"] main .ctaSection .buttons a.button--secondary.button--lg,
+html[data-theme="dark"] main .container.text--center .buttons a.button--secondary.button--lg:nth-child(2),
+html[data-theme="dark"] main .container.text--center .buttons .button--secondary.button--lg:nth-child(2) {
+  color: #ffffff !important; /* Keep white text in dark mode to maintain readability */
+}
+
 /* Dark mode will be set as default via JavaScript */
 
 /* Specific styling for the details/summary elements (expandable sections) */
@@ -282,6 +297,286 @@ summary {
   background-color: rgba(227, 242, 253, 0.6);
   border-radius: 3px;
   font-weight: bold;
+}
+
+/* Showcase-Style Course Layout for All Pages with Module Sequence */
+
+/* Course Title & Overview Styling */
+.course-title-section {
+  background: linear-gradient(135deg, #0056b3, #007bff);
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.course-title-section h1 {
+  color: white !important;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.course-title-section .focus-theme,
+.course-title-section .course-goal {
+  font-style: italic;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+  text-align: center;
+}
+
+html[data-theme="dark"] .course-title-section {
+  background: linear-gradient(135deg, #003d82, #0056b3);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Quarter Overview Styling */
+.quarter-overview-section {
+  background-color: var(--ifm-color-emphasis-100);
+  padding: 2rem;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+html[data-theme="dark"] .quarter-overview-section {
+  background-color: var(--ifm-color-emphasis-900);
+  border: 2px solid #4a86e8;
+}
+
+/* Module Sequence Styling */
+.module-sequence-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.module-card {
+  background-color: var(--ifm-background-surface-color);
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="dark"] .module-card {
+  background-color: var(--ifm-background-surface-color);
+  border: 2px solid #4a86e8;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.module-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 123, 255, 0.3);
+}
+
+html[data-theme="dark"] .module-card:hover {
+  box-shadow: 0 8px 15px rgba(74, 134, 232, 0.4);
+}
+
+.module-card h2 {
+  color: #0056b3 !important;
+  font-size: 1.8rem;
+  margin-top: 0;
+  text-align: center;
+  text-transform: uppercase;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #007bff;
+  margin-bottom: 1rem;
+}
+
+html[data-theme="dark"] .module-card h2 {
+  color: #64b5f6 !important;
+  border-bottom: 2px solid #4a86e8;
+}
+
+.module-card ul {
+  padding-left: 1.5rem;
+  margin-bottom: 0;
+}
+
+.module-card li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+/* Learning Outcomes Styling */
+.learning-outcomes-section {
+  background-color: var(--ifm-color-emphasis-100);
+  border-left: 5px solid #28a745;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+html[data-theme="dark"] .learning-outcomes-section {
+  background-color: var(--ifm-color-emphasis-900);
+  border-left: 5px solid #4caf50;
+}
+
+/* Weekly Breakdown Styling */
+.weekly-breakdown-section {
+  background-color: var(--ifm-color-emphasis-100);
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+html[data-theme="dark"] .weekly-breakdown-section {
+  background-color: var(--ifm-color-emphasis-900);
+  border: 1px solid #ffca28;
+}
+
+.weekly-breakdown-section h3 {
+  color: #856404 !important;
+  margin-top: 0;
+}
+
+html[data-theme="dark"] .weekly-breakdown-section h3 {
+  color: #ffcc80 !important;
+}
+
+/* Assessment Section Styling */
+.assessment-section {
+  background-color: var(--ifm-color-emphasis-100);
+  border: 1px solid #dc3545;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+html[data-theme="dark"] .assessment-section {
+  background-color: var(--ifm-color-emphasis-900);
+  border: 1px solid #f44336;
+}
+
+.assessment-section h3 {
+  color: #721c24 !important;
+  margin-top: 0;
+}
+
+html[data-theme="dark"] .assessment-section h3 {
+  color: #ef9a9a !important;
+}
+
+/* Hardware Requirements Styling */
+.hardware-requirements-section {
+  background-color: var(--ifm-color-emphasis-100);
+  border: 1px solid #6f42c1;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+html[data-theme="dark"] .hardware-requirements-section {
+  background-color: var(--ifm-color-emphasis-900);
+  border: 1px solid #ab47bc;
+}
+
+.hardware-requirements-section h3 {
+  color: #4d2687 !important;
+  margin-top: 0;
+}
+
+html[data-theme="dark"] .hardware-requirements-section h3 {
+  color: #b39ddb !important;
+}
+
+/* Enhanced header and text styling for consistency across all pages */
+.markdown h1 {
+  font-size: 2.2rem;
+  border-bottom: 3px solid #007bff;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.markdown h2 {
+  font-size: 1.8rem;
+  color: #0056b3 !important;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.markdown h3 {
+  font-size: 1.5rem;
+  color: #007bff !important;
+  margin-top: 1.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.markdown h4 {
+  color: #007bff !important;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+html[data-theme="dark"] .markdown h1 {
+  border-bottom: 3px solid #4a86e8;
+}
+
+html[data-theme="dark"] .markdown h2 {
+  color: #64b5f6 !important;
+}
+
+html[data-theme="dark"] .markdown h3 {
+  color: #4a86e8 !important;
+}
+
+html[data-theme="dark"] .markdown h4 {
+  color: #4a86e8 !important;
+}
+
+/* Body text styling for readability */
+.markdown p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+/* Enhanced list styling */
+.markdown ul, .markdown ol {
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+.markdown li {
+  margin-bottom: 0.3rem;
+}
+
+/* Card-style styling for content sections */
+.content-card {
+  background-color: var(--ifm-background-surface-color);
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+html[data-theme="dark"] .content-card {
+  background-color: var(--ifm-background-surface-color);
+  border: 1px solid #4a5568;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Critical information highlighting */
+.critical-info {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-left: 4px solid #ffc107;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0 4px 4px 0;
+}
+
+html[data-theme="dark"] .critical-info {
+  background-color: rgba(255, 204, 40, 0.2);
+  border-left: 4px solid #ffca28;
 }
 
 /* Homepage hero banner styling */

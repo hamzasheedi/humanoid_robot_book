@@ -1,19 +1,31 @@
-# title: Troubleshooting and Validation for Complete Capstone Integration
----  
-# Troubleshooting and Validation for Complete Capstone Integration  This guide provides a structured framework for validating and troubleshooting a fully integrated capstone robotics system. It covers ROS 2 infrastructure, Digital Twin simulation, NVIDIA Isaac-based perception, and the Vision-Language-Action (VLA) pipeline.
+# Troubleshooting and Validation for Complete Capstone Integration 
+ * Troubleshooting and Validation for Complete Capstone Integration  This guide provides a structured framework for validating and troubleshooting a fully integrated capstone robotics system. It covers ROS 2 infrastructure, Digital Twin simulation, NVIDIA Isaac-based perception, and the Vision-Language-Action (VLA) pipeline.
 ---
-## Systematic Validation Framework  ### Component-Level Validation  
+### Systematic Validation Framework  
+### Component-Level Validation  
 ---  
-### ROS 2 Infrastructure  #### Validation Steps  1. List active nodes:
-```bash     ros2 node list   `
+### ROS 2 Infrastructure  
+#### Validation Steps  
+### ROS 2 CLI Cheat Sheet
 
-1.  ros2 topic list
-    
-2.  ros2 topic info
-    
-3.  ros2 service list
-    
+Here is the formatted list of commands with their descriptions:
 
+* **`ros2 node list`**
+    Outputs a list of the names of all the nodes currently running in the system.
+
+* **`ros2 topic list`**
+    Outputs a list of all active topics currently available in the ROS graph.
+
+
+
+* **`ros2 topic info`**
+    Prints specific details about a topic (requires a topic name argument), such as the message type and publisher/subscriber count.
+
+* **`ros2 service list`**
+    Outputs a list of all active services currently available in the ROS graph.
+
+
+**Would you like me to add the commands for *actions* (`ros2 action list`) to this list as well?**
 #### Expected Results
 
 *   All launch-configured nodes are active

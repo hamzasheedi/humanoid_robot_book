@@ -60,9 +60,9 @@ pip install rsl-rl
 pip install omni-isaac-gym-envs
 ```
 
-### Creating a Simple RL Environment
+## Creating Custom Environments
 
-Here's an example environment for training a simple navigation task:
+Creating custom RL environments for robotic tasks:
 
 ```python
 import torch
@@ -70,7 +70,6 @@ import numpy as np
 from isaacgym import gymtorch
 from isaacgym import gymapi
 from isaacgym.torch_utils import *
-from rl_games.common.player import BasePlayer
 
 class IsaacNavigationEnv:
     def __init__(self, cfg, sim_device, rl_device, graphics_device_id, headless):
@@ -91,7 +90,7 @@ class IsaacNavigationEnv:
         
         # Create actors and setup environment
         self.setup_environment()
-        
+
     def make_sim(self):
         # Create simulation
         sim_params = gymapi.SimParams()
@@ -113,26 +112,36 @@ class IsaacNavigationEnv:
             self.device_id, self.device_id, 
             gymapi.SIM_PHYSX, sim_params)
         return sim
-    
+
     def reset_idx(self, env_ids):
         """Reset specific environments"""
         # Reset robot positions, target positions, etc.
         pass
-    
+
     def pre_physics_step(self, actions):
         """Apply actions to simulation"""
         # Convert actions to joint torques or position targets
         pass
-    
+
     def post_physics_step(self):
         """Process simulation results for RL"""
         # Calculate observations, rewards, and determine done conditions
+        pass
+
+    def compute_observations(self):
+        """Compute the observations for the agent"""
+        # Extract relevant information from simulation
+        pass
+
+    def compute_rewards(self):
+        """Compute rewards for the agent"""
+        # Calculate reward based on task completion, efficiency, etc.
         pass
 ```
 
 ## Training Loop
 
-Using the RSL-RL library for training:
+Using RSL-RL for training:
 
 ```python
 from rsl_rl.runners import OnPolicyRunner
