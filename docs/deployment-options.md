@@ -1,16 +1,18 @@
 ---
-title: Deployment Guide for GitHub Pages
+title: Deployment Options: GitHub Pages & Vercel
 ---
 
-# Deployment Guide for GitHub Pages
+# Deployment Options: GitHub Pages & Vercel
 
-This guide provides detailed steps for deploying the AI Robotics Textbook to GitHub Pages using Docusaurus v3.
+This guide provides detailed steps for deploying the AI Robotics Textbook to GitHub Pages or Vercel using Docusaurus v3.
 
 ## Overview
 
-This project uses Docusaurus v3 for documentation generation and GitHub Pages for deployment. The site has already been configured with the correct settings in `docusaurus.config.js` for GitHub Pages deployment.
+This project uses Docusaurus v3 for documentation generation. You can deploy to either GitHub Pages or Vercel depending on your needs and preferences. Both deployment methods are fully supported, though this project was primarily configured for GitHub Pages.
 
-## GitHub Pages Deployment Guide
+---
+
+## PART 1: Deploying to GitHub Pages
 
 ### Prerequisites
 - GitHub repository set up with your Docusaurus project
@@ -20,7 +22,7 @@ This project uses Docusaurus v3 for documentation generation and GitHub Pages fo
 
 ### Configuration in docusaurus.config.js
 
-The deployment settings have already been configured in this project:
+The GitHub Pages deployment settings are configured in this project:
 
 ```javascript
 const config = {
@@ -82,77 +84,185 @@ const config = {
    - Images and assets display properly
    - Search functionality (if enabled) works
 
-### Troubleshooting
+---
 
-#### Common Deployment Issues
+## PART 2: Deploying to Vercel
 
-**Issue**: Deployment fails with authentication error
-**Solution**: Ensure you have proper credentials set up for git operations, either:
-- Personal Access Token for HTTPS authentication
-- SSH key properly configured
+### Prerequisites
+- Vercel account (linked with GitHub)
+- Access to the repository in both GitHub and Vercel
+- A `vercel.json` configuration file in the project root
 
-**Issue**: Site doesn't load after deployment
-**Solution**: 
-- Check the GitHub Pages settings in repository settings
-- Verify the correct branch and folder are selected
-- Ensure the baseUrl in `docusaurus.config.js` matches your repository name
+### Configuration Overview
 
-**Issue**: Links are broken in deployed site
-**Solution**:
-- Verify that all internal links are relative (not absolute paths)
-- Ensure the site is browsed via the correct URL (https://username.github.io/repo-name/)
+The project includes a `vercel.json` file that enables Vercel deployment:
 
-#### Verification Commands
+```json
+{
+  "root": ".",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": true
+}
+```
 
-- Check if the build was successful: `npm run build`
-- Manually check the generated site: `npm run serve` and visit `http://localhost:3000`
-- Verify git remote: `git remote -v`
-- Check current branch: `git branch`
+### Deployment Steps for Vercel
 
-### Manual Deployment (Alternative Method)
+#### Option A: Git Integration (Recommended)
+1. Go to https://vercel.com/
+2. Sign in with your GitHub account
+3. Click "New Project" → "Import Git Repository"
+4. Select your `humanoid_robot_book` repository
+5. Configure the project settings:
+   - **FRAMEWORK PRESET**: Select "Other" (since Docusaurus has its own build process)
+   - **BUILD COMMAND**: `npm run build`
+   - **OUTPUT DIRECTORY**: `build` (this is the directory Docusaurus outputs to)
+   - **ROOT DIRECTORY**: Leave as default (root)
+6. Add environment variables if needed:
+   - NODE_VERSION: 20.x or your preferred version
+7. Deploy the project
 
-If the automatic deployment fails, you can manually deploy:
+#### Option B: Manual Deployment (Using Vercel CLI)
+1. Install Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+2. Build the static site:
+   ```bash
+   npm run build
+   ```
+3. Deploy to Vercel:
+   ```bash
+   vercel --prod
+   ```
 
-1. Build the site: `npm run build`
-2. Create a new orphan branch: `git checkout --orphan gh-pages`
-3. Remove all files: `git rm -rf .`
-4. Copy the build folder content (from the `build` directory)
-5. Commit and push: `git add . && git commit -m "Deploy website" && git push origin gh-pages`
-6. Switch back to your main branch: `git checkout -`
+### Vercel Configuration Details
 
-### Deployment Schedule
+The `vercel.json` file specifies how Vercel should build and deploy your project:
+- **root**: Points to the project root directory
+- **builds**: Defines how to build the project using the package.json script
+- **routes**: Sets up catch-all routing for SPA functionality (needed for client-side routing)
+- **cleanUrls**: Removes .html extensions from URLs for cleaner paths
+- **trailingSlash**: Controls trailing slash behavior to match Docusaurus configuration
 
-For regular updates, follow this workflow:
-1. Make changes to documentation
-2. Test locally: `npm start`
-3. Build: `npm run build`
-4. Deploy: `GIT_USER=hamzasheedi npm run deploy`
-5. Verify deployment at the site URL
+### Environment Variables for Vercel
 
-## Post-Deployment Validation
+For Vercel-specific configuration without changing the main codebase, you can define environment variables during project import in the Vercel dashboard:
 
-After deployment:
+- `NODE_VERSION`: Node.js version to use (e.g., "20.x")
+- Any other build or runtime environment variables
 
-1. **Accessibility**: Verify the site is accessible at the configured URL
-2. **Functionality**: Test navigation, search, and interactive elements
-3. **Performance**: Check page load times and responsiveness
-4. **Content Accuracy**: Verify all content appears as intended
+### Custom Domain Setup (Optional)
 
-## Updating Content Post-Deployment
+1. In your Vercel dashboard, navigate to your project
+2. Go to Settings → Domains
+3. Add your custom domain
+4. Follow Vercel's instructions to update DNS settings
+5. Vercel will automatically provision an SSL certificate
 
-To update content after initial deployment:
+### Verification Steps for Vercel
 
-1. Make changes to source files
-2. Commit changes to the main branch
-3. Run deployment command again: `GIT_USER=hamzasheedi npm run deploy`
-4. The site will update automatically
+1. After deployment, check that:
+   - The site is accessible at the provided Vercel URL (e.g., `https://humanoid-robot-book-hamzasheedi.vercel.app`)
+   - If using custom domain, verify it works at your domain
+   - All pages load correctly
+   - Navigation works properly
+   - Assets and interactive elements function properly
 
-## Security Considerations
+### Troubleshooting Vercel Deployment
 
-- Ensure that sensitive information is not included in the documentation
-- Review all content before deployment to GitHub Pages (which is public by default)
-- Use appropriate access controls for the GitHub repository
+#### Common Issues:
+- **Build failures**: Check NODE_VERSION is appropriate for Docusaurus 3.x (needs Node 18+)
+- **Asset loading problems**: If deploying to subdirectory instead of root, adjust baseUrl accordingly
+- **Routing issues**: The `vercel.json` routes section handles SPA routing by redirecting all routes to index.html
+
+#### For GitHub Pages vs Vercel Configuration:
+If you need to deploy the same codebase to both platforms with different base URLs, you can use environment variables:
+
+```js
+// In docusaurus.config.js
+const isVercel = process.env.VERCEL_ENV !== undefined;
+
+const config = {
+  url: isVercel 
+    ? 'https://humanoid-robot-book.hamzasheedi.vercel.app' 
+    : 'https://hamzasheedi.github.io',
+  baseUrl: isVercel ? '/' : '/humanoid_robot_book/',
+  // ... rest of config
+};
+```
 
 ---
 
-The AI Robotics Textbook is now ready for deployment to GitHub Pages. The configuration is set up correctly to ensure the site appears at: https://hamzasheedi.github.io/humanoid_robot_book/
+## Comparing GitHub Pages vs Vercel
+
+| Feature | GitHub Pages | Vercel |
+|---------|--------------|--------|
+| **Cost** | Free for public repos | Free tier with generous limits |
+| **Setup** | Requires gh-pages branch | Git integration or CLI |
+| **Build Time** | Limited | More generous (30 mins) |
+| **Global CDN** | Basic | Excellent with edge locations |
+| **SSL Certificates** | Automatic for GitHub domains | Automatic for all deployments |
+| **Custom Domains** | Supported | Supported with easy setup |
+| **Preview Deployments** | No native support | Native support for PR previews |
+| **Analytics** | Third-party required | Built-in analytics |
+| **Caching** | Standard | Advanced edge caching |
+| **Performance** | Good | Excellent with global edge network |
+
+### When to Choose GitHub Pages:
+- If you're already using GitHub for source control
+- For completely free hosting of open-source documentation
+- For simple deployment that stays within the GitHub ecosystem
+- If you don't need advanced features like preview deployments
+
+### When to Choose Vercel:
+- For better global performance with worldwide CDN
+- When you need preview deployments for PRs
+- For advanced caching and optimization features
+- If you want built-in analytics and performance monitoring
+
+## Notes on Dual Platform Configuration
+
+The current configuration supports GitHub Pages deployment with the URL `https://hamzasheedi.github.io/humanoid_robot_book/`. If you want to deploy to both platforms:
+
+1. **For Vercel as primary**: You would need to modify the baseUrl to `/` in docusaurus.config.js and ensure all paths are relative to root
+2. **For both platforms**: Use environment variables to dynamically set the baseUrl based on the deployment platform
+3. **For platform-specific builds**: Create separate build scripts or branches for each platform with appropriate configurations
+
+## Troubleshooting
+
+### Common Deployment Issues for Both Platforms:
+
+1. **Broken Links**: 
+   - Verify all internal links are correct relative to your URL structure
+   - For GitHub Pages, ensure links account for the subdirectory (e.g., `/humanoid_robot_book/docs/`)
+   - For Vercel, ensure links work relative to root or configured base path
+
+2. **Missing Assets**:
+   - Check that the CSS, JS, and image files are loading correctly
+   - Verify that your baseUrl setting is correct for the deployment platform
+
+3. **Navigation Problems**:
+   - Ensure client-side routing is properly configured
+   - Test navigation between all sections of your site
+
+4. **Build Failures**:
+   - Check that all dependencies are properly defined in package.json
+   - Verify the Node.js version is compatible with your Docusaurus version
+   - Look for any platform-specific configuration differences needed
+
+The AI Robotics Textbook is now configured for deployment on both GitHub Pages and Vercel. Choose the platform that best fits your deployment requirements and audience accessibility needs.
