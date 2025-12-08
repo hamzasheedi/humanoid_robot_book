@@ -14,7 +14,7 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "prebuild": "npm run docusaurus clear",
     "postbuild": "echo Build completed successfully for Vercel deployment",
-    "vercel-build": "VERCEL_ENV=true npm run build",
+    "vercel-build": "cross-env NODE_ENV=production VERCEL_ENV=true docusaurus build",
     "prepare-deployment": "cross-env DEPLOY_TARGET=vercel npm run build"
   },
   "dependencies": {

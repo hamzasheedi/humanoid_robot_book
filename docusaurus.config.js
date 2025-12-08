@@ -12,11 +12,11 @@ const config = {
   tagline: 'Physical AI & Humanoid Robotics Course',
   favicon: 'img/favicon.ico',
 
-  // Set the production url of your site here
-  url: 'https://hamzasheedi.github.io',
+  // Set the production url of your site here - conditionally for different platforms
+  url: process.env.NETLIFY || process.env.VERCEL_ENV ? 'https://humanoid-robot-book.vercel.app' : 'https://hamzasheedi.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/humanoid_robot_book/',
+  // For GitHub pages deployment, use '/<projectName>/', for Vercel use '/'
+  baseUrl: process.env.NETLIFY || process.env.VERCEL_ENV ? '/' : '/humanoid_robot_book/',
 
   // Specify trailing slash behavior to ensure consistent URLs
   trailingSlash: true,
