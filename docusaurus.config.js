@@ -45,6 +45,10 @@ const config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/hamzasheedi/humanoid_robot_book/tree/main/',
+          routeBasePath: '/docs', // Serve the docs at /docs
+        },
+        pages: {
+          // Use the pages from src/pages
         },
         blog: false, // Disable blog if not needed
         theme: {
@@ -53,6 +57,9 @@ const config = {
       }),
     ],
   ],
+
+  // Custom pages configuration
+  // Pages are handled by the classic preset by default
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
