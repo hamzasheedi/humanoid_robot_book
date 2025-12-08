@@ -13,18 +13,17 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here - conditionally for different platforms
-  url: process.env.NETLIFY || process.env.VERCEL_ENV ? 'https://humanoid-robot-book.vercel.app' : 'https://hamzasheedi.github.io',
+  url: 'https://humanoid-robot-book.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, use '/<projectName>/', for Vercel use '/'
-  baseUrl: process.env.NETLIFY || process.env.VERCEL_ENV ? '/' : '/humanoid_robot_book/',
+  baseUrl: '/',
 
   // Specify trailing slash behavior to ensure consistent URLs
   trailingSlash: true,
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'hamzasheedi', // Usually your GitHub org/user name.
-  projectName: 'humanoid_robot_book', // Usually your repo name.
+  // Vercel deployment config.
+  organizationName: 'hamzasheedi', // Your GitHub org/user name.
+  projectName: 'humanoid_robot_book', // Your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
