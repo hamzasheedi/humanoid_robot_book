@@ -1,5 +1,5 @@
 ---
-title: Deployment Options: GitHub Pages & Vercel
+title: Deployment Options GitHub Pages and Vercel
 ---
 
 # Deployment Options: GitHub Pages & Vercel
@@ -89,8 +89,10 @@ const config = {
 ## PART 2: Deploying to Vercel
 
 ### Prerequisites
-- Vercel account (linked with GitHub)
-- Access to the repository in both GitHub and Vercel
+- Vercel CLI installed and authenticated (`vercel login`)
+- PowerShell terminal
+- Valid `package.json` with build script
+- Git repository initialized (optional but recommended)
 - A `vercel.json` configuration file in the project root
 
 ### Configuration Overview
@@ -120,6 +122,23 @@ The project includes a `vercel.json` file that enables Vercel deployment:
 }
 ```
 
+### Verifying Your Build Script
+
+Before deploying, it's crucial to verify that your build script works correctly:
+
+```powershell
+# Navigate to your project directory
+Set-Location "C:\Users\Hamza\Desktop\qwen_ai_book\humanoid_robot_book"
+
+# Test the build script locally to ensure it works
+npm run build
+
+# Verify the build directory was created
+Get-ChildItem build -PathType Container
+```
+
+**Important**: Make sure your build completes successfully before proceeding to avoid deployment errors.
+
 ### Deployment Steps for Vercel
 
 #### Option A: Git Integration (Recommended)
@@ -136,19 +155,42 @@ The project includes a `vercel.json` file that enables Vercel deployment:
    - NODE_VERSION: 20.x or your preferred version
 7. Deploy the project
 
-#### Option B: Manual Deployment (Using Vercel CLI)
-1. Install Vercel CLI:
-   ```bash
+#### Option B: Manual Deployment (Using Vercel CLI with PowerShell)
+1. Open PowerShell as your terminal
+2. Ensure Vercel CLI is installed and authenticated:
+   ```powershell
+   # Install Vercel CLI if not already installed
    npm install -g vercel
+
+   # Authenticate with your Vercel account
+   vercel login
    ```
-2. Build the static site:
-   ```bash
+3. Verify your project has the correct configuration:
+   ```powershell
+   # Check that you're in the right directory
+   Get-Location
+
+   # Verify package.json has the correct build script
+   Get-Content package.json | Select-String "build"
+   ```
+4. Build the static site locally to verify it works:
+   ```powershell
    npm run build
    ```
-3. Deploy to Vercel:
-   ```bash
+5. Deploy to Vercel:
+   ```powershell
+   # For preview deployment first
+   vercel
+
+   # For direct production deployment
    vercel --prod
    ```
+
+**PowerShell-Specific Deployment Process:**
+- Vercel CLI will prompt for project settings (accept defaults for most options)
+- The tool will upload your files, install dependencies, and build your project
+- Once complete, you'll receive a live URL to view your deployed site
+- For future updates, simply run `vercel --prod` again to redeploy
 
 ### Vercel Configuration Details
 

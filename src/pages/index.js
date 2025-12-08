@@ -308,6 +308,26 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Deployment Options */}
+        <section className={clsx('hero hero--primary', styles.deploymentSection)}>
+          <div className="container text--center">
+            <h2>Deployment Options</h2>
+            <p>This textbook is deployed on both GitHub Pages and Vercel for maximum accessibility</p>
+            <div className={styles.buttons}>
+              <Link
+                className="button button--secondary button--lg margin-horiz--md"
+                to="/docs/deployment-options">
+                View Deployment Guide
+              </Link>
+              <Link
+                className="button button--outline button--secondary button--lg margin-horiz--md"
+                to="/docs/vercel-deployment">
+                Vercel Deployment Info
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Call to Action */}
         <section className={clsx('hero hero--dark', styles.ctaSection)}>
           <div className="container text--center">
