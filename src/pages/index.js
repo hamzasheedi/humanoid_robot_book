@@ -8,8 +8,8 @@ import styles from './index.module.css';
 // Define the ModuleCard component within this file
 function ModuleCard({ title, description, link }) {
   return (
-    <div className="col col--4 margin-bottom--lg">
-      <div className="card-demo padding-horiz--md">
+    <div className={clsx('col', 'col--4', 'margin-bottom--lg')}>
+      <div className={clsx('card-demo', styles.moduleCard)}>
         <div className="card">
           <div className="card__body">
             <h3>{title}</h3>

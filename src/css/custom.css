@@ -1,10 +1,175 @@
-/* styles.module.css */
+/* Custom CSS for AI Robotics Textbook */
 
+/* Ensure dark mode consistency across the site */
+html[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+}
+
+/* Blue border for cards throughout the site */
+.card {
+  border: 2px solid #007bff; /* Blue border for all cards */
+}
+
+html[data-theme='dark'] .card {
+  border: 2px solid #007bff; /* Blue border in dark mode too */
+}
+
+/* Specific card styling */
+.card-demo {
+  padding: 1rem;
+  border: 2px solid #007bff; /* Blue border for card demos */
+  border-radius: 0.5rem;
+}
+
+html[data-theme='dark'] .card-demo {
+  border: 2px solid #007bff; /* Blue border in dark mode too */
+}
+
+/* Homepage-specific styles only - using more standard CSS selectors */
+/* Target homepage text elements to ensure they appear properly in dark mode */
+html[data-theme="dark"] .container article *,
+html[data-theme="dark"] .container main *,
+html[data-theme="dark"] .hero__subtitle,
+html[data-theme="dark"] .heroBanner p,
+html[data-theme="dark"] .section p,
+html[data-theme="dark"] .section ul,
+html[data-theme="dark"] .section li,
+html[data-theme="dark"] .section div,
+html[data-theme="dark"] .featureList p,
+html[data-theme="dark"] .featureList li,
+html[data-theme="dark"] .featureList div {
+  color: rgba(255, 255, 255, 0.87) !important;
+  /* Ensure text is properly visible in dark mode */
+}
+
+/* Override any specific text elements that might be dark */
+html[data-theme="dark"] .container article .col--8,
+html[data-theme="dark"] .container article .col--4,
+html[data-theme="dark"] .container article .col--6,
+html[data-theme="dark"] .row,
+html[data-theme="dark"] .container.padding-horiz--md {
+  color: rgba(255, 255, 255, 0.87) !important;
+}
+
+/* Specific homepage sections with beautiful outlines */
+html[data-theme="dark"] .container.padding-horiz--md:nth-of-type(2),
+html[data-theme="dark"] .container.padding-horiz--md:nth-of-type(3),
+html[data-theme="dark"] .container.padding-horiz--md:nth-of-type(4),
+html[data-theme="dark"] .container.padding-horiz--md:nth-of-type(5),
+html[data-theme="dark"] .container.padding-horiz--md:nth-of-type(6) {
+  border: 2px solid #4a86e8; /* Beautiful blue border */
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 2.5rem;
+  background-color: rgba(40, 40, 40, 0.7); /* Darker background for contrast in dark mode */
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* For light mode - similar but subtle outline */
+.container.padding-horiz--md:nth-of-type(2),
+.container.padding-horiz--md:nth-of-type(3),
+.container.padding-horiz--md:nth-of-type(4),
+.container.padding-horiz--md:nth-of-type(5),
+.container.padding-horiz--md:nth-of-type(6) {
+  border: 2px solid #4a86e8; /* Beautiful blue border */
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 2.5rem;
+  background-color: rgba(245, 245, 245, 0.9); /* Light background for contrast in light mode */
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Section headings with enhanced styling and separator */
+.container.padding-horiz--md h2.text--center {
+  background-color: #e3f2fd !important;
+  padding: 12px 20px;
+  border-radius: 6px;
+  color: #0d47a1 !important;
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  position: relative;
+  border: 1px solid #bbdefb;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Dark mode for section headings */
+html[data-theme="dark"] .container.padding-horiz--md h2.text--center {
+  background-color: #1a237e !important;
+  color: #e3f2fd !important;
+  border: 1px solid #5c6bc0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Add section separator line after headings */
+.container.padding-horiz--md h2.text--center::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, transparent, #4a86e8, transparent);
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  border-radius: 2px;
+}
+
+html[data-theme="dark"] .container.padding-horiz--md h2.text--center::after {
+  background: linear-gradient(to right, transparent, #64b5f6, transparent);
+}
+
+/* Specific styling for the details/summary elements (expandable sections) */
+html[data-theme="dark"] details {
+  background-color: rgba(30, 30, 30, 0.8) !important;
+  border: 1px solid #4a86e8;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+html[data-theme="dark"] summary {
+  color: white !important;
+  cursor: pointer;
+  padding: 5px;
+  background-color: rgba(26, 35, 126, 0.6);
+  border-radius: 3px;
+}
+
+details {
+  background-color: rgba(240, 240, 240, 0.7);
+  border: 1px solid #4a86e8;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 1rem;
+}
+
+summary {
+  color: #0d47a1;
+  cursor: pointer;
+  padding: 5px;
+  background-color: rgba(227, 242, 253, 0.6);
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+/* Homepage hero banner styling */
 .heroBanner {
   padding: 4rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+  background: var(--ifm-hero-background-color, #2b3137);
+  color: var(--ifm-hero-text-color, white);
 }
 
 @media screen and (max-width: 996px) {
@@ -45,8 +210,13 @@
 .featureCard {
   padding: 1.5rem;
   border-radius: 0.5rem;
-  background-color: #f6f6f6;
+  background-color: var(--ifm-card-background-color, #f6f6f6);
   margin-bottom: 1rem;
+  border: 2px solid #007bff; /* Add blue border */
+}
+
+html[data-theme='dark'] .featureCard {
+  background-color: var(--ifm-card-background-color, #2d2d2d);
 }
 
 @media screen and (min-width: 997px) {
@@ -69,9 +239,13 @@
 .moduleCard {
   padding: 1.5rem;
   border-radius: 0.5rem;
-  background-color: #fafafa;
-  border: 1px solid #eee;
+  background-color: var(--ifm-card-background-color, #fafafa);
+  border: 2px solid #007bff !important; /* Blue border for module cards */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+html[data-theme='dark'] .moduleCard {
+  background-color: var(--ifm-card-background-color, #2d2d2d);
 }
 
 .moduleCard:hover {
@@ -79,7 +253,47 @@
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
+html[data-theme='dark'] .moduleCard:hover {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
 .heroBannerLogo {
   max-width: 200px;
   height: auto;
+}
+
+/* Consistent dark mode for sections */
+.section {
+  padding: 4rem 0;
+  background-color: var(--ifm-background-color, #f9f9f9);
+  color: var(--ifm-color-emphasis-900, rgba(0, 0, 0, 0.9));
+}
+
+html[data-theme='dark'] .section {
+  background-color: var(--ifm-background-color, #171717);
+  color: var(--ifm-color-emphasis-100, rgba(255, 255, 255, 0.9));
+}
+
+/* Card styling for consistency across the site */
+.card__body {
+  padding: 1.5rem;
+  color: var(--ifm-color-emphasis-900, rgba(0, 0, 0, 0.9));
+}
+
+html[data-theme='dark'] .card__body {
+  color: var(--ifm-color-emphasis-100, rgba(255, 255, 255, 0.9));
+}
+
+.card__footer {
+  padding: 1rem 1.5rem;
+  background-color: var(--ifm-color-emphasis-100, #f8f9fa);
+  border-top: 1px solid var(--ifm-color-emphasis-300, #e9ecef);
+  border-radius: 0 0 0.5rem 0.5rem;
+  color: var(--ifm-color-emphasis-900, rgba(0, 0, 0, 0.9));
+}
+
+html[data-theme='dark'] .card__footer {
+  background-color: var(--ifm-color-emphasis-900, #2d2d2d);
+  border-top: 1px solid var(--ifm-color-emphasis-700, #454545);
+  color: var(--ifm-color-emphasis-100, rgba(255, 255, 255, 0.9));
 }
