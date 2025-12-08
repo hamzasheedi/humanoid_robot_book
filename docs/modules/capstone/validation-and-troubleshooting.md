@@ -1,517 +1,367 @@
+# title: Troubleshooting and Validation for Complete Capstone Integration
+---  
+# Troubleshooting and Validation for Complete Capstone Integration  This guide provides a structured framework for validating and troubleshooting a fully integrated capstone robotics system. It covers ROS 2 infrastructure, Digital Twin simulation, NVIDIA Isaac-based perception, and the Vision-Language-Action (VLA) pipeline.
 ---
-title: Troubleshooting and Validation for Complete Capstone Integration
----
+## Systematic Validation Framework  ### Component-Level Validation  
+---  
+### ROS 2 Infrastructure  #### Validation Steps  1. List active nodes:
+```bash     ros2 node list   `
 
-# Troubleshooting and Validation for Complete Capstone Integration
-
-This guide provides systematic approaches for troubleshooting issues in the integrated capstone system and validating that all components work together correctly. It covers validation of the complete integration of ROS 2, Digital Twin simulation, NVIDIA Isaac perception, and Vision-Language-Action (VLA) systems.
-
-## Systematic Validation Framework
-
-### 1. Component-Level Validation
-
-#### ROS 2 Infrastructure
-**Validation Steps:**
-1. Verify all required nodes are running:
-   ```bash
-   ros2 node list
-   ```
-2. Check all required topics are available:
-   ```bash
-   ros2 topic list
-   ```
-3. Validate message types on all topics:
-   ```bash
-   ros2 topic info <topic_name>
-   ```
-4. Check service availability:
-   ```bash
-   ros2 service list
-   ```
-
-**Expected Results:**
-- All nodes listed in launch file are active
-- All required topics are present with correct message types
-- All services are reachable and responding
-- No duplicate or conflicting topic names
-
-#### Digital Twin Validation
-**Validation Steps:**
-1. Test simulation environment loading:
-   - Verify camera feeds are publishing images
-   - Check that the robot model is properly positioned
-   - Validate physics properties are realistic
-2. Validate sensor simulation:
-   - Camera images with realistic noise and artifacts
-   - LiDAR/depth data with appropriate resolution
-   - IMU/odometry data matching physical model
-
-**Expected Results:**
-- All sensors publish realistic data
-- Robot responds correctly to joint commands
-- Physics simulation behaves consistently with real world
-
-#### Perception System Validation
-**Validation Steps:**
-1. Test object detection capabilities:
-   ```bash
-   ros2 topic echo /object_detection/obstacles
-   ```
-2. Validate landmark recognition:
-   - Check landmark detection accuracy
-   - Verify localization quality
-3. Test sensor fusion:
-   - Combine multiple sensor inputs
-   - Validate fused perception output
-
-**Expected Results:**
-- Object detection accuracy >85% for known objects
-- Landmark recognition with <0.1m accuracy
-- Sensor fusion providing consistent environmental model
-
-#### Navigation System Validation
-**Validation Steps:**
-1. Test path planning:
-   - Verify planner generates valid paths
-   - Check obstacle avoidance effectiveness
-2. Validate navigation execution:
-   - Test waypoint following precision
-   - Verify obstacle avoidance in dynamic environments
-
-**Expected Results:**
-- Path planning success rate >95%
-- Waypoint following precision <0.1m
-- Obstacle avoidance preventing all collisions
-
-#### VLA Integration Validation
-**Validation Steps:**
-1. Test voice recognition:
-   - Verify speech-to-text accuracy >90%
-   - Test performance in noisy environments
-2. Validate natural language understanding:
-   - Test command parsing accuracy
-   - Verify appropriate action generation
-
-**Expected Results:**
-- Speech recognition accuracy >90% in quiet conditions
-- >95% command parsing accuracy for standard commands
-- Appropriate actions generated for valid inputs
-
-### 2. Integration-Level Validation
-
-#### Communication Validation
-**Validation Steps:**
-1. Check message flow between components:
-   - Monitor all inter-component topics
-   - Verify message rates are appropriate
-   - Check for message loss or delays
-
-2. Validate system-wide state:
-   - Check TF transforms are available
-   - Verify all coordinate frames are properly connected
-   - Test data synchronization between components
-
-**Expected Results:**
-- No message loss between components
-- All required TF frames published with <100ms delay
-- Data synchronized across components for coherent state
-
-#### Performance Validation
-**Validation Steps:**
-1. Monitor system resource usage:
-   - CPU utilization <80% sustained
-   - Memory usage stable over time
-   - GPU utilization appropriate for workload
-
-2. Test response times:
-   - Voice command to action <3 seconds
-   - Perception pipeline <100ms
-   - Navigation planning <500ms
-
-**Expected Results:**
-- All components meeting real-time requirements
-- No resource contention causing performance degradation
-- Consistent response times under load
-
-### 3. End-to-End Validation
-
-#### Scenario-Based Testing
-Validate the complete system with realistic scenarios:
-
-**Scenario 1: Simple Navigation**
-- **Command**: "Go to the kitchen"
-- **Expected Behavior**: 
-  - Recognize kitchen location in map
-  - Plan safe path to kitchen
-  - Navigate successfully avoiding obstacles
-  - Arrive at destination within 0.2m error
-- **Validation Metrics**:
-  - Task completion: 10/10 attempts
-  - Position accuracy: <0.2m error
-  - Time to completion: <5 minutes
-
-**Scenario 2: Object Interaction**
-- **Command**: "Find the red ball and pick it up"
-- **Expected Behavior**:
-  - Detect red ball in environment
-  - Navigate to ball position
-  - Execute grasping maneuver
-  - Confirm successful grasp
-- **Validation Metrics**:
-  - Object detection accuracy: >90%
-  - Grasping success rate: >75%
-  - Total task completion: >80%
-
-**Scenario 3: Complex Multi-Step Task**
-- **Command**: "Go to the living room, find the blue cup on the table, and bring it to me"
-- **Expected Behavior**:
-  - Parse multi-step command correctly
-  - Navigate to living room
-  - Locate blue cup on table
-  - Grasp cup
-  - Navigate back to user
-- **Validation Metrics**:
-  - Command parsing: >95% accuracy
-  - Task completion: >70% success rate
-  - Time to completion: <10 minutes
-
-## Troubleshooting Methodology
-
-### 1. Diagnostic Tools and Commands
-
-#### ROS 2 Diagnostic Commands
-```bash
-# Check overall ROS 2 system health
-ros2 doctor
-
-# Monitor node activity
-ros2 lifecycle list
-
-# Check network connectivity
-ros2 daemon status
-
-# Profile node performance
-ros2 run plotjuggler plotjuggler
-```
-
-#### System Health Monitoring
-```bash
-# GPU usage (for Isaac components)
-nvidia-smi
-
-# System resource usage
-htop
-
-# Network diagnostics
-iperf3 -c <hostname>  # if applicable
-```
-
-#### Custom Diagnostic Tools
-Create diagnostic nodes to monitor specific aspects of your system:
-```python
-import rclpy
-from diagnostic_updater import Updater, DiagnosticTask
-from std_msgs.msg import Bool
-
-class CapstoneDiagnostics(Diagnostic_task.DiagnosticTask):
-    def __init__(self):
-        super().__init__("Capstone System Health")
-        self.voice_working = False
-        self.perception_ok = False
-        self.nav_available = False
+1.  ros2 topic list
     
-    def run(self, stat):
-        # Check voice system
-        if self.check_voice_system():
-            stat.summary(diagnostic_msgs.msg.DiagnosticStatus.OK, "Voice system operational")
-        else:
-            stat.summary(diagnostic_msgs.msg.DiagnosticStatus.ERROR, "Voice system error")
-        
-        # Add checks for other systems...
-        return stat
+2.  ros2 topic info
+    
+3.  ros2 service list
+    
 
-def check_voice_system(self):
-    # Implement specific validation logic for voice system
-    pass
-```
+#### Expected Results
 
-### 2. Common Issues and Solutions
+*   All launch-configured nodes are active
+    
+*   All required topics are published with correct message types
+    
+*   Services respond normally
+    
+*   No duplicate or conflicting names
+    
 
-#### Communication Problems
-**Issue**: Nodes unable to communicate
-**Symptoms**: 
-- No messages on expected topics
-- Services returning timeouts
-- TF lookup failures
+### Digital Twin Validation
 
-**Solutions**:
-1. Check ROS_DOMAIN_ID consistency across all nodes
-2. Verify network configuration and firewalls
-3. Confirm all nodes are on the same network segment
-4. Restart ROS daemon if needed: `ros2 daemon stop && ros2 daemon start`
+#### Validation Steps
 
-#### Performance Bottlenecks
-**Issue**: System too slow to respond in real-time
-**Symptoms**:
-- Delayed responses to commands
-- Low frame rates in perception
-- Navigation path planning taking too long
+*   Confirm the simulation environment loads successfully
+    
+*   Camera topics stream valid image data
+    
+*   Robot model spawns in the correct position
+    
+*   Simulated sensors (camera, LiDAR, IMU, odometry) provide consistent outputs
+    
 
-**Solutions**:
-1. Profile components to identify bottlenecks
-2. Optimize algorithms or reduce data processing
-3. Use more efficient data structures
-4. Consider hardware upgrades if necessary
+#### Expected Results
 
-#### Sensor Calibration Issues
-**Issue**: Sensors not providing accurate data
-**Symptoms**:
-- Navigation errors
-- Object detection failures
-- Misaligned coordinate systems
+*   Realistic sensor physics
+    
+*   Correct robot motion from command inputs
+    
+*   Stable and consistent simulation world
+    
 
-**Solutions**:
-1. Recalibrate all sensors
-2. Validate calibration parameters
-3. Check physical mounting positions
-4. Verify coordinate frame definitions
+### Perception System Validation
 
-#### Perception Failures
-**Issue**: Object detection or SLAM failing
-**Symptoms**:
-- Robot lost in environment
-- Objects not detected
-- Drifting position estimates
+#### Validation Steps
 
-**Solutions**:
-1. Verify camera intrinsics and extrinsics
-2. Check lighting conditions and adjust parameters
-3. Verify sufficient visual features in environment
-4. Retrain models if needed
+1.  ros2 topic echo /object\_detection/obstacles
+    
+2.  Validate landmark detection
+    
+3.  Confirm sensor-fusion stability
+    
 
-#### VLA Misunderstanding
-**Issue**: Natural language commands misinterpreted
-**Symptoms**:
-- Wrong actions taken
-- Commands not understood
-- System confusion
+#### Expected Results
 
-**Solutions**:
-1. Improve language model with domain-specific data
-2. Add confirmation steps for critical commands
-3. Implement fallback strategies for misunderstood commands
-4. Fine-tune intent recognition for specific tasks
+*   Accurate object and feature detection
+    
+*   Consistent landmark recognition
+    
+*   Stable fused environmental model
+    
 
-### 3. Recovery Procedures
+### Navigation System Validation
 
-#### Emergency Stop Procedures
-1. Implement software emergency stop:
-   ```bash
-   ros2 service call /emergency_stop std_srvs/srv/Trigger
-   ```
-2. Physical emergency stop button connected to hardware layer
-3. Automatic timeout for long-running actions
-4. Safe position recovery for manipulators
+#### Validation Steps
 
-#### Component Restart Procedures
-```bash
-# Restart specific node
-ros2 run <package> <node_executable>
+*   Test path-planning behavior
+    
+*   Validate dynamic obstacle avoidance
+    
+*   Evaluate waypoint-following accuracy
+    
 
-# Relaunch specific subsystem
-ros2 launch <package> <subsystem_launch_file>
+#### Expected Results
 
-# Complete system restart
-ros2 launch capstone_integration full_system.launch.py
-```
+*   Reliable path generation
+    
+*   Accurate waypoint tracking
+    
+*   Collision-free navigation
+    
 
-#### State Recovery
-1. Implement persistent state storage
-2. Create recovery checkpoints
-3. Implement graceful degradation when primary systems fail
-4. Log system state for post-incident analysis
+### VLA Integration Validation
 
-## Validation Procedures
+#### Validation Steps
 
-### 1. Automated Testing Suite
+*   Test voice recognition accuracy and robustness
+    
+*   Validate natural-language command parsing
+    
+*   Confirm correct action generation
+    
 
-Create comprehensive tests that validate the complete system:
+#### Expected Results
 
-```python
-import unittest
-import rclpy
-from rclpy.action import ActionClient
-from capstone_interfaces.action import ExecuteTask
-from std_msgs.msg import String
+*   High speech-to-text accuracy
+    
+*   Reliable command interpretation
+    
+*   Appropriate action execution
+    
 
+Integration-Level Validation
+----------------------------
 
-class TestCapstoneIntegration(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        rclpy.init()
+### Communication Validation
 
-    @classmethod
-    def tearDownClass(cls):
-        rclpy.shutdown()
+#### Validation Steps
 
-    def setUp(self):
-        self.node = rclpy.create_node('capstone_tester')
-        self.action_client = ActionClient(
-            self.node, 
-            ExecuteTask, 
-            'execute_capstone_task'
-        )
-        self.test_results = {}
+*   Monitor inter-component message flow
+    
+*   Validate message rates and delays
+    
+*   Verify TF frame availability
+    
+*   Check time synchronization
+    
 
-    def test_voice_command_integration(self):
-        """Test voice command through complete pipeline"""
-        # Create and send test command
-        goal_msg = ExecuteTask.Goal()
-        goal_msg.task_name = "simple_navigate"
-        goal_msg.parameters = ["kitchen"]
-        
-        # Wait for action server
-        self.action_client.wait_for_server(timeout_sec=5.0)
-        
-        # Send goal and wait for result
-        future = self.action_client.send_goal_async(goal_msg)
-        rclpy.spin_until_future_complete(self.node, future)
-        
-        result = future.result()
-        self.assertTrue(result.result.success)
-        
-        self.test_results['voice_integration'] = 'PASS'
+#### Expected Results
 
-    def test_perception_navigation_integration(self):
-        """Test perception-guided navigation"""
-        # Similar test for perception-navigation integration
-        self.test_results['perception_nav_integration'] = 'PASS'
+*   No dropped messages
+    
+*   TF frames published with minimal lag
+    
+*   Synchronized data across the system
+    
 
-    def test_vla_integration(self):
-        """Test complete VLA pipeline"""
-        # Test voice-language-action integration
-        self.test_results['vla_integration'] = 'PASS'
+### Performance Validation
 
-    def tearDown(self):
-        self.node.destroy_node()
+#### Validation Steps
 
+*   Monitor CPU, GPU, and memory usage
+    
+*   Measure VLA pipeline latency
+    
+*   Measure perception and navigation response times
+    
 
-def main():
-    unittest.main()
+#### Expected Results
 
+*   All components meet real-time requirements
+    
+*   No performance bottlenecks
+    
+*   Stable response times even under load
+    
 
-if __name__ == '__main__':
-    main()
-```
+End-to-End Validation
+---------------------
 
-### 2. Continuous Monitoring
+### Scenario A: Simple Navigation
 
-Implement continuous monitoring for deployed systems:
+**Command:** “Go to the kitchen.”
 
-```python
-# system_monitor.py
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
-import psutil
-import time
-import json
+**Expected Behavior**
 
+*   Detect location
+    
+*   Plan safe route
+    
+*   Navigate accurately
+    
 
-class SystemMonitor(Node):
-    def __init__(self):
-        super().__init__('system_monitor')
-        
-        self.status_pub = self.create_publisher(String, 'system_status', 10)
-        self.timer = self.create_timer(1.0, self.check_system_health)
+**Metrics**
 
-    def check_system_health(self):
-        """Check system health and publish status"""
-        health_info = {
-            'timestamp': time.time(),
-            'cpu_percent': psutil.cpu_percent(),
-            'memory_percent': psutil.virtual_memory().percent,
-            'disk_percent': psutil.disk_usage('/').percent,
-            'system_uptime': self.get_uptime(),
-            'active_nodes': self.count_active_nodes(),
-            'ros_healthy': self.check_ros_integrity()
-        }
-        
-        msg = String()
-        msg.data = json.dumps(health_info)
-        self.status_pub.publish(msg)
+*   High task-completion consistency
+    
+*   Low position-error margin
+    
+*   Stable execution duration
+    
 
-    def get_uptime(self):
-        """Get system uptime in seconds"""
-        # Implementation to get system uptime
-        pass
+### Scenario B: Object Interaction
 
-    def count_active_nodes(self):
-        """Count active ROS 2 nodes"""
-        # Use ROS 2 client library to count nodes
-        pass
+**Command:** “Find the red ball and pick it up.”
 
-    def check_ros_integrity(self):
-        """Check ROS 2 system integrity"""
-        # Check for essential services/topics
-        pass
-```
+**Expected Behavior**
 
-### 3. Performance Metrics and Benchmarks
+*   Detect object
+    
+*   Navigate to object
+    
+*   Perform controlled grasping
+    
 
-Track key performance indicators:
+### Scenario C: Multi-Step Task
 
-- **Response Time**: Time from command to action initiation
-- **Task Success Rate**: Percentage of tasks completed successfully
-- **System Uptime**: Percentage of time system is operational
-- **Error Recovery**: Average time to recover from errors
-- **Resource Usage**: CPU, GPU, memory, and network usage
-- **Accuracy Metrics**: Navigation accuracy, perception precision, etc.
+**Command:** “Go to the living room, locate the blue cup, and bring it to me.”
 
-## Best Practices
+**Metrics**
 
-### 1. Preventive Measures
-- Implement comprehensive logging from the beginning
-- Design with modularity to isolate failures
-- Include safety checks at each component boundary
-- Plan for graceful degradation when components fail
+*   Accurate multi-step parsing
+    
+*   Successful grasping
+    
+*   Successful return navigation
+    
 
-### 2. Documentation
-- Document all integration points and interfaces
-- Record configuration parameters and their effects
-- Maintain logs of all testing and validation results
-- Create runbooks for common troubleshooting scenarios
+Troubleshooting Methodology
+---------------------------
 
-### 3. Validation at Each Integration Phase
-- Validate component before system integration
-- Test integration in simulation before physical deployment
-- Gradually add complexity to validation scenarios
-- Include stress testing and edge case validation
+### Diagnostic Tools
 
-## Appendix: Quick Diagnostics Checklist
+#### ROS 2 Commands
 
-### Daily System Check
-- [ ] All nodes running normally
-- [ ] Required topics publishing data
-- [ ] TF tree complete and updated
-- [ ] System resource usage normal
-- [ ] Camera feeds active and clear
-- [ ] Navigation system localized
-- [ ] Voice recognition responsive
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   ros2 doctor  ros2 lifecycle list  ros2 daemon status   `
 
-### Pre-Deployment Validation
-- [ ] All integration tests passing
-- [ ] Performance benchmarks met
-- [ ] Safety systems functional
-- [ ] Emergency procedures tested
-- [ ] Backup systems ready
-- [ ] Network connectivity verified
+#### System Resource Monitoring
 
-### Post-Event Analysis
-- [ ] Analyze system logs
-- [ ] Identify root cause of issues
-- [ ] Document resolution steps
-- [ ] Update procedures to prevent recurrence
-- [ ] Retest relevant components after fixes
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   nvidia-smi  htop   `
 
-Following this systematic approach to validation and troubleshooting will ensure your integrated capstone system operates reliably and can be maintained effectively during deployment.
+#### Network Diagnostics
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`iperf3 -c` 
+
+Common Issues and Solutions
+---------------------------
+
+### Communication Failures
+
+**Symptoms**
+
+*   Missing messages
+    
+*   Service timeouts
+    
+*   TF lookup errors
+    
+
+**Solutions**
+
+*   Ensure ROS\_DOMAIN\_ID matches
+    
+*   Check firewall and network settings
+    
+*   Restart ROS 2 daemon
+    
+
+### Performance Bottlenecks
+
+**Symptoms**
+
+*   Slow perception
+    
+*   Delayed actions
+    
+
+**Solutions**
+
+*   Profile each component
+    
+*   Optimize algorithms
+    
+*   Reduce unnecessary processing
+    
+
+### Sensor Calibration Issues
+
+**Solutions**
+
+*   Recalibrate sensors
+    
+*   Verify frame transforms
+    
+*   Inspect mounting hardware
+    
+
+### Perception Failures
+
+**Solutions**
+
+*   Validate camera intrinsics/extrinsics
+    
+*   Improve lighting conditions
+    
+*   Retrain models if needed
+    
+
+Recovery Procedures
+-------------------
+
+### Emergency Stop
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   ros2 service call /emergency_stop std_srvs/srv/Trigger   `
+
+*   Physical emergency stop button if available
+    
+*   Automatic timeout for actions
+    
+
+### Restart Procedures
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   ros2 run   ros2 launch   ros2 launch capstone_integration full_system.launch.py   `
+
+Validation Procedures
+---------------------
+
+### Automated Testing Example
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   import unittest  import rclpy  from rclpy.action import ActionClient  from capstone_interfaces.action import ExecuteTask  class TestIntegration(unittest.TestCase):      @classmethod      def setUpClass(cls):          rclpy.init()      @classmethod      def tearDownClass(cls):          rclpy.shutdown()      def setUp(self):          self.node = rclpy.create_node("integration_tester")          self.client = ActionClient(              self.node,              ExecuteTask,              "execute_capstone_task"          )      def test_voice_pipeline(self):          goal = ExecuteTask.Goal()          goal.task_name = "simple_navigation"          goal.parameters = ["kitchen"]          self.client.wait_for_server()          future = self.client.send_goal_async(goal)          rclpy.spin_until_future_complete(self.node, future)          result = future.result().result          self.assertTrue(result.success)      def tearDown(self):          self.node.destroy_node()   `
+
+Continuous Monitoring Example
+-----------------------------
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   import rclpy  from rclpy.node import Node  from std_msgs.msg import String  import psutil  import time  import json  class SystemMonitor(Node):      def __init__(self):          super().__init__("system_monitor")          self.publisher = self.create_publisher(String, "system_status", 10)          self.timer = self.create_timer(1.0, self.publish_status)      def publish_status(self):          data = {              "cpu": psutil.cpu_percent(),              "memory": psutil.virtual_memory().percent,              "disk": psutil.disk_usage("/").percent,              "timestamp": time.time()          }          msg = String()          msg.data = json.dumps(data)          self.publisher.publish(msg)   `
+
+Best Practices
+--------------
+
+*   Maintain detailed logs
+    
+*   Use modular architecture
+    
+*   Validate in simulation before deployment
+    
+*   Add safety checks for each subsystem
+    
+*   Test incrementally
+    
+
+Quick Diagnostics Checklist
+---------------------------
+
+### Daily
+
+*   Nodes active
+    
+*   Topics publishing
+    
+*   TF tree valid
+    
+*   Resource usage normal
+    
+*   Cameras working
+    
+*   Localization stable
+    
+*   Voice recognition responsive
+    
+
+### Pre-Deployment
+
+*   All tests passing
+    
+*   Benchmarks met
+    
+*   Safety systems ready
+    
+*   Network verified
+    
+
+### Post-Event
+
+*   Review logs
+    
+*   Identify root causes
+    
+*   Document fixes
+    
+*   Re-validate affected components
