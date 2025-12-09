@@ -29,7 +29,7 @@ Solutions to common issues encountered when working with ROS 2.
 ### [ROS 2 Exercises](./exercises/)
 Practice exercises for mastering ROS 2 concepts.
 
-### [Tutorials](./tutorials/)
+### [Tutorials](/modules/ros2/tutorials/)
 Step-by-step tutorials for ROS 2 implementation.
 
 ## LEARNING OBJECTIVES
