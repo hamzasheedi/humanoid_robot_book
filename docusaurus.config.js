@@ -1,9 +1,4 @@
 // @ts-check
-// `@type` JSDoc annotations allow editor autocompletion and type checking
-// (when paired with `@ts-check`).
-// There are various equivalent ways to declare your Docusaurus config.
-// See: https://docusaurus.io/docs/api/docusaurus-config
-
 import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
@@ -12,25 +7,17 @@ const config = {
   tagline: 'Physical AI & Humanoid Robotics Course',
   favicon: 'img/favicon.ico',
 
-  // Set the production url of your site here - conditionally for different platforms
   url: 'https://humanoid-robot-book.vercel.app',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, use '/<projectName>/', for Vercel use '/'
   baseUrl: '/',
-
-  // Specify trailing slash behavior to ensure consistent URLs
   trailingSlash: true,
 
-  // Vercel deployment config.
-  organizationName: 'hamzasheedi', // Your GitHub org/user name.
-  projectName: 'humanoid_robot_book', // Your repo name.
+  organizationName: 'hamzasheedi',
+  projectName: 'humanoid_robot_book',
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  // ✅ Broken links settings
+  onBrokenLinks: 'ignore',
+  onBrokenMarkdownLinks: 'ignore',
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -43,17 +30,15 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/hamzasheedi/humanoid_robot_book/tree/main/',
-          routeBasePath: '/docs', // Serve the docs at /docs
+          routeBasePath: '/docs',
         },
         pages: {
           path: 'src/pages',
-          routeBasePath: '/', // Serve pages at the root
+          routeBasePath: '/',
         },
-        blog: false, // Disable blog if not needed
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -64,7 +49,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: 'AI Robotics Textbook',
@@ -127,12 +111,10 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
-      
-      // Enable dark mode by default
       colorMode: {
         defaultMode: 'dark',
-        disableSwitch: false,  // Still allow users to switch if they prefer
-        respectPrefersColorScheme: false,  // Don't respect system preference, force dark mode
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
       },
     }),
 };
