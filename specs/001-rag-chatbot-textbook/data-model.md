@@ -12,7 +12,7 @@
 ## Entity: Answer
 - **id**: UUID (primary key)
 - **question_id**: UUID (foreign key to Question)
-- **content**: Text (the text of the answer)
+- **content**: String (the text of the answer)
 - **sources**: Array[String] (list of textbook sections cited)
 - **confidence_score**: Float (0.0 to 1.0, measure of answer accuracy)
 - **timestamp**: DateTime (when the answer was generated)

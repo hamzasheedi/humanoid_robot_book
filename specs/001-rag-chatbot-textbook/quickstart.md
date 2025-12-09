@@ -30,11 +30,11 @@ This guide will help you set up the RAG Chatbot for the Physical AI & Humanoid R
    ```bash
    cp .env.example .env
    # Edit .env with your API keys and connection strings:
-   # COHERE_API_KEY=your_cohere_api_key
-   # QDRANT_URL=your_qdrant_cluster_url
-   # QDRANT_API_KEY=your_qdrant_api_key (if using cloud)
-   # NEON_DB_URL=your_neon_postgres_connection_string
-   # API_KEY=your_backend_api_key
+   # COHERE_API_KEY=your_cohere_api_key_here
+   # QDRANT_URL=your_qdrant_cluster_url_here
+   # QDRANT_API_KEY=your_qdrant_api_key_here (if using cloud)
+   # NEON_DB_URL=your_neon_postgres_connection_string_here
+   # API_KEY=your_backend_api_key_here
    ```
 
 4. Run the backend server:
@@ -97,7 +97,7 @@ This guide will help you set up the RAG Chatbot for the Physical AI & Humanoid R
 1. Visit the Docusaurus site in your browser (usually http://localhost:3000)
 2. Navigate to any textbook page
 3. Use the embedded chatbot to ask questions about the content
-4. Test text selection functionality by selecting text and clicking the floating "Ask About Selected" button
+4. Test text selection functionality by selecting text and clicking "Ask About Selected Text"
 
 ## Security Considerations
 

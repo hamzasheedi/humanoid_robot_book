@@ -7,7 +7,7 @@
 
 ## Summary
 
-Implementation of an integrated RAG (Retrieval-Augmented Generation) chatbot for the Physical AI & Humanoid Robotics textbook using **Cohere Free API** for embeddings and answer generation. The chatbot is embedded directly in the Docusaurus-based textbook, allowing students to ask questions about textbook content and receive context-aware answers. The architecture includes a FastAPI backend that interfaces with Qdrant for vector search and Neon Postgres for storing logs and accuracy data. The system strictly answers questions based only on textbook content, with responses provided within 2 seconds for cloud deployment and 5 seconds for local deployment. The Cohere integration ensures cost-effective RAG functionality suitable for educational environments.
+Implementation of an integrated RAG (Retrieval-Augmented Generation) chatbot for the Physical AI & Humanoid Robotics textbook using Cohere Free API. The chatbot will be embedded directly in the Docusaurus-based textbook, allowing students to ask questions about textbook content and receive context-aware answers. The architecture includes a FastAPI backend that interfaces with Qdrant for vector search and Neon Postgres for storing logs and accuracy data. The system will strictly answer questions based only on textbook content, with responses provided within 2 seconds for cloud deployment and 5 seconds for local deployment. The Cohere integration ensures cost-effective RAG functionality suitable for educational environments while maintaining the required accuracy and performance standards.
 
 ## Technical Context
 
@@ -81,7 +81,8 @@ frontend/ (Docusaurus integration)
 │   ├── components/
 │   │   ├── ChatbotWindow.jsx
 │   │   ├── TextSelectionHandler.jsx
-│   │   └── AnswerDisplay.jsx
+│   │   ├── AnswerDisplay.jsx
+│   │   └── InstructorDashboard.jsx
 │   └── pages/
 │       └── Chatbot.jsx
 ├── static/
