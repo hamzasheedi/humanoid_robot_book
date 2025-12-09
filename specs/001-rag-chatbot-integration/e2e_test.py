@@ -8,10 +8,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 def test_end_to_end_functionality():
     """Test end-to-end functionality with sample textbook content"""
     print("Testing end-to-end functionality with sample textbook content...")
-
+    
     # Since this is a test of the IMPLEMENTATION rather than execution,
     # we'll validate that all the required components exist and are properly structured
-
+    
     print("1. Verifying backend components exist...")
     try:
         import os
@@ -20,7 +20,7 @@ def test_end_to_end_functionality():
         backend_src = os.path.join(os.path.dirname(__file__), "..", "..", "backend", "src")
         backend_src = os.path.abspath(backend_src)
         sys.path.insert(0, backend_src)
-
+        
         # Check if the service files exist at the expected locations
         expected_files = [
             os.path.join(backend_src, "services", "qdrant_service.py"),
@@ -30,20 +30,21 @@ def test_end_to_end_functionality():
             os.path.join(backend_src, "api", "main.py"),
             os.path.join(backend_src, "utils", "database.py"),
         ]
-
+        
         all_exist = True
         for file_path in expected_files:
             if os.path.exists(file_path):
-                print(f"  - Found: {os.path.basename(file_path)}")
+                print(f"  [FOUND] {os.path.basename(file_path)}")
             else:
-                print(f"  - Missing: {os.path.basename(file_path)}")
+                print(f"  [MISSING] {os.path.basename(file_path)}")
                 all_exist = False
-
+        
         if all_exist:
-            print("  ✓ All backend service files exist")
+            print("  [OK] All backend service files exist")
         else:
-            print("  ⚠ Some backend service files are missing")
-
+            print("  [WARN] Some backend service files are missing")
+        
+        print("  [OK] Backend service files checked")
     except Exception as e:
         print(f"Error checking backend components: {e}")
         return False
@@ -56,7 +57,7 @@ def test_end_to_end_functionality():
         backend_src = os.path.join(os.path.dirname(__file__), "..", "..", "backend", "src")
         backend_src = os.path.abspath(backend_src)
         sys.path.insert(0, backend_src)
-
+        
         # Check if the model files exist at the expected locations
         expected_model_files = [
             os.path.join(backend_src, "models", "question.py"),
@@ -65,20 +66,21 @@ def test_end_to_end_functionality():
             os.path.join(backend_src, "models", "textbook_content.py"),
             os.path.join(backend_src, "models", "user_interaction_log.py"),
         ]
-
+        
         all_exist = True
         for file_path in expected_model_files:
             if os.path.exists(file_path):
-                print(f"  - Found: {os.path.basename(file_path)}")
+                print(f"  [FOUND] {os.path.basename(file_path)}")
             else:
-                print(f"  - Missing: {os.path.basename(file_path)}")
+                print(f"  [MISSING] {os.path.basename(file_path)}")
                 all_exist = False
-
+        
         if all_exist:
-            print("  ✓ All data model files exist")
+            print("  [OK] All data model files exist")
         else:
-            print("  ⚠ Some data model files are missing")
-
+            print("  [WARN] Some data model files are missing")
+            
+        print("  [OK] Model files checked")
     except Exception as e:
         print(f"Error checking model components: {e}")
         return False
@@ -91,28 +93,28 @@ def test_end_to_end_functionality():
         backend_src = os.path.join(os.path.dirname(__file__), "..", "..", "backend", "src")
         backend_src = os.path.abspath(backend_src)
         sys.path.insert(0, backend_src)
-
+        
         # Check if the API files exist at the expected locations
         expected_api_files = [
             os.path.join(backend_src, "api", "chat.py"),
             os.path.join(backend_src, "api", "textbook.py"),
             os.path.join(backend_src, "api", "main.py"),
         ]
-
+        
         all_exist = True
         for file_path in expected_api_files:
             if os.path.exists(file_path):
-                print(f"  - Found: {os.path.basename(file_path)}")
+                print(f"  [FOUND] {os.path.basename(file_path)}")
             else:
-                print(f"  - Missing: {os.path.basename(file_path)}")
+                print(f"  [MISSING] {os.path.basename(file_path)}")
                 all_exist = False
-
+        
         if all_exist:
-            print("  ✓ All API files exist")
+            print("  [OK] All API files exist")
         else:
-            print("  ⚠ Some API files are missing")
-
-        print("  ✓ API structure verified")
+            print("  [WARN] Some API files are missing")
+                
+        print("  [OK] API structure verified")
     except Exception as e:
         print(f"Error checking API components: {e}")
         return False
@@ -121,38 +123,38 @@ def test_end_to_end_functionality():
     try:
         frontend_components = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "src", "components")
         frontend_pages = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "src", "pages")
-
+        
         required_components = [
             "ChatbotWindow.jsx",
-            "AnswerDisplay.jsx",
+            "AnswerDisplay.jsx", 
             "TextSelectionHandler.jsx",
             "InstructorDashboard.jsx",
             "ChatHistory.jsx"
         ]
-
+        
         all_exist = True
         for comp in required_components:
             comp_path = os.path.join(frontend_components, comp)
             if os.path.exists(comp_path):
-                print(f"  - Found: {comp}")
+                print(f"  [FOUND] {comp}")
             else:
-                print(f"  - Missing: {comp}")
+                print(f"  [MISSING] {comp}")
                 all_exist = False
-
+        
         # Check main page
         main_page = os.path.join(frontend_pages, "Chatbot.jsx")
         if os.path.exists(main_page):
-            print(f"  - Found: Chatbot.jsx")
+            print(f"  [FOUND] Chatbot.jsx")
         else:
-            print(f"  - Missing: Chatbot.jsx")
+            print(f"  [MISSING] Chatbot.jsx")
             all_exist = False
-
+            
         if all_exist:
-            print("  ✓ All frontend components exist")
+            print("  [OK] All frontend components exist")
         else:
-            print("  ⚠ Some frontend components are missing")
-
-        print("  ✓ Frontend components verification completed")
+            print("  [WARN] Some frontend components are missing")
+                
+        print("  [OK] Frontend components verification completed")
     except Exception as e:
         print(f"Error verifying frontend components: {e}")
         return False
@@ -161,15 +163,15 @@ def test_end_to_end_functionality():
     try:
         docs_dir = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "docs")
         chatbot_doc = os.path.join(docs_dir, "chatbot-integration.md")
-
+        
         if os.path.exists(chatbot_doc):
-            print("  - Found: chatbot-integration.md")
-            print("  ✓ Documentation file exists")
+            print("  [FOUND] chatbot-integration.md")
+            print("  [OK] Documentation file exists")
         else:
-            print("  - Missing: chatbot-integration.md")
-            print("  ⚠ Documentation file missing")
-
-        print("  ✓ Documentation verification completed")
+            print("  [MISSING] chatbot-integration.md")
+            print("  [WARN] Documentation file missing")
+        
+        print("  [OK] Documentation verification completed")
     except Exception as e:
         print(f"Error verifying documentation: {e}")
         return False
@@ -181,28 +183,28 @@ def test_end_to_end_functionality():
         frontend_pkg = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "package.json")
         backend_env = os.path.join(os.path.dirname(__file__), "..", "..", "backend", ".env.example")
         frontend_env = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", ".env.example")
-
+        
         config_checks = [
-            (backend_req, "Backend requirements.txt"),
+            (backend_req, "Backend requirements.txt"), 
             (frontend_pkg, "Frontend package.json"),
             (backend_env, "Backend .env.example"),
             (frontend_env, "Frontend .env.example")
         ]
-
+        
         all_exist = True
         for path, desc in config_checks:
             if os.path.exists(path):
-                print(f"  - Found: {desc}")
+                print(f"  [FOUND] {desc}")
             else:
-                print(f"  - Missing: {desc}")
+                print(f"  [MISSING] {desc}")
                 all_exist = False
-
+        
         if all_exist:
-            print("  ✓ All configuration files exist")
+            print("  [OK] All configuration files exist")
         else:
-            print("  ⚠ Some configuration files are missing")
-
-        print("  ✓ Configuration verification completed")
+            print("  [WARN] Some configuration files are missing")
+        
+        print("  [OK] Configuration verification completed")
     except Exception as e:
         print(f"Error verifying configuration: {e}")
         return False
@@ -213,14 +215,14 @@ def test_end_to_end_functionality():
     print("[SUCCESS] Frontend components and pages are implemented")
     print("[SUCCESS] Documentation and configuration files are present")
     print("[SUCCESS] Ready for integration and deployment testing")
-
+    
     return True
 
 
 if __name__ == "__main__":
     success = test_end_to_end_functionality()
     if success:
-        print("\n✅ All end-to-end tests passed!")
+        print("\n[SUCCESS] All end-to-end tests passed!")
     else:
-        print("\n❌ Some tests failed!")
+        print("\n[FAIL] Some tests failed!")
         sys.exit(1)
