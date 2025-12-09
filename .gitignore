@@ -120,3 +120,5 @@ local.properties
 
 # Docusaurus specific
 # (nothing specific to add beyond what's already included)
+.vercel
+.env*.local

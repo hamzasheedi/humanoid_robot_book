@@ -12,16 +12,18 @@ const config = {
   tagline: 'Physical AI & Humanoid Robotics Course',
   favicon: 'img/favicon.ico',
 
-  // Set the production url of your site here
-  url: 'https://hamzasheedi.github.io',
+  // Set the production url of your site here - conditionally for different platforms
+  url: 'https://humanoid-robot-book.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/humanoid_robot_book/',
+  // For GitHub pages deployment, use '/<projectName>/', for Vercel use '/'
+  baseUrl: '/',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'hamzasheedi', // Usually your GitHub org/user name.
-  projectName: 'humanoid_robot_book', // Usually your repo name.
+  // Specify trailing slash behavior to ensure consistent URLs
+  trailingSlash: true,
+
+  // Vercel deployment config.
+  organizationName: 'hamzasheedi', // Your GitHub org/user name.
+  projectName: 'humanoid_robot_book', // Your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
