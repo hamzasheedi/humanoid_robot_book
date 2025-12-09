@@ -203,11 +203,11 @@ description: "Task list for RAG Chatbot Integration feature"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T067 [P] Documentation updates in frontend/docs/
+- [X] T067 [P] Documentation updates in frontend/docs/
 - [X] T068 [P] Add proper error messages for "no content found" scenarios
 - [X] T069 Code cleanup and refactoring
 - [X] T070 Performance optimization across all stories
-- [ ] T071 [P] Additional unit tests (if requested) in backend/tests/unit/
+- [X] T071 [P] Additional unit tests (if requested) in backend/tests/unit/
 - [X] T072 [P] Add rate limiting to prevent abuse
 - [X] T073 [P] Security hardening
 - [X] T074 [P] Run quickstart.md validation

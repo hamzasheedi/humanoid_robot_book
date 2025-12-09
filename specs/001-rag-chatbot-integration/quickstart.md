@@ -114,6 +114,34 @@ NEON_DB_URL=your_neon_postgres_connection_string
    - Verify API URL in frontend environment variables
    - Check that backend server is running and accessible
 
+## Validation
+
+After completing the setup:
+
+1. Verify the backend is running by visiting: `http://localhost:8000/health`
+2. Test the chat endpoint with a sample request:
+   ```
+   curl -X POST http://localhost:8000/chat/ask \
+     -H "Content-Type: application/json" \
+     -d '{"question": "What is ROS 2?", "session_id": "test-session"}'
+   ```
+3. Check that the frontend loads without errors
+4. Verify the chatbot window is accessible and functional
+5. Confirm that the system meets the performance targets:
+   - Response time ≤2 seconds for cloud deployment
+   - Response accuracy ≥95% based on textbook content
+   - Security validation: API keys are not exposed in frontend code
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **"Module not found" errors**: Ensure you've installed all dependencies with pip/npm
+2. **Connection refused errors**: Verify backend is running on the correct port
+3. **API key errors**: Double-check your API keys in the .env files
+4. **Qdrant connection issues**: Confirm QDRANT_URL is correct and accessible
+5. **Slow response times**: Check your network connection and API limits
+
 ## Next Steps
 
 1. Deploy the backend to a cloud provider
