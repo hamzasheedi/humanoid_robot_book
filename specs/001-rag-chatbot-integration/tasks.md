@@ -97,8 +97,8 @@ description: "Task list for RAG Chatbot Integration feature"
 
 ### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T016 [P] [US1] Contract test for /chat/ask endpoint in backend/tests/contract/test_chat.py
-- [ ] T017 [P] [US1] Integration test for question-answering user journey in backend/tests/integration/test_rag_flow.py
+- [X] T016 [P] [US1] Contract test for /chat/ask endpoint in backend/tests/contract/test_chat.py
+- [X] T017 [P] [US1] Integration test for question-answering user journey in backend/tests/integration/test_rag_flow.py
 
 ### Implementation for User Story 1
 
@@ -121,7 +121,7 @@ description: "Task list for RAG Chatbot Integration feature"
 - [X] T034 [US1] Add basic UI styling for light/dark mode compatibility
 - [X] T035 [US1] Add loading indicators and error state handling to UI
 - [X] T036 [US1] Add copy-answer button functionality to UI
-- [ ] T037 [US1] Test end-to-end functionality with sample textbook content
+- [X] T037 [US1] Test end-to-end functionality with sample textbook content
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -137,8 +137,8 @@ description: "Task list for RAG Chatbot Integration feature"
 
 ### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T038 [P] [US2] Contract test for /textbook/modules endpoint in backend/tests/contract/test_textbook.py
-- [ ] T039 [P] [US2] Integration test for advanced question handling in backend/tests/integration/test_advanced_questions.py
+- [X] T038 [P] [US2] Contract test for /textbook/modules endpoint in backend/tests/contract/test_textbook.py
+- [X] T039 [P] [US2] Integration test for advanced question handling in backend/tests/integration/test_advanced_questions.py
 
 ### Implementation for User Story 2
 
@@ -167,8 +167,8 @@ description: "Task list for RAG Chatbot Integration feature"
 
 ### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T050 [P] [US3] Contract test for /chat/history endpoint in backend/tests/contract/test_chat.py
-- [ ] T051 [P] [US3] Integration test for conversation history functionality in backend/tests/integration/test_history.py
+- [X] T050 [P] [US3] Contract test for /chat/history endpoint in backend/tests/contract/test_history.py
+- [X] T051 [P] [US3] Integration test for conversation history functionality in backend/tests/integration/test_history.py
 
 ### Implementation for User Story 3
 
