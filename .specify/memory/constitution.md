@@ -1,9 +1,9 @@
-<!-- 
+<!--
 Sync Impact Report:
-- Version change: 1.0.0 → 1.1.0
-- Modified principles: Added 5 principles from user input
-- Added sections: Core Principles (5), Key Standards, Constraints, Success Criteria, Validation and Cascading Rules
-- Templates requiring updates: [.specify/templates/plan-template.md] ⚠ pending, [.specify/templates/spec-template.md] ⚠ pending, [.specify/templates/tasks-template.md] ⚠ pending
+- Version change: 1.1.0 → 1.2.0
+- Modified principles: None (preserved all existing principles)
+- Added sections: RAG Chatbot Implementation, Chatbot UI Requirements
+- Templates requiring updates: [.specify/templates/plan-template.md] ✅ updated, [.specify/templates/spec-template.md] ✅ updated, [.specify/templates/tasks-template.md] ✅ updated
 - Follow-up TODOs: None
 -->
 # Textbook for Physical AI & Humanoid Robotics Constitution
@@ -70,6 +70,37 @@ Include alternative instructions for students without high-end RTX GPUs (cloud o
 - Diagrams and tutorials enhance clarity and engagement (tested via peer/student review).
 - Book deployed on Docusaurus and GitHub Pages using Spec-Kit Plus, fully navigable.
 
+## RAG Chatbot Implementation
+
+The textbook includes an interactive Retrieval-Augmented Generation (RAG) chatbot that enables students to engage with the content through natural language queries. For beginners, RAG combines large language models with a knowledge base to provide accurate, contextually relevant answers based on the textbook content rather than general web knowledge.
+
+### Technology Stack
+- **FastAPI Backend**: Provides high-performance API endpoints for chatbot interactions with asynchronous processing capabilities
+- **Qdrant Vector Store**: Stores textbook content as searchable vectors for semantic similarity matching
+- **Neon Postgres Database**: Manages user sessions, query history, and structured metadata
+
+### Implementation Requirements
+- All RAG implementations must be tested and verified in both cloud and local environments
+- Vector storage must properly index textbook content for context-aware responses
+- API endpoints must handle text queries and return responses with proper citations to source material
+- Response generation must maintain accuracy while providing clear, student-friendly explanations
+
+## Chatbot UI Requirements
+
+The chatbot interface must be designed for accessibility and ease of use by students with varying technical backgrounds.
+
+### Interface Design
+- Simple and intuitive interface that doesn't require prior AI/ML knowledge to use
+- Embedded directly within the textbook pages (Docusaurus integration) for seamless access
+- Supports text selection functionality allowing students to get context-aware answers about specific passages
+- Visual clarity and accessibility following WCAG 2.1 AA standards for inclusive design
+
+### Student Experience
+- Clear indication of when the chatbot is processing queries
+- Visual feedback for response accuracy and confidence levels
+- Ability to follow up on previous questions while maintaining context
+- Option to view source citations for further reading.
+
 ## Validation and Cascading Rules
 
 ### Specification Alignment
@@ -81,8 +112,20 @@ Lesson plans, weekly breakdowns, and exercises must reflect hardware and cloud c
 ### Implementation Alignment
 Code examples and diagrams must strictly follow tested pipelines; deviation requires explicit note and justification.
 
+## Success Criteria
+
+- All technical examples reproduce results on test hardware or cloud setup.
+- Citations meet minimum standards, plagiarism = 0%.
+- Students following the book can complete the Capstone project (simulated humanoid with conversational AI).
+- Diagrams and tutorials enhance clarity and engagement (tested via peer/student review).
+- Book deployed on Docusaurus and GitHub Pages using Spec-Kit Plus, fully navigable.
+- Interactive RAG chatbot responds to queries with ≥95% accuracy on textbook content.
+- Chatbot provides context-aware answers maintaining conversation flow.
+- Response time consistently ≤2 seconds for cloud deployment and ≤5 seconds for local deployment.
+- Students can successfully interact with the embedded chatbot interface.
+
 ## Governance
 
 This constitution governs all project decisions and supersedes any conflicting practices. Amendment requires explicit documentation of rationale and approval by project leads. All specifications, plans, and implementations must verify compliance with these principles. Complexity must be justified with clear benefits to the learning experience.
 
-**Version**: 1.1.0 | **Ratified**: TODO(RATIFICATION_DATE): Date of original adoption | **Last Amended**: 2025-12-08
+**Version**: 1.2.0 | **Ratified**: TODO(RATIFICATION_DATE): Date of original adoption | **Last Amended**: 2025-12-09
