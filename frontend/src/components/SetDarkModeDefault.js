@@ -3,7 +3,7 @@ import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 
 const SetDarkModeDefault = () => {
   useEffect(() => {
-    if (ExecutionEnvironment.canUseDOM) {
+    if (ExecutionEnvironment.canUseDOM && typeof localStorage !== 'undefined') {
       // Set theme preference to dark in localStorage
       localStorage.setItem('theme', 'dark');
 

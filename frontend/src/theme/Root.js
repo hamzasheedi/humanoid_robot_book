@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import ChatbotWindow from '../components/ChatbotWindow';
 
 const Root = ({ children }) => {
@@ -20,10 +21,14 @@ const Root = ({ children }) => {
   return (
     <>
       {children}
-      <ChatbotWindow
-        isOpen={showChatbot}
-        onClose={() => setShowChatbot(prev => !prev)} // This toggles the chatbot state
-      />
+      <BrowserOnly>
+        {() => (
+          <ChatbotWindow
+            isOpen={showChatbot}
+            onClose={() => setShowChatbot(prev => !prev)} // This toggles the chatbot state
+          />
+        )}
+      </BrowserOnly>
     </>
   );
 };

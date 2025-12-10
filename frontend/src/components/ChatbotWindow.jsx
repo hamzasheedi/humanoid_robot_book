@@ -4,7 +4,11 @@ import './ChatbotWindow.css';
 const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdChange }) => {
   // Initialize session ID from props or from localStorage
   const [sessionId, setSessionId] = useState(() => {
-    return propSessionId || localStorage.getItem('chatbot-session-id') || null;
+    // Check if we're in the browser environment
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return propSessionId || localStorage.getItem('chatbot-session-id') || null;
+    }
+    return propSessionId || null; // Fallback when not in browser
   });
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -21,10 +25,13 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
 
   // Persist session ID in localStorage
   useEffect(() => {
-    if (sessionId) {
-      localStorage.setItem('chatbot-session-id', sessionId);
-    } else {
-      localStorage.removeItem('chatbot-session-id');
+    // Only run in browser environment
+    if (typeof window !== 'undefined' && window.localStorage) {
+      if (sessionId) {
+        localStorage.setItem('chatbot-session-id', sessionId);
+      } else {
+        localStorage.removeItem('chatbot-session-id');
+      }
     }
   }, [sessionId]);
 
@@ -119,17 +126,20 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
 
   // Function to handle text selection
   useEffect(() => {
-    const handleSelection = () => {
-      const selectedText = window.getSelection().toString().trim();
-      if (selectedText) {
-        setSelectedText(selectedText);
-      }
-    };
+    // Only run in browser environment
+    if (typeof window !== 'undefined' && window.document) {
+      const handleSelection = () => {
+        const selectedText = window.getSelection().toString().trim();
+        if (selectedText) {
+          setSelectedText(selectedText);
+        }
+      };
 
-    document.addEventListener('mouseup', handleSelection);
-    return () => {
-      document.removeEventListener('mouseup', handleSelection);
-    };
+      document.addEventListener('mouseup', handleSelection);
+      return () => {
+        document.removeEventListener('mouseup', handleSelection);
+      };
+    }
   }, []);
 
   // Function to handle "Ask About Selected Text" button
@@ -200,7 +210,13 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
 
   // Function to copy text to clipboard
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
+    // Only run in browser environment
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+    } else {
+      // Fallback for server-side or unsupported browsers
+      console.warn('Clipboard API not available');
+    }
   };
 
   return (
