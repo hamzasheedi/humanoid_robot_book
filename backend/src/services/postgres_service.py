@@ -2,6 +2,7 @@ import asyncpg
 from typing import List, Optional, Dict
 from datetime import datetime
 import uuid
+import json
 from ..utils.database import db
 from ..models import Question, Answer, ChatSession, UserInteractionLog
 
@@ -25,7 +26,7 @@ class PostgresService:
                 question.user_id,
                 question.session_id,
                 question.timestamp,
-                question.metadata
+                json.dumps(question.metadata) if question.metadata else '{}'
             )
             return result
 
@@ -42,10 +43,10 @@ class PostgresService:
                 answer.id,
                 answer.question_id,
                 answer.content,
-                answer.sources,
+                json.dumps(answer.sources) if answer.sources else '[]',
                 answer.confidence_score,
                 answer.timestamp,
-                answer.metadata
+                json.dumps(answer.metadata) if answer.metadata else '{}'
             )
             return result
     
@@ -381,7 +382,7 @@ class PostgresService:
                     question.user_id,
                     question.session_id,
                     question.timestamp or datetime.utcnow(),
-                    question.metadata
+                    json.dumps(question.metadata) if question.metadata else '{}'
                 )
                 
                 # Save the answer with the question ID
@@ -395,10 +396,10 @@ class PostgresService:
                     answer.id or uuid.uuid4(),
                     question_id,
                     answer.content,
-                    answer.sources,
+                    json.dumps(answer.sources) if answer.sources else '[]',
                     answer.confidence_score,
                     answer.timestamp or datetime.utcnow(),
-                    answer.metadata
+                    json.dumps(answer.metadata) if answer.metadata else '{}'
                 )
                 
                 # Update session interaction count

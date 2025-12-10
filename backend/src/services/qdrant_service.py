@@ -28,22 +28,22 @@ class QdrantService:
             raise
     
     async def setup_collection(self):
-        """Create or verify collection exists with proper vector configuration"""
+        """Create or verify collection exists with proper vector configuration for Cohere embeddings"""
         if not self.client:
             raise RuntimeError("Qdrant client not connected")
-        
+
         try:
             # Check if collection exists
             collections = await self.client.get_collections()
             collection_exists = any(col.name == self.collection_name for col in collections.collections)
-            
+
             if not collection_exists:
-                # Create collection with 1536 dimensions (for OpenAI embeddings)
+                # Create collection with 1024 dimensions (for Cohere embeddings)
                 await self.client.create_collection(
                     collection_name=self.collection_name,
-                    vectors_config=VectorParams(size=1536, distance=Distance.COSINE)
+                    vectors_config=VectorParams(size=1024, distance=Distance.COSINE)
                 )
-                print(f"Created Qdrant collection: {self.collection_name}")
+                print(f"Created Qdrant collection: {self.collection_name} with 1024 dimensions for Cohere embeddings")
             else:
                 print(f"Qdrant collection {self.collection_name} already exists")
         except Exception as e:

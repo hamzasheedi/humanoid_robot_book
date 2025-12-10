@@ -106,7 +106,12 @@ def log_request(request, extra_data: Dict[str, Any] = None):
 
 # Utility function for logging responses
 def log_response(response, request_id: str = None):
-    logger.info(f"Response status: {response.status_code}")
+    # Check if response is an HTTP response object or a dictionary
+    if hasattr(response, 'status_code'):
+        logger.info(f"Response status: {response.status_code}")
+    else:
+        # For dictionary responses, just log the content
+        logger.info(f"Response content: {response}")
     if request_id:
         logger.info(f"Request ID: {request_id}")
 

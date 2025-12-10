@@ -66,14 +66,14 @@ class RAGService:
             """
 
             # Get the answer from the LLM
-            response = co.generate(
-                model="command-r-plus",  # Cohere's advanced model
-                prompt=prompt,
+            response = co.chat(
+                model="command-r7b-12-2024",  # Updated Cohere model
+                message=prompt,
                 max_tokens=500,
                 temperature=0.3
             )
 
-            answer_text = response.generations[0].text.strip()
+            answer_text = response.text.strip()
 
             # Calculate a confidence score based on the relevance of retrieved content
             confidence_score = min(1.0, sum([item["score"] for item in relevant_contents]) / len(relevant_contents) / 0.8)
@@ -218,14 +218,14 @@ class RAGService:
             """
 
             # Get the answer from the LLM
-            response = co.generate(
-                model="command-r-plus",  # Cohere's advanced model
-                prompt=prompt,
+            response = co.chat(
+                model="command-r7b-12-2024",  # Updated Cohere model
+                message=prompt,
                 max_tokens=500,
                 temperature=0.3
             )
 
-            answer_text = response.generations[0].text.strip()
+            answer_text = response.text.strip()
 
             # Calculate a confidence score based on the relevance of retrieved content
             avg_relevance = sum([item["score"] for item in relevant_contents]) / len(relevant_contents)
@@ -305,14 +305,14 @@ class RAGService:
             """
 
             # Get the answer from the LLM with more tokens for detailed responses
-            response = co.generate(
+            response = co.chat(
                 model="command-r-plus",  # Use Cohere's advanced model for complex questions
-                prompt=prompt,
+                message=prompt,
                 max_tokens=1000,  # More tokens for detailed technical explanations
                 temperature=0.2   # Lower temperature for more factual, less creative responses
             )
 
-            answer_text = response.generations[0].text.strip()
+            answer_text = response.text.strip()
 
             # Calculate a confidence score based on the relevance of retrieved content
             avg_relevance = sum([item["score"] for item in relevant_contents]) / len(relevant_contents)
@@ -359,14 +359,14 @@ class RAGService:
             {answer_text}
             """
 
-            response = co.generate(
+            response = co.chat(
                 model="command-r-plus",  # Cohere's advanced model
-                prompt=evaluation_prompt,
+                message=evaluation_prompt,
                 max_tokens=500,
                 temperature=0.2
             )
 
-            evaluation_text = response.generations[0].text.strip()
+            evaluation_text = response.text.strip()
 
             # For now, return a basic assessment
             # A more sophisticated implementation would parse the evaluation_text
