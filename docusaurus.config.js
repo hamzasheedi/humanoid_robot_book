@@ -96,6 +96,15 @@ const config = {
             ],
           },
           {
+            title: 'Features',
+            items: [
+              {
+                label: 'Interactive Chatbot',
+                to: '/docs/chatbot-integration',
+              },
+            ],
+          },
+          {
             title: 'More',
             items: [
               {

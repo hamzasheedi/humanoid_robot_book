@@ -1,0 +1,94 @@
+/* Dark mode styles */
+[data-theme="dark"] .chatbot-container,
+body.dark .chatbot-container {
+  background-color: #1f2937; /* gray-800 */
+  border-color: #374151; /* gray-700 */
+}
+
+[data-theme="dark"] .chatbot-header,
+body.dark .chatbot-header {
+  background-color: #374151; /* gray-700 */
+  color: white;
+}
+
+[data-theme="dark"] .chat-messages,
+body.dark .chat-messages {
+  background-color: #111827; /* gray-900 */
+  color: white;
+}
+
+[data-theme="dark"] .user-message .message-content,
+body.dark .user-message .message-content {
+  background-color: #3b82f6; /* blue-500 */
+  color: white;
+}
+
+[data-theme="dark"] .bot-message .message-content,
+body.dark .bot-message .message-content {
+  background-color: #374151; /* gray-700 */
+  color: white;
+}
+
+[data-theme="dark"] .input-area,
+body.dark .input-area {
+  background-color: #1f2937; /* gray-800 */
+  border-top-color: #374151; /* gray-700 */
+}
+
+[data-theme="dark"] .input-area input,
+body.dark .input-area input {
+  background-color: #111827; /* gray-900 */
+  border-color: #4b5563; /* gray-600 */
+  color: white;
+}
+
+[data-theme="dark"] .input-area input:focus,
+body.dark .input-area input:focus {
+  border-color: #6366f1; /* indigo-500 */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* indigo-500/20 */
+}
+
+[data-theme="dark"] .welcome-message,
+body.dark .welcome-message {
+  color: #d1d5db; /* gray-300 */
+}
+
+.confidence-score.high {
+  background-color: #bbf7d0; /* green-200 */
+  color: #166534; /* green-700 */
+}
+
+.confidence-score.medium {
+  background-color: #fef3c7; /* yellow-200 */
+  color: #92400e; /* yellow-700 */
+}
+
+.confidence-score.low {
+  background-color: #fecaca; /* red-200 */
+  color: #b91c1c; /* red-700 */
+}
+
+/* Dark mode specific color adjustments */
+[data-theme="dark"] .confidence-score.high,
+body.dark .confidence-score.high {
+  background-color: #166534; /* green-700 */
+  color: #bbf7d0; /* green-200 */
+}
+
+[data-theme="dark"] .confidence-score.medium,
+body.dark .confidence-score.medium {
+  background-color: #92400e; /* yellow-700 */
+  color: #fef3c7; /* yellow-200 */
+}
+
+[data-theme="dark"] .confidence-score.low,
+body.dark .confidence-score.low {
+  background-color: #b91c1c; /* red-700 */
+  color: #fecaca; /* red-200 */
+}
+
+[data-theme="dark"] .selected-text-notice,
+body.dark .selected-text-notice {
+  background-color: #1d4ed8; /* blue-800 */
+  color: white;
+}

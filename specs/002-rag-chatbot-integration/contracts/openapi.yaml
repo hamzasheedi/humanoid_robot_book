@@ -1,0 +1,403 @@
+openapi: 3.0.0
+info:
+  title: RAG Chatbot API with Cohere Integration
+  description: API for the integrated RAG chatbot in the Physical AI & Humanoid Robotics textbook using Cohere Free API
+  version: 1.0.0
+  contact:
+    name: Development Team
+    email: team@example.com
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: http://localhost:8000/v1
+    description: Development server
+
+paths:
+  /chat/ask:
+    post:
+      summary: Ask a question to the textbook chatbot
+      description: Submit a question to get an answer based only on textbook content using Cohere embeddings
+      operationId: askQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - question
+              properties:
+                question:
+                  type: string
+                  description: The question to ask the chatbot
+                  example: "What is ROS 2?"
+                selected_text:
+                  type: string
+                  description: Optional selected text context from the textbook
+                  example: "ROS 2 is the latest version of Robot Operating System..."
+                session_id:
+                  type: string
+                  description: Optional session ID to maintain conversation context
+                  format: uuid
+                  example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+      responses:
+        '200':
+          description: Successful answer to the question
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No relevant content found in the textbook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+
+  /chat/context:
+    post:
+      summary: Get context from selected text
+      description: Submit selected text to get relevant context from the textbook using Cohere embeddings
+      operationId: getContextFromSelection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - selected_text
+              properties:
+                selected_text:
+                  type: string
+                  description: The selected text to get context for
+                  example: "Robot Operating System (ROS) is a flexible framework..."
+                session_id:
+                  type: string
+                  description: Optional session ID to maintain conversation context
+                  format: uuid
+                  example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+      responses:
+        '200':
+          description: Relevant context retrieved from textbook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextResponse'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No relevant content found in the textbook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+
+  /chat/history:
+    get:
+      summary: Get chat history for a session
+      description: Retrieve the history of questions and answers for a specific session
+      operationId: getChatHistory
+      parameters:
+        - name: session_id
+          in: query
+          required: true
+          description: The session ID to retrieve history for
+          schema:
+            type: string
+            format: uuid
+            example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+      responses:
+        '200':
+          description: Chat history retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistoryResponse'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+
+  /textbook/modules:
+    get:
+      summary: Get available textbook modules
+      description: Retrieve a list of all available textbook modules for the chatbot
+      operationId: getTextbookModules
+      responses:
+        '200':
+          description: List of textbook modules retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModuleListResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+
+  /admin/reindex:
+    post:
+      summary: Reindex textbook content
+      description: Trigger regeneration of embeddings for textbook content using Cohere
+      operationId: reindexTextbookContent
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                modules:
+                  type: array
+                  items:
+                    type: string
+                  description: Optional list of modules to reindex; if omitted, reindexes all
+                  example: ["ros2", "gazebo-unity"]
+      responses:
+        '200':
+          description: Reindexing process initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReindexResponse'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+
+components:
+  schemas:
+    QuestionResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+          description: The answer to the question
+          example: "ROS 2 (Robot Operating System 2) is a set of libraries and tools that help you build robot applications..."
+        sources:
+          type: array
+          items:
+            type: string
+          description: List of textbook sections that informed the answer
+          example: ["/docs/ros2/introduction", "/docs/ros2/architecture"]
+        confidence:
+          type: number
+          format: float
+          description: Confidence score of the answer (0.0 to 1.0)
+          example: 0.95
+        session_id:
+          type: string
+          format: uuid
+          description: The session ID for this interaction
+          example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+      required:
+        - answer
+        - sources
+        - confidence
+        - session_id
+
+    ContextResponse:
+      type: object
+      properties:
+        context:
+          type: string
+          description: The relevant context retrieved from the textbook
+          example: "The Robot Operating System (ROS) is a flexible framework..."
+        sources:
+          type: array
+          items:
+            type: string
+          description: List of textbook sections that contain the context
+          example: ["/docs/ros2/introduction", "/docs/ros2/architecture"]
+        session_id:
+          type: string
+          format: uuid
+          description: The session ID for this interaction
+          example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+      required:
+        - context
+        - sources
+        - session_id
+
+    HistoryResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          description: The session ID
+          example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+        interactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Interaction'
+      required:
+        - session_id
+        - interactions
+
+    Interaction:
+      type: object
+      properties:
+        question:
+          type: string
+          description: The question asked
+          example: "What is the difference between ROS 2 and ROS 1?"
+        answer:
+          type: string
+          description: The answer provided
+          example: "ROS 2 differs from ROS 1 in several key ways..."
+        timestamp:
+          type: string
+          format: date-time
+          description: When the interaction occurred
+          example: "2023-10-20T10:30:00Z"
+        sources:
+          type: array
+          items:
+            type: string
+          description: List of textbook sections that informed the answer
+          example: ["/docs/ros2/introduction", "/docs/ros2/architecture"]
+      required:
+        - question
+        - answer
+        - timestamp
+
+    ModuleListResponse:
+      type: object
+      properties:
+        modules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Module'
+      required:
+        - modules
+
+    Module:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the module
+          example: "ros2"
+        name:
+          type: string
+          description: Display name of the module
+          example: "ROS 2 Fundamentals"
+        description:
+          type: string
+          description: Brief description of the module
+          example: "Introduction to Robot Operating System version 2"
+        sections:
+          type: array
+          items:
+            type: string
+          description: List of sections within the module
+          example: ["Introduction", "Architecture", "Nodes and Topics"]
+      required:
+        - id
+        - name
+        - description
+        - sections
+
+    ReindexResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Status message about the reindexing process
+          example: "Reindexing process initiated for all modules"
+        modules_processed:
+          type: array
+          items:
+            type: string
+          description: List of modules that were processed
+          example: ["ros2", "gazebo-unity", "nvidia-isaac"]
+        timestamp:
+          type: string
+          format: date-time
+          description: When the reindexing was initiated
+          example: "2023-10-20T10:30:00Z"
+      required:
+        - message
+        - modules_processed
+        - timestamp
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "No relevant content found in the textbook"
+        code:
+          type: string
+          description: Error code
+          example: "NO_CONTENT_FOUND"
+      required:
+        - error
+        - code
+
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: API key for authentication

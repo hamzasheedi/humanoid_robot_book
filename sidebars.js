@@ -174,6 +174,7 @@ const sidebars = {
     },
     'deployment-validation',
     'length-validation-framework',
+    'chatbot-integration',
   ],
 };
 
