@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './ChatbotWindow.css';
 
+// Set backend URL from environment variable
+const BACKEND_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+
 const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdChange }) => {
-  // Initialize session ID from props or from localStorage
   const [sessionId, setSessionId] = useState(() => {
-    // Check if we're in the browser environment
     if (typeof window !== 'undefined' && window.localStorage) {
       return propSessionId || localStorage.getItem('chatbot-session-id') || null;
     }
-    return propSessionId || null; // Fallback when not in browser
+    return propSessionId || null;
   });
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
@@ -16,62 +17,37 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
   const [selectedText, setSelectedText] = useState('');
   const messagesEndRef = useRef(null);
 
-  // Update local state when prop changes
-  useEffect(() => {
-    if (propSessionId) {
-      setSessionId(propSessionId);
-    }
-  }, [propSessionId]);
+  useEffect(() => { if (propSessionId) setSessionId(propSessionId); }, [propSessionId]);
 
-  // Persist session ID in localStorage
   useEffect(() => {
-    // Only run in browser environment
     if (typeof window !== 'undefined' && window.localStorage) {
-      if (sessionId) {
-        localStorage.setItem('chatbot-session-id', sessionId);
-      } else {
-        localStorage.removeItem('chatbot-session-id');
-      }
+      if (sessionId) localStorage.setItem('chatbot-session-id', sessionId);
+      else localStorage.removeItem('chatbot-session-id');
     }
   }, [sessionId]);
 
-  // Function to handle session ID change
   const handleSessionIdChange = (newSessionId) => {
     setSessionId(newSessionId);
-    if (onSessionIdChange) {
-      onSessionIdChange(newSessionId);
-    }
+    if (onSessionIdChange) onSessionIdChange(newSessionId);
   };
 
-  // Function to scroll to bottom of messages
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrollToBottom = () => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); };
+  useEffect(() => { scrollToBottom(); }, [messages]);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  // Function to handle sending a message
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
-    // Add user message to UI immediately
     const userMessage = { id: Date.now(), text: inputValue, sender: 'user' };
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
 
     try {
-      // Call backend API to get response
       let data;
-      // For testing purposes, use mock responses when backend is not available
       try {
-        const response = await fetch('http://localhost:8000/chat/ask', {
+        const response = await fetch(`${BACKEND_URL}/chat/ask`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             question: inputValue,
             selected_text: selectedText,
@@ -79,23 +55,18 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
           }),
         });
 
-        if (!response.ok) {
-          throw new Error(`Server error: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`Server error: ${response.status}`);
         data = await response.json();
       } catch (error) {
         console.error('Error connecting to backend:', error);
-        // Return mock response for testing UI
         data = {
-          answer: "I'm currently unable to connect to the AI backend. This is a mock response to demonstrate the UI. To fix this, please ensure the backend server is running on port 8000.",
+          answer: "Unable to connect to backend. This is a mock response.",
           sources: ["Mock Response"],
           confidence: 0.5,
           session_id: sessionId || `session_${Date.now()}`
         };
       }
-      
-      // Add bot response to UI
+
       const botMessage = {
         id: Date.now() + 1,
         text: data.answer,
@@ -103,226 +74,106 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
         sources: data.sources,
         confidence: data.confidence
       };
-      
       setMessages(prev => [...prev, botMessage]);
-      
-      // Update session ID if it was generated
-      if (data.session_id && !sessionId) {
-        handleSessionIdChange(data.session_id);
-      }
+
+      if (data.session_id && !sessionId) handleSessionIdChange(data.session_id);
     } catch (error) {
       console.error('Error sending message:', error);
-      const errorMessage = {
-        id: Date.now() + 1,
-        text: 'Sorry, I encountered an error processing your request. Please try again.',
-        sender: 'bot',
-        isError: true
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => [...prev, { id: Date.now()+1, text: 'Error processing request.', sender: 'bot', isError: true }]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Function to handle text selection
-  useEffect(() => {
-    // Only run in browser environment
-    if (typeof window !== 'undefined' && window.document) {
-      const handleSelection = () => {
-        const selectedText = window.getSelection().toString().trim();
-        if (selectedText) {
-          setSelectedText(selectedText);
-        }
-      };
-
-      document.addEventListener('mouseup', handleSelection);
-      return () => {
-        document.removeEventListener('mouseup', handleSelection);
-      };
-    }
-  }, []);
-
-  // Function to handle "Ask About Selected Text" button
   const handleAskSelectedText = async () => {
     if (!selectedText.trim() || isLoading) return;
 
-    // Add user message to UI
     const userMessage = { id: Date.now(), text: `Selected: "${selectedText}"`, sender: 'user' };
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
 
     try {
-      // Call backend API to get context for selected text
       let data;
-      // For testing purposes, use mock responses when backend is not available
       try {
-        const response = await fetch('http://localhost:8000/chat/context', {
+        const response = await fetch(`${BACKEND_URL}/chat/context`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            selected_text: selectedText,
-            session_id: sessionId
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ selected_text: selectedText, session_id: sessionId }),
         });
 
-        if (!response.ok) {
-          throw new Error(`Server error: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`Server error: ${response.status}`);
         data = await response.json();
       } catch (error) {
         console.error('Error connecting to backend:', error);
-        // Return mock response for testing UI
-        data = {
-          context: "I'm currently unable to connect to the AI backend. This is a mock response to demonstrate the UI. To fix this, please ensure the backend server is running on port 8000.",
-          session_id: sessionId || `session_${Date.now()}`
-        };
+        data = { context: "Unable to connect to backend. This is a mock response.", session_id: sessionId || `session_${Date.now()}` };
       }
-      
-      // Add bot response to UI
+
       const botMessage = {
         id: Date.now() + 1,
-        text: data.context || 'No relevant content found in the textbook for the selected text.',
+        text: data.context || 'No relevant content found.',
         sender: 'bot',
       };
-      
       setMessages(prev => [...prev, botMessage]);
-      
-      // Update session ID if it was generated
-      if (data.session_id && !sessionId) {
-        handleSessionIdChange(data.session_id);
-      }
+
+      if (data.session_id && !sessionId) handleSessionIdChange(data.session_id);
     } catch (error) {
-      console.error('Error getting context for selection:', error);
-      const errorMessage = {
-        id: Date.now() + 1,
-        text: 'Sorry, I encountered an error processing the selected text. Please try again.',
-        sender: 'bot',
-        isError: true
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      console.error('Error getting context:', error);
+      setMessages(prev => [...prev, { id: Date.now()+1, text: 'Error processing selected text.', sender: 'bot', isError: true }]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Function to copy text to clipboard
-  const copyToClipboard = (text) => {
-    // Only run in browser environment
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(text);
-    } else {
-      // Fallback for server-side or unsupported browsers
-      console.warn('Clipboard API not available');
-    }
-  };
+  const copyToClipboard = (text) => { if (navigator?.clipboard) navigator.clipboard.writeText(text); };
 
   return (
     <div className="chatbot-window">
-      {/* Floating button when closed */}
-      {!isOpen && (
-        <button
-          className="chatbot-toggle"
-          onClick={onClose} // This should open the chat window
-        >
-          💬 AI Tutor
-        </button>
-      )}
+      {!isOpen && <button className="chatbot-toggle" onClick={onClose}>💬 AI Tutor</button>}
 
-      {/* Chat window when open */}
       {isOpen && (
         <div className="chatbot-container">
           <div className="chatbot-header">
             <h3>AI Textbook Assistant</h3>
             <div className="header-controls">
-              <button
-                className="minimize-btn"
-                onClick={onClose}
-                aria-label="Minimize chat"
-              >
-                −
-              </button>
+              <button className="minimize-btn" onClick={onClose}>−</button>
             </div>
           </div>
 
           <div className="chatbot-body">
-            {/* Messages container */}
             <div className="chat-messages">
               {messages.length === 0 ? (
                 <div className="welcome-message">
-                  <p>Hello! I'm your AI assistant for the Physical AI & Humanoid Robotics textbook.</p>
-                  <p>You can ask me questions about the content, or select text and click "Ask About Selected Text" to get context-aware answers.</p>
+                  <p>Hello! I'm your AI assistant for the textbook.</p>
                 </div>
-              ) : (
-                messages.map((message) => (
-                  <div 
-                    key={message.id} 
-                    className={`message ${message.sender === 'user' ? 'user-message' : 'bot-message'}`}
-                  >
-                    <div className="message-content">
-                      <p>{message.text}</p>
-                      {message.sources && message.sources.length > 0 && (
-                        <div className="sources">
-                          <small>Referenced: {message.sources.map(s => s.title || 'Source').join(', ')}</small>
-                        </div>
-                      )}
-                      {message.confidence && (
-                        <div className="confidence">
-                          <small>Confidence: {(message.confidence * 100).toFixed(1)}%</small>
-                        </div>
-                      )}
-                    </div>
-                    <button 
-                      className="copy-btn"
-                      onClick={() => copyToClipboard(message.text)}
-                      aria-label="Copy message"
-                    >
-                      📋
-                    </button>
-                  </div>
-                ))
-              )}
-              {isLoading && (
-                <div className="message bot-message">
+              ) : messages.map(message => (
+                <div key={message.id} className={`message ${message.sender==='user'?'user-message':'bot-message'}`}>
                   <div className="message-content">
-                    <p>Thinking...</p>
+                    <p>{message.text}</p>
                   </div>
+                  <button className="copy-btn" onClick={()=>copyToClipboard(message.text)}>📋</button>
                 </div>
-              )}
-              <div ref={messagesEndRef} />
+              ))}
+              {isLoading && <div className="message bot-message"><p>Thinking...</p></div>}
+              <div ref={messagesEndRef}/>
             </div>
 
-            {/* Input area */}
             {selectedText && (
               <div className="selected-text-notice">
-                <span>Selected: "{selectedText.substring(0, 60)}{selectedText.length > 60 ? '...' : ''}"</span>
-                <button 
-                  onClick={handleAskSelectedText}
-                  disabled={isLoading}
-                  className="ask-selected-btn"
-                >
-                  Ask About Selected Text
-                </button>
+                <span>Selected: "{selectedText.substring(0,60)}{selectedText.length>60?'...':''}"</span>
+                <button onClick={handleAskSelectedText} disabled={isLoading}>Ask About Selected Text</button>
               </div>
             )}
+
             <div className="input-area">
               <input
                 type="text"
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder="Ask a question about the textbook..."
+                onChange={e=>setInputValue(e.target.value)}
+                onKeyPress={e=>e.key==='Enter' && handleSendMessage()}
+                placeholder="Ask a question..."
                 disabled={isLoading}
               />
-              <button 
-                onClick={handleSendMessage}
-                disabled={isLoading || !inputValue.trim()}
-                className="send-btn"
-              >
-                {isLoading ? '...' : '→'}
-              </button>
+              <button onClick={handleSendMessage} disabled={isLoading||!inputValue.trim()}>{isLoading?'...':'→'}</button>
             </div>
           </div>
         </div>
