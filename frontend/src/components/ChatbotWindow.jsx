@@ -67,7 +67,7 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
       let data;
       // For testing purposes, use mock responses when backend is not available
       try {
-        const response = await fetch('https://humanoid-robot-book-3.onrender.com/chat/ask', {
+        const response = await fetch('https://backend-z4du.onrender.com/chat/ask', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
       let data;
       // For testing purposes, use mock responses when backend is not available
       try {
-        const response = await fetch('https://humanoid-robot-book-3.onrender.com/chat/context', {
+        const response = await fetch('https://backend-z4du.onrender.com/chat/context', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
