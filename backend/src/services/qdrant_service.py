@@ -3,7 +3,7 @@ from typing import List, Dict, Optional
 from qdrant_client import AsyncQdrantClient
 from qdrant_client.http import models
 from qdrant_client.http.models import Distance, VectorParams
-from .config import QDRANT_URL, QDRANT_API_KEY
+from ..config import QDRANT_URL, QDRANT_API_KEY
 
 class QdrantService:
     def __init__(self):

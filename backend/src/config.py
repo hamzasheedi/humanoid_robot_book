@@ -9,7 +9,7 @@ load_dotenv()
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 NEON_DB_URL = os.getenv("NEON_DB_URL")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 API_KEY = os.getenv("API_KEY")
 
 # Additional configuration settings
@@ -20,7 +20,7 @@ ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
 # Configuration validation
 def validate_config():
-    required_vars = ["OPENAI_API_KEY", "QDRANT_URL", "NEON_DB_URL", "API_KEY"]
+    required_vars = ["COHERE_API_KEY", "QDRANT_URL", "NEON_DB_URL", "API_KEY"]
     missing_vars = [var for var in required_vars if not os.getenv(var)]
 
     if missing_vars:

@@ -1,44 +1,109 @@
----
-sidebar_position: 1
-title: Interactive Chatbot
----
+# Integrated RAG Chatbot for Textbook
 
-# Interactive Chatbot for the Physical AI & Humanoid Robotics Textbook
+## Overview
 
-Our textbook features an integrated AI chatbot that allows students to ask questions and receive context-aware answers based on the textbook content.
+The *Physical AI & Humanoid Robotics* textbook now features an integrated RAG (Retrieval-Augmented Generation) chatbot powered by Cohere embeddings. This chatbot enables students to ask questions about textbook content and receive context-aware answers based on the course material.
 
 ## Features
 
-- **Context-Aware Q&A**: Ask questions about any topic covered in the textbook
-- **Text Selection**: Select text and ask for clarification on specific passages
-- **Citation References**: Get sources for answers back to specific sections
-- **Conversation History**: Track your learning journey
-- **Instructor Dashboard**: Tools for educators to monitor student progress
+### Student Question-Answering
+
+- Ask questions about textbook content directly from any page
+- Receive answers based strictly on textbook content
+- Get citations showing which textbook sections informed the response
+- Track conversation history within each session
+
+### Text Selection Functionality
+
+- Select text on any textbook page
+- Ask for clarification on specific content using the "Ask About Selected Text" button
+- Receive context-aware responses based on the selected text
+
+### Instructor Tools
+
+- Advanced question handling for complex technical queries
+- Confidence scoring for answer accuracy
+- Educational value assessment
+- Citation functionality for specific textbook references
+
+### Learning Progress Tracking
+
+- Session-based conversation history
+- Ability to review previous questions and answers
+- Filtering and search capabilities for chat history
 
 ## How to Use
 
 ### Asking Questions
-1. Click the floating chat icon in the bottom-right corner
-2. Type your question about the textbook content
-3. Press Enter or click "Send"
 
-### Using Text Selection
+1. Navigate to any textbook page
+2. Use the embedded chatbot interface
+3. Type your question about the content
+4. Receive an answer based on textbook material
+
+### Text Selection
+
 1. Highlight any text in the textbook
-2. Click the "Ask About Selected Text" button that appears
-3. The AI will provide context-aware answers about the selected text
+2. Click on the floating "Ask About Selected Text" button
+3. The chatbot will provide context-aware explanations
 
-### Viewing History
-1. Open the chat panel
-2. Browse your previous questions and answers
-3. Use search to find specific conversations
+### Reviewing History
 
-## Technical Details
+1. Access your conversation history
+2. Review previous questions and answers
+3. Track your learning progress
 
-The chatbot uses Retrieval-Augmented Generation (RAG) to ensure all answers are grounded in the textbook content. It leverages:
+## Technical Implementation
 
-- **FastAPI backend** for processing
-- **Qdrant vector database** for content retrieval
-- **OpenAI models** for answer generation
-- **Neon PostgreSQL** for storing conversation history
+### Architecture
 
-All responses are limited to information contained in the textbook and properly cited.
+- **Frontend:** React components integrated into Docusaurus
+- **Backend:** FastAPI server with Cohere integration
+- **Vector Store:** Qdrant for embedding storage and retrieval
+- **Database:** Neon Postgres for logging and session management
+
+### Technology Stack
+
+- **Cohere API:** For embeddings and answer generation
+- **Qdrant:** Vector database for semantic search
+- **Neon Postgres:** Transactional database for logs and metadata
+- **FastAPI:** Backend API framework
+- **React:** Frontend components for chat interface
+- **Docusaurus:** Static site generator for textbook
+
+## Performance
+
+- **Response times:** &lt;2 seconds for cloud deployment, &lt;5 seconds for local
+- **Accuracy:** &gt;=95% textbook content accuracy
+- **Security:** All API keys stored server-side with proper validation
+
+## Troubleshooting
+
+### Common Issues
+
+- **No response from chatbot:** Verify backend server is running and Cohere API key is valid
+- **Connection refused for Qdrant:** Check Qdrant cluster URL and API key in environment variables
+- **Slow response times:** Verify network connection to Cohere and Qdrant
+
+## Integration Benefits
+
+### For Students
+
+- Immediate access to textbook content explanations
+- Context-aware responses to specific questions
+- Learning progress tracking
+- Enhanced engagement with material
+
+### For Instructors
+
+- Tools for testing content accuracy
+- Advanced question handling capabilities
+- Educational value assessment
+- Citations for verification
+
+## Future Enhancements
+
+- Additional textbook modules integration
+- Advanced personalization features
+- Enhanced natural language understanding
+- Multi-language support

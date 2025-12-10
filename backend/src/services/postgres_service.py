@@ -2,7 +2,7 @@ import asyncpg
 from typing import List, Optional, Dict
 from datetime import datetime
 import uuid
-from .utils.database import db
+from ..utils.database import db
 from ..models import Question, Answer, ChatSession, UserInteractionLog
 
 class PostgresService:

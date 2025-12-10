@@ -3,7 +3,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 1000;
+  z-index: 9999;
 }
 
 .chatbot-toggle {
@@ -133,6 +133,35 @@
   font-size: 0.8em;
   color: #6b7280;
   font-style: italic;
+}
+
+/* Dark mode specific styles */
+html[data-theme='dark'] .user-message .message-content {
+  background-color: #3b82f6;
+}
+
+html[data-theme='dark'] .bot-message .message-content {
+  background-color: #374151;
+  color: white;
+}
+
+html[data-theme='dark'] .welcome-message {
+  color: #d1d5db;
+}
+
+html[data-theme='dark'] .input-area {
+  background-color: #1f2937;
+}
+
+html[data-theme='dark'] .input-area input {
+  background-color: #374151;
+  color: white;
+  border: 1px solid #4b5563;
+}
+
+html[data-theme='dark'] .selected-text-notice {
+  background-color: #1d4ed8;
+  color: white;
 }
 
 .copy-btn {

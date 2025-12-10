@@ -1,37 +1,39 @@
 import asyncio
-import openai
+import cohere
 from typing import List
-from .config import OPENAI_API_KEY
+from ..config import COHERE_API_KEY
 from .qdrant_service import QdrantService
 import logging
 
-openai.api_key = OPENAI_API_KEY
+co = cohere.Client(COHERE_API_KEY)
 
 class EmbeddingService:
     def __init__(self, qdrant_service: QdrantService):
         self.qdrant_service = qdrant_service
-        self.model = "text-embedding-ada-002"  # OpenAI's recommended embedding model
-    
+        self.model = "embed-english-v3.0"  # Cohere's recommended embedding model
+
     async def create_embedding(self, text: str) -> List[float]:
         """Create an embedding for a single text"""
         try:
-            response = await openai.Embedding.acreate(
-                input=text,
-                model=self.model
+            response = co.embed(
+                texts=[text],
+                model=self.model,
+                input_type="search_document"
             )
-            return response['data'][0]['embedding']
+            return response.embeddings[0]
         except Exception as e:
             print(f"Error creating embedding: {e}")
             raise
-    
+
     async def create_embeddings_batch(self, texts: List[str]) -> List[List[float]]:
         """Create embeddings for a batch of texts"""
         try:
-            response = await openai.Embedding.acreate(
-                input=texts,
-                model=self.model
+            response = co.embed(
+                texts=texts,
+                model=self.model,
+                input_type="search_document"
             )
-            return [item['embedding'] for item in response['data']]
+            return response.embeddings
         except Exception as e:
             print(f"Error creating embeddings batch: {e}")
             raise

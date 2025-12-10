@@ -1,15 +1,15 @@
 import asyncio
-import openai
+import cohere
 from typing import List, Optional, Dict
 from datetime import datetime
 import uuid
-from .config import OPENAI_API_KEY
+from ..config import COHERE_API_KEY
 from .qdrant_service import QdrantService
 from .embedding_service import EmbeddingService
 from .postgres_service import PostgresService
 from ..models import Question, Answer, ChatSession
 
-openai.api_key = OPENAI_API_KEY
+co = cohere.Client(COHERE_API_KEY)
 
 class RAGService:
     def __init__(self, qdrant_service: QdrantService, embedding_service: EmbeddingService, postgres_service: PostgresService):
@@ -66,14 +66,14 @@ class RAGService:
             """
 
             # Get the answer from the LLM
-            response = await openai.ChatCompletion.acreate(
-                model="gpt-3.5-turbo",  # Consider using gpt-4 for more complex questions
-                messages=[{"role": "user", "content": prompt}],
+            response = co.generate(
+                model="command-r-plus",  # Cohere's advanced model
+                prompt=prompt,
                 max_tokens=500,
                 temperature=0.3
             )
 
-            answer_text = response.choices[0].message['content'].strip()
+            answer_text = response.generations[0].text.strip()
 
             # Calculate a confidence score based on the relevance of retrieved content
             confidence_score = min(1.0, sum([item["score"] for item in relevant_contents]) / len(relevant_contents) / 0.8)
@@ -218,14 +218,14 @@ class RAGService:
             """
 
             # Get the answer from the LLM
-            response = await openai.ChatCompletion.acreate(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": prompt}],
+            response = co.generate(
+                model="command-r-plus",  # Cohere's advanced model
+                prompt=prompt,
                 max_tokens=500,
                 temperature=0.3
             )
 
-            answer_text = response.choices[0].message['content'].strip()
+            answer_text = response.generations[0].text.strip()
 
             # Calculate a confidence score based on the relevance of retrieved content
             avg_relevance = sum([item["score"] for item in relevant_contents]) / len(relevant_contents)
@@ -305,14 +305,14 @@ class RAGService:
             """
 
             # Get the answer from the LLM with more tokens for detailed responses
-            response = await openai.ChatCompletion.acreate(
-                model="gpt-4",  # Use GPT-4 for more complex technical questions
-                messages=[{"role": "user", "content": prompt}],
+            response = co.generate(
+                model="command-r-plus",  # Use Cohere's advanced model for complex questions
+                prompt=prompt,
                 max_tokens=1000,  # More tokens for detailed technical explanations
                 temperature=0.2   # Lower temperature for more factual, less creative responses
             )
 
-            answer_text = response.choices[0].message['content'].strip()
+            answer_text = response.generations[0].text.strip()
 
             # Calculate a confidence score based on the relevance of retrieved content
             avg_relevance = sum([item["score"] for item in relevant_contents]) / len(relevant_contents)
@@ -359,14 +359,14 @@ class RAGService:
             {answer_text}
             """
 
-            response = await openai.ChatCompletion.acreate(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": evaluation_prompt}],
+            response = co.generate(
+                model="command-r-plus",  # Cohere's advanced model
+                prompt=evaluation_prompt,
                 max_tokens=500,
                 temperature=0.2
             )
 
-            evaluation_text = response.choices[0].message['content'].strip()
+            evaluation_text = response.generations[0].text.strip()
 
             # For now, return a basic assessment
             # A more sophisticated implementation would parse the evaluation_text

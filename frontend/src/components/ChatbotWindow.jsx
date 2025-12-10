@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './ChatbotWindow.css';
 
-const ChatbotWindow = ({ sessionId: propSessionId, onSessionIdChange }) => {
+const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdChange }) => {
   // Initialize session ID from props or from localStorage
   const [sessionId, setSessionId] = useState(() => {
     return propSessionId || localStorage.getItem('chatbot-session-id') || null;
   });
-
-  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -59,23 +57,36 @@ const ChatbotWindow = ({ sessionId: propSessionId, onSessionIdChange }) => {
 
     try {
       // Call backend API to get response
-      const response = await fetch('http://localhost:8000/chat/ask', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          question: inputValue,
-          selected_text: selectedText,
-          session_id: sessionId
-        }),
-      });
+      let data;
+      // For testing purposes, use mock responses when backend is not available
+      try {
+        const response = await fetch('http://localhost:8000/chat/ask', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            question: inputValue,
+            selected_text: selectedText,
+            session_id: sessionId
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        data = await response.json();
+      } catch (error) {
+        console.error('Error connecting to backend:', error);
+        // Return mock response for testing UI
+        data = {
+          answer: "I'm currently unable to connect to the AI backend. This is a mock response to demonstrate the UI. To fix this, please ensure the backend server is running on port 8000.",
+          sources: ["Mock Response"],
+          confidence: 0.5,
+          session_id: sessionId || `session_${Date.now()}`
+        };
       }
-
-      const data = await response.json();
       
       // Add bot response to UI
       const botMessage = {
@@ -132,22 +143,33 @@ const ChatbotWindow = ({ sessionId: propSessionId, onSessionIdChange }) => {
 
     try {
       // Call backend API to get context for selected text
-      const response = await fetch('http://localhost:8000/chat/context', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          selected_text: selectedText,
-          session_id: sessionId
-        }),
-      });
+      let data;
+      // For testing purposes, use mock responses when backend is not available
+      try {
+        const response = await fetch('http://localhost:8000/chat/context', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            selected_text: selectedText,
+            session_id: sessionId
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        data = await response.json();
+      } catch (error) {
+        console.error('Error connecting to backend:', error);
+        // Return mock response for testing UI
+        data = {
+          context: "I'm currently unable to connect to the AI backend. This is a mock response to demonstrate the UI. To fix this, please ensure the backend server is running on port 8000.",
+          session_id: sessionId || `session_${Date.now()}`
+        };
       }
-
-      const data = await response.json();
       
       // Add bot response to UI
       const botMessage = {
@@ -185,9 +207,9 @@ const ChatbotWindow = ({ sessionId: propSessionId, onSessionIdChange }) => {
     <div className="chatbot-window">
       {/* Floating button when closed */}
       {!isOpen && (
-        <button 
+        <button
           className="chatbot-toggle"
-          onClick={() => setIsOpen(true)}
+          onClick={onClose} // This should open the chat window
         >
           💬 AI Tutor
         </button>
@@ -199,9 +221,9 @@ const ChatbotWindow = ({ sessionId: propSessionId, onSessionIdChange }) => {
           <div className="chatbot-header">
             <h3>AI Textbook Assistant</h3>
             <div className="header-controls">
-              <button 
+              <button
                 className="minimize-btn"
-                onClick={() => setIsOpen(false)}
+                onClick={onClose}
                 aria-label="Minimize chat"
               >
                 −

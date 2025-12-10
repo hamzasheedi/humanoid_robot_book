@@ -1,7 +1,7 @@
 import asyncpg
 from typing import Optional
 from contextlib import asynccontextmanager
-from .config import NEON_DB_URL
+from ..config import NEON_DB_URL
 
 class Database:
     def __init__(self):
