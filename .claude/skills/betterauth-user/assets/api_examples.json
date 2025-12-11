@@ -1,0 +1,60 @@
+# Better-Auth User Creation Examples
+
+## Valid User Registration Request
+```json
+{
+  "email": "johndoe@example.com",
+  "password": "SecurePass123!",
+  "profile": {
+    "name": "John Doe",
+    "age": 25,
+    "role": "student"
+  }
+}
+```
+
+## Valid Response
+```json
+{
+  "result": {
+    "success": true,
+    "message": "User created successfully",
+    "user_id": "user_abc123def456"
+  }
+}
+```
+
+## Error Responses
+
+### Duplicate Email
+```json
+{
+  "result": {
+    "success": false,
+    "message": "Email already exists",
+    "user_id": null
+  }
+}
+```
+
+### Weak Password
+```json
+{
+  "result": {
+    "success": false,
+    "message": "Validation error: Password must be at least 8 characters",
+    "user_id": null
+  }
+}
+```
+
+### API Failure
+```json
+{
+  "result": {
+    "success": false,
+    "message": "API error: 500 - Internal server error",
+    "user_id": null
+  }
+}
+```
