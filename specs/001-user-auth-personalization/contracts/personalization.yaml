@@ -1,0 +1,179 @@
+openapi: 3.0.0
+info:
+  title: Personalization API
+  description: API for managing user personalization preferences
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Local development server
+  - url: https://api.yourdomain.com/api
+    description: Production server
+
+paths:
+  /personalization:
+    get:
+      summary: Retrieve personalization preferences
+      description: Retrieves the current user's personalization preferences
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Personalization preferences retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizationResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Personalization preferences not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update personalization preferences
+      description: Updates the current user's personalization preferences
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalizationUpdateRequest'
+      responses:
+        '200':
+          description: Personalization preferences updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizationResponse'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    PersonalizationPreferences:
+      type: object
+      description: User personalization preferences
+      properties:
+        preference_id:
+          type: string
+          description: Unique identifier for the preference record
+          example: "pref_abc123def456"
+        user_id:
+          type: string
+          description: Reference to the associated user
+          example: "user_xyz789uvw012"
+        content_difficulty:
+          type: string
+          description: Preferred content difficulty level
+          enum: [adaptive, beginner, intermediate, advanced]
+          example: adaptive
+        preferred_examples:
+          type: array
+          items:
+            type: string
+            enum: [hardware-focused, simulation, real-robot, theory, practice]
+          description: Array of preferred example types
+          example: ["simulation", "real-robot"]
+        response_complexity:
+          type: string
+          description: Preferred response complexity
+          enum: [simple, balanced, detailed]
+          example: balanced
+        interaction_style:
+          type: string
+          description: Preferred interaction style
+          enum: [guided, exploratory, problem-solving]
+          example: guided
+        learning_pace:
+          type: string
+          description: Preferred learning pace
+          enum: [slow, moderate, fast]
+          example: moderate
+        created_at:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: "2023-01-01T00:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2023-01-02T10:30:00Z"
+
+    PersonalizationUpdateRequest:
+      type: object
+      properties:
+        content_difficulty:
+          type: string
+          description: Preferred content difficulty level
+          enum: [adaptive, beginner, intermediate, advanced]
+          example: adaptive
+        preferred_examples:
+          type: array
+          items:
+            type: string
+            enum: [hardware-focused, simulation, real-robot, theory, practice]
+          description: Array of preferred example types
+          example: ["simulation", "real-robot"]
+        response_complexity:
+          type: string
+          description: Preferred response complexity
+          enum: [simple, balanced, detailed]
+          example: balanced
+        interaction_style:
+          type: string
+          description: Preferred interaction style
+          enum: [guided, exploratory, problem-solving]
+          example: guided
+        learning_pace:
+          type: string
+          description: Preferred learning pace
+          enum: [slow, moderate, fast]
+          example: moderate
+
+    PersonalizationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Personalization preferences retrieved successfully"
+        preferences:
+          $ref: '#/components/schemas/PersonalizationPreferences'
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Invalid preference data"

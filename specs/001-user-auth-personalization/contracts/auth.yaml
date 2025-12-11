@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  title: Authentication API
+  description: API for user signup, signin, and session management
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Local development server
+  - url: https://api.yourdomain.com/api
+    description: Production server
+
+paths:
+  /auth/signup:
+    post:
+      summary: Create a new user account
+      description: Creates a new user account with Better-Auth and stores profile information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: User's email address
+                  example: student@example.com
+                password:
+                  type: string
+                  minLength: 8
+                  description: User's password
+                  example: securePassword123
+                profile:
+                  $ref: '#/components/schemas/UserProfile'
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/signin:
+    post:
+      summary: Authenticate user
+      description: Authenticates a user with Better-Auth and creates a session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: User's email address
+                  example: student@example.com
+                password:
+                  type: string
+                  description: User's password
+                  example: securePassword123
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/signout:
+    post:
+      summary: End current session
+      description: Ends the current user session
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Session ended successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Successfully signed out"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserProfile:
+      type: object
+      description: User profile information
+      properties:
+        os:
+          type: string
+          description: Operating system
+          example: "Windows 10"
+        cpu:
+          type: string
+          description: CPU specifications
+          example: "Intel i7-12700K"
+        gpu:
+          type: string
+          description: GPU specifications
+          example: "NVIDIA RTX 3080"
+        ram_gb:
+          type: integer
+          description: RAM in gigabytes
+          example: 32
+        programming_experience:
+          type: string
+          description: Programming experience level
+          enum: [beginner, intermediate, advanced, expert]
+          example: intermediate
+        robotics_experience:
+          type: string
+          description: Robotics experience level
+          enum: [none, beginner, intermediate, advanced]
+          example: beginner
+        development_environment:
+          type: string
+          description: Preferred development environment
+          example: "Visual Studio Code"
+        primary_language:
+          type: string
+          description: Primary programming language
+          example: "Python"
+        learning_goals:
+          type: array
+          items:
+            type: string
+          description: Array of learning goals
+          example: ["robotics", "AI", "simulation"]
+
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Authentication successful"
+        user_id:
+          type: string
+          example: "user_abc123def456"
+        session_id:
+          type: string
+          example: "session_xyz789uvw012"
+        auth_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Invalid email format"
