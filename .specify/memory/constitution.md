@@ -1,10 +1,9 @@
-<!-- 
+<!--
 Sync Impact Report:
-- Version change: 1.2.0 → 2.1.0
-- Modified principles: Updated references from OpenAI to Cohere API 
-- Added sections: Updated all backend & chatbot-specific references to Cohere
-- Templates requiring updates: [.specify/templates/plan-template.md] ✅ updated, [.specify/templates/spec-template.md] ✅ updated, [.specify/templates/tasks-template.md] ✅ updated
-- Follow-up TODOs: RATIFICATION_DATE (needs to be set to actual ratification date)
+- Version change: 2.1.0 → 2.1.1
+- Added sections: Amendment: Signup & Personalization (new section with 9 subsections)
+- Templates requiring updates: [.specify/templates/plan-template.md] ⚠ pending, [.specify/templates/spec-template.md] ⚠ pending, [.specify/templates/tasks-template.md] ⚠ pending
+- Follow-up TODOs: None
 -->
 # Constitution: Integrated RAG Chatbot and Physical AI & Humanoid Robotics Textbook
 
@@ -131,10 +130,75 @@ Weekly plans, exercises, and chatbot scenarios must reflect hardware, cloud, and
 ### Implementation Alignment
 All backend, embeddings, and retrieval workflows must follow tested procedures; deviations require documented justification. Code implementations must pass all validation checks before merging, with special attention to Cohere API usage and response handling.
 
+## Amendment: Signup & Personalization
+
+### Preamble
+
+This amendment establishes the foundational principles, standards, and governance for user authentication, profile collection, and personalization features within the Physical AI & Humanoid Robotics Textbook platform. The amendment ensures secure, privacy-compliant user onboarding while enabling personalized educational experiences through profile-based content adaptation and chatbot interactions.
+
+### Core Principles
+
+- **Secure Authentication**: All user authentication must be handled through Better-Auth with industry-standard security practices, including secure password storage, session management, and protection against common vulnerabilities.
+- **Privacy-First Profile Collection**: User profile data collection must be minimal, purposeful, and transparent, with clear consent mechanisms and data usage policies.
+- **Personalization with Purpose**: Personalization features must enhance the educational experience without compromising user privacy or creating filter bubbles that limit learning opportunities.
+- **Data Sovereignty**: Users must retain control over their personalization data, with clear opt-out mechanisms and data portability options.
+
+### Key Standards
+
+- **Data Collection**: Collect only hardware/software profile information relevant to educational content adaptation (OS, CPU, GPU, RAM, programming experience, robotics experience).
+- **User Privacy**: Implement end-to-end encryption for profile data transmission and storage, with compliance to GDPR and applicable privacy regulations.
+- **Integration Standards**: All authentication and personalization features must integrate seamlessly with existing RAG chatbot, session management, and master_agent orchestration systems.
+
+### Constraints
+
+- **Security**: All user data must be stored in Neon Postgres with appropriate encryption at rest and in transit.
+- **Scope**: Personalization features are limited to textbook content adaptation and chatbot response customization; no external data sharing without explicit consent.
+- **Performance**: Authentication and personalization features must not significantly impact platform performance or increase response latency beyond acceptable thresholds.
+
+### Success Criteria
+
+- User can successfully sign up/sign in through Better-Auth integration with proper validation
+- User profile collected and validated during signup process with clear consent
+- Textbook content personalized based on user's technical background and experience level
+- Chatbot responds using personalization data to provide relevant examples and explanations
+- All backend services (Better-Auth, Neon, Cohere, Qdrant) work securely and efficiently
+- User profile data is stored and accessed with appropriate security measures
+- Personalization features enhance rather than limit educational experience
+
+### Backend & Chatbot Additions
+
+- **API Integration**: Better-Auth endpoints must be properly integrated with FastAPI backend, including proper error handling and response formatting
+- **Session Handling**: Session state management through Neon Postgres with proper timeout and security measures
+- **Profile Persistence**: User profile data stored in Neon Postgres with appropriate indexing for efficient retrieval
+- **RAG Integration**: Personalization data must be accessible to RAG system for context-aware responses
+- **Master Agent Coordination**: Authentication and personalization flows must be properly orchestrated through master_agent
+
+### UI & Accessibility
+
+- **Signup Form Standards**: Accessible signup forms compliant with WCAG 2.1 AA standards with proper labeling and error messaging
+- **Personalization Settings**: Clear UI controls for users to view, edit, or opt out of personalization features
+- **Accessibility Compliance**: All personalized content must maintain accessibility standards for users with disabilities
+- **Progressive Enhancement**: Core functionality must be available without JavaScript, with personalization as an enhancement
+
+### Validation & Cascading Rules
+
+- **Data Validation**: All profile data must be validated for format, range, and reasonableness before storage
+- **Session Consistency**: Authentication tokens and session data must remain consistent across all platform components
+- **Personalized Content Correctness**: Personalized content must maintain educational accuracy and not compromise learning objectives
+- **Security Validation**: All authentication and personalization features must pass security validation before deployment
+
+### Governance
+
+- **Review Schedule**: Personalization features and privacy practices must be reviewed quarterly
+- **Update Process**: Changes to personalization algorithms require stakeholder approval and user notification
+- **Compliance Monitoring**: Ongoing monitoring of privacy regulation compliance and security best practices
+- **User Feedback**: Regular collection and analysis of user feedback on personalization features
+- **Data Retention**: Clear policies for data retention and deletion with automated enforcement
+
 ## Governance
 
 This constitution governs all project decisions and supersedes any conflicting practices. Amendment requires explicit documentation of rationale and approval by project leads. All specifications, plans, and implementations must verify compliance with these principles. Complexity must be justified with clear benefits to the learning experience.
 
 Changes to core principles, standards, and deployment procedures must be tracked with version history. The project team must conduct regular reviews to ensure continued compliance with this constitution.
 
-**Version**: 2.1.0 | **Ratified**: TODO(RATIFICATION_DATE): Date of original adoption | **Last Amended**: 2025-12-09
+**Version**: 2.1.1 | **Ratified**: 2025-12-12 | **Last Amended**: 2025-12-12
