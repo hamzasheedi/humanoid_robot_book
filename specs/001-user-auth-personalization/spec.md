@@ -18,7 +18,7 @@ This feature specification MUST align with the project constitution principles:
 
 ### User Story 1 - New User Signup and Profile Collection (Priority: P1)
 
-A student or instructor visits the Physical AI & Humanoid Robotics Textbook platform for the first time and needs to create an account. The user provides their email, password, and hardware/software profile information (OS, CPU, GPU, RAM, programming experience, robotics experience) to enable personalized learning experiences.
+A student or instructor visits the Physical AI & Humanoid Robotics Textbook platform for the first time and needs to create an account. The user provides their email and password for authentication, with optional hardware/software profile information (OS, CPU, GPU, RAM, programming experience, robotics experience) to enable personalized learning experiences.
 
 **Why this priority**: This is the foundational user journey that enables all other personalized features. Without account creation, users cannot access personalized content or track their learning progress.
 
@@ -28,14 +28,14 @@ A student or instructor visits the Physical AI & Humanoid Robotics Textbook plat
 
 **Acceptance Scenarios**:
 
-1. **Given** a user is on the signup page, **When** they provide valid email, password, and hardware/software profile information, **Then** their account is created successfully with profile data stored in Neon Postgres
+1. **Given** a user is on the signup page, **When** they provide valid email and password, **Then** their account is created successfully with optional profile data stored in Neon Postgres
 2. **Given** a user provides invalid email format, **When** they submit the signup form, **Then** they receive an appropriate error message and form remains accessible
 
 ---
 
 ### User Story 2 - User Authentication and Session Management (Priority: P1)
 
-A returning student or instructor logs into the Physical AI & Humanoid Robotics Textbook platform using their credentials. The system authenticates them via Better-Auth and creates a session to maintain their personalized experience across visits.
+A returning student or instructor logs into the Physical AI & Humanoid Robotics Textbook platform using their credentials. The system authenticates them via Better-Auth and creates a session with timeout after period of inactivity to maintain their personalized experience across visits.
 
 **Why this priority**: This is critical for user retention and ongoing access to personalized features. Without secure signin, users cannot access their personalized learning paths.
 
@@ -79,14 +79,14 @@ A logged-in student accesses textbook content or interacts with the RAG chatbot,
 
 ### Functional Requirements
 
-- **FR-001**: System MUST allow users to create accounts using Better-Auth with email and password authentication
-- **FR-002**: System MUST collect and validate hardware/software profile information during signup (OS, CPU, GPU, RAM, programming experience, robotics experience)
+- **FR-001**: System MUST allow users to create accounts using Better-Auth with email and password authentication only
+- **FR-002**: System MUST collect hardware/software profile information during signup as optional fields (OS, CPU, GPU, RAM, programming experience, robotics experience)
 - **FR-003**: System MUST securely store user profile data in Neon Postgres with appropriate encryption
-- **FR-004**: System MUST authenticate users via Better-Auth and create secure sessions
-- **FR-005**: System MUST maintain user sessions across browser sessions with appropriate timeout mechanisms
+- **FR-004**: System MUST authenticate users via Better-Auth and create secure sessions with timeout after period of inactivity
+- **FR-005**: System MUST maintain user sessions across browser sessions with appropriate timeout mechanisms for both cloud and local deployments
 - **FR-006**: System MUST adapt textbook content difficulty based on user's programming and robotics experience level
 - **FR-007**: System MUST customize chatbot responses based on user's hardware capabilities and experience level
-- **FR-008**: System MUST ensure personalized content and responses are delivered within latency requirements (≤2s cloud, ≤5s local)
+- **FR-008**: System MUST ensure personalized content and responses are delivered within latency requirements (≤2s cloud, ≤5s local) for both cloud and local deployments
 - **FR-009**: System MUST provide WCAG 2.1 AA compliant interfaces for all authentication and personalization features
 - **FR-010**: System MUST allow users to view and update their profile information and personalization preferences
 
@@ -108,3 +108,13 @@ A logged-in student accesses textbook content or interacts with the RAG chatbot,
 - **SC-006**: 95% of users can successfully sign in and maintain their personalized experience across sessions
 - **SC-007**: Chatbot response personalization accuracy reaches 90% based on user profile matching
 - **SC-008**: Accessibility compliance audit confirms WCAG 2.1 AA compliance for all authentication and personalization interfaces
+
+## Clarifications
+
+### Session 2025-12-12
+
+- Q: Which authentication flows are required (email/password, OAuth, multi-factor)? → A: Email/password only
+- Q: Which fields in the user profile are mandatory vs optional? → A: Email/password mandatory only, all profile fields optional
+- Q: Is personalization limited to textbook content or also to chatbot interactions? → A: Both textbook content and chatbot responses
+- Q: Should there be a session timeout or persistent login? → A: Session timeout after period of inactivity
+- Q: Should signup/signin work only on cloud or also local setups? → A: Both cloud and local setups
