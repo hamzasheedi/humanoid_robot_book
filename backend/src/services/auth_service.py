@@ -4,8 +4,9 @@ from datetime import datetime, timedelta
 import jwt
 from passlib.context import CryptContext
 from dotenv import load_dotenv
+import aiohttp
 
-from ..models.user import UserCreate, User
+from ..models.user import User
 
 load_dotenv()
 
@@ -16,6 +17,9 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 SECRET_KEY = os.getenv("SECRET_KEY", "fallback_secret_key_for_development")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+# Better-Auth API configuration
+BETTER_AUTH_URL = os.getenv("BETTER_AUTH_URL", "http://localhost:8000")
 
 class AuthService:
     @staticmethod
@@ -29,7 +33,7 @@ class AuthService:
         return pwd_context.hash(password)
 
     @staticmethod
-    def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    async def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
         """Create a JWT access token."""
         to_encode = data.copy()
         if expires_delta:
@@ -41,7 +45,7 @@ class AuthService:
         return encoded_jwt
 
     @staticmethod
-    def verify_access_token(token: str) -> Optional[dict]:
+    async def verify_access_token(token: str) -> Optional[dict]:
         """Verify a JWT access token and return the payload."""
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -50,7 +54,57 @@ class AuthService:
             return None
 
     @staticmethod
-    def create_user_payload(user: User) -> dict:
+    async def create_user_with_better_auth(email: str, password: str) -> Optional[dict]:
+        """
+        Create a user via Better-Auth API.
+        """
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    f"{BETTER_AUTH_URL}/api/auth/signup",
+                    json={
+                        "email": email,
+                        "password": password
+                    },
+                    headers={"Content-Type": "application/json"}
+                ) as response:
+                    if response.status == 200:
+                        result = await response.json()
+                        return result
+                    else:
+                        print(f"Better-Auth registration failed: {response.status}")
+                        return None
+        except Exception as e:
+            print(f"Error calling Better-Auth API: {str(e)}")
+            return None
+
+    @staticmethod
+    async def authenticate_user_with_better_auth(email: str, password: str) -> Optional[dict]:
+        """
+        Authenticate a user via Better-Auth API.
+        """
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    f"{BETTER_AUTH_URL}/api/auth/signin",
+                    json={
+                        "email": email,
+                        "password": password
+                    },
+                    headers={"Content-Type": "application/json"}
+                ) as response:
+                    if response.status == 200:
+                        result = await response.json()
+                        return result
+                    else:
+                        print(f"Better-Auth authentication failed: {response.status}")
+                        return None
+        except Exception as e:
+            print(f"Error calling Better-Auth API: {str(e)}")
+            return None
+
+    @staticmethod
+    async def create_user_payload(user: User) -> dict:
         """Create a payload for the user JWT token."""
         return {
             "sub": user.id,

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p backend/src/models backend/src/services backend/src/api)",
+      "Bash(mkdir -p frontend/src/components/Auth frontend/src/components/Personalization frontend/src/components/Session frontend/src/services frontend/src/pages)",
+      "Bash(test -f backend/.env)",
+      "Bash(echo \"# Frontend Configuration\nREACT_APP_BACKEND_URL=http://localhost:8000\nREACT_APP_API_KEY=\nREACT_APP_BETTER_AUTH_URL=\")"
+    ]
+  }
+}
