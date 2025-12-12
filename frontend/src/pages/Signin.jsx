@@ -27,9 +27,11 @@ const SigninPage = () => {
   if (isSignedIn) {
     return (
       <div className="signin-success-container">
-        <h1>Welcome Back!</h1>
-        <p>You have been signed in successfully.</p>
-        <p>Redirecting to the homepage...</p>
+        <div className="signin-success-content">
+          <h1>Welcome Back!</h1>
+          <p>You have been signed in successfully.</p>
+          <p>Redirecting to the homepage...</p>
+        </div>
       </div>
     );
   }
@@ -37,8 +39,16 @@ const SigninPage = () => {
   return (
     <div className="signin-page-container">
       <div className="signin-content">
-        <h1>Sign In to Your Account</h1>
-        <p>Access your personalized Physical AI & Humanoid Robotics learning experience</p>
+        <div className="signin-header">
+          <div className="signin-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="#007bff" strokeWidth="2"/>
+              <path d="M6 20C6 17.7909 7.79086 16 10 16H14C16.2091 16 18 17.7909 18 20C18 21.1046 17.1046 22 16 22H8C6.89543 22 6 21.1046 6 20Z" stroke="#007bff" strokeWidth="2"/>
+            </svg>
+          </div>
+          <h1>Sign In to Your Account</h1>
+          <p>Access your personalized Physical AI & Humanoid Robotics learning experience</p>
+        </div>
 
         <SigninForm onSignin={handleSigninSuccess} />
 
@@ -46,6 +56,10 @@ const SigninPage = () => {
           <p>
             Don't have an account? <a href="/signup">Sign Up</a>
           </p>
+        </div>
+
+        <div className="back-to-home">
+          <a href="/">← Back to Homepage</a>
         </div>
       </div>
     </div>

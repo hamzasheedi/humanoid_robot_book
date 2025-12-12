@@ -1,15 +1,52 @@
-/* SignupForm.css - Styles for the signup form component with homepage theme */
+/* ProfileEditor.css - Styles for the profile editor component with homepage theme */
 
-.signup-form-container {
-  max-width: 500px;
+.profile-editor-container {
+  max-width: 600px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.signup-form {
+.profile-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
+}
+
+.form-section {
+  margin-bottom: 25px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: var(--ifm-color-emphasis-100);
+  border: 2px solid var(--ifm-color-emphasis-200);
+  position: relative;
+}
+
+.form-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 70%;
+  height: 4px;
+  background: linear-gradient(90deg, #28a745, #218838);
+}
+
+.form-section h3 {
+  margin: 0 0 20px 0;
+  color: var(--ifm-heading-color);
+  font-size: 1.3rem;
+  position: relative;
+}
+
+.form-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #28a745, #218838);
+  border-radius: 1px;
 }
 
 .form-group {
@@ -33,7 +70,7 @@
   left: 0;
   width: 30px;
   height: 2px;
-  background: linear-gradient(90deg, #6f42c1, #5a32a3);
+  background: linear-gradient(90deg, #28a745, #218838);
   border-radius: 1px;
 }
 
@@ -54,8 +91,8 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #6f42c1;
-  box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.2);
+  border-color: #28a745;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
   transform: translateY(-1px);
 }
 
@@ -81,15 +118,8 @@
   font-size: 1rem;
 }
 
-.error-text {
-  color: #dc3545;
-  font-size: 0.85rem;
-  margin-top: 4px;
-  font-style: italic;
-}
-
-.signup-button {
-  background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+.save-profile-button {
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%);
   color: white;
   padding: 14px 28px;
   border: none;
@@ -101,10 +131,13 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  width: 100%;
+  max-width: 200px;
+  margin-left: auto;
 }
 
-.signup-button::before {
+.save-profile-button::before {
   content: '';
   position: absolute;
   top: 0;
@@ -115,56 +148,21 @@
   transition: left 0.5s;
 }
 
-.signup-button:hover::before {
+.save-profile-button:hover::before {
   left: 100%;
 }
 
-.signup-button:hover {
-  background: linear-gradient(135deg, #5a32a3 0%, #4a2785 100%);
+.save-profile-button:hover {
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(111, 66, 193, 0.4);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
 }
 
-.signup-button:disabled {
+.save-profile-button:disabled {
   background: var(--ifm-color-emphasis-300);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-}
-
-.form-section {
-  margin-top: 25px;
-  padding-top: 25px;
-  border-top: 2px solid var(--ifm-color-emphasis-200);
-  position: relative;
-}
-
-.form-section::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: 30%;
-  right: 30%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #6f42c1, transparent);
-}
-
-.form-section h3 {
-  margin-bottom: 15px;
-  color: var(--ifm-heading-color);
-  font-size: 1.3rem;
-  position: relative;
-}
-
-.form-section h3::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: linear-gradient(90deg, #6f42c1, #5a32a3);
-  border-radius: 1px;
 }
 
 .checkboxes {
@@ -194,13 +192,13 @@
   height: 18px;
   border: 2px solid var(--ifm-color-emphasis-400);
   border-radius: 4px;
-  accent-color: #6f42c1;
+  accent-color: #28a745;
   cursor: pointer;
 }
 
 .checkboxes input[type="checkbox"]:checked {
-  background-color: #6f42c1;
-  border-color: #6f42c1;
+  background-color: #28a745;
+  border-color: #28a745;
 }
 
 .submit-error {
