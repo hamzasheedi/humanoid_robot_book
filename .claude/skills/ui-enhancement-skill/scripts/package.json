@@ -1,0 +1,27 @@
+{
+  "name": "ui-enhancement-skill",
+  "version": "1.0.0",
+  "description": "A skill for enhancing the UI of the Physical AI & Humanoid Robotics Textbook",
+  "main": "index.js",
+  "scripts": {
+    "enhance-all": "node index.js",
+    "enhance-homepage": "node enhance-homepage.js",
+    "enhance-navbar": "node create-navbar.js",
+    "fix-dark-mode": "node fix-dark-mode.js",
+    "generate-logo": "node generate-logo.js",
+    "enhance-chatbot": "node enhance-chatbot.js",
+    "generate-css": "node generate-css.js",
+    "create-components": "node create-components.js"
+  },
+  "keywords": [
+    "ui",
+    "enhancement",
+    "docusaurus",
+    "frontend",
+    "robotics",
+    "textbook"
+  ],
+  "author": "Claude Code",
+  "license": "MIT",
+  "dependencies": {}
+}
