@@ -9,7 +9,8 @@ class QdrantService:
     def __init__(self):
         self.client: Optional[AsyncQdrantClient] = None
         self.collection_name = "textbook_content"
-    
+        self.connected = False
+
     async def connect(self):
         """Initialize Qdrant client connection"""
         try:
@@ -17,19 +18,25 @@ class QdrantService:
                 self.client = AsyncQdrantClient(
                     url=QDRANT_URL,
                     api_key=QDRANT_API_KEY,
+                    https=True,  # Required for Qdrant Cloud
+                    timeout=20.0,
                     prefer_grpc=False
                 )
             else:
                 self.client = AsyncQdrantClient(host=QDRANT_URL)
-            
+
+            # Test connection to ensure it's actually working
+            await self.client.get_collections()
+            self.connected = True
             print("Qdrant client connected successfully")
         except Exception as e:
+            self.connected = False
             print(f"Error connecting to Qdrant: {e}")
             raise
     
     async def setup_collection(self):
         """Create or verify collection exists with proper vector configuration for Cohere embeddings"""
-        if not self.client:
+        if not self.connected:
             raise RuntimeError("Qdrant client not connected")
 
         try:
@@ -52,9 +59,9 @@ class QdrantService:
 
     async def add_embedding(self, content_id: str, embedding: List[float], payload: Dict):
         """Add a single embedding to the collection"""
-        if not self.client:
+        if not self.connected:
             raise RuntimeError("Qdrant client not connected")
-        
+
         try:
             await self.client.upsert(
                 collection_name=self.collection_name,
@@ -72,12 +79,12 @@ class QdrantService:
 
     async def add_embeddings_batch(self, content_ids: List[str], embeddings: List[List[float]], payloads: List[Dict]):
         """Add multiple embeddings to the collection"""
-        if not self.client:
+        if not self.connected:
             raise RuntimeError("Qdrant client not connected")
-        
+
         if len(content_ids) != len(embeddings) or len(content_ids) != len(payloads):
             raise ValueError("content_ids, embeddings, and payloads lists must have the same length")
-        
+
         try:
             points = [
                 models.PointStruct(
@@ -87,7 +94,7 @@ class QdrantService:
                 )
                 for content_id, embedding, payload in zip(content_ids, embeddings, payloads)
             ]
-            
+
             await self.client.upsert(
                 collection_name=self.collection_name,
                 points=points
@@ -98,16 +105,16 @@ class QdrantService:
 
     async def search_similar(self, query_embedding: List[float], limit: int = 3) -> List[Dict]:
         """Search for similar content based on embedding"""
-        if not self.client:
+        if not self.connected:
             raise RuntimeError("Qdrant client not connected")
-        
+
         try:
             results = await self.client.search(
                 collection_name=self.collection_name,
                 query_vector=query_embedding,
                 limit=limit
             )
-            
+
             return [
                 {
                     "id": result.id,
@@ -119,18 +126,18 @@ class QdrantService:
         except Exception as e:
             print(f"Error searching for similar content: {e}")
             return []
-    
+
     async def get_content_by_id(self, content_id: str) -> Optional[Dict]:
         """Get content by its ID"""
-        if not self.client:
+        if not self.connected:
             raise RuntimeError("Qdrant client not connected")
-        
+
         try:
             records = await self.client.retrieve(
                 collection_name=self.collection_name,
                 ids=[content_id]
             )
-            
+
             if records:
                 return {
                     "id": records[0].id,
@@ -140,12 +147,12 @@ class QdrantService:
         except Exception as e:
             print(f"Error retrieving content by ID: {e}")
             return None
-    
+
     async def delete_content_by_id(self, content_id: str):
         """Delete content by its ID"""
-        if not self.client:
+        if not self.connected:
             raise RuntimeError("Qdrant client not connected")
-        
+
         try:
             await self.client.delete(
                 collection_name=self.collection_name,

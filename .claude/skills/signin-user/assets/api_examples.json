@@ -1,0 +1,64 @@
+{
+  "valid_signin_request": {
+    "input": {
+      "email": "johndoe@example.com",
+      "password": "SecurePass123!"
+    },
+    "output": {
+      "auth_result": {
+        "success": true,
+        "message": "Login successful",
+        "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "user_profile": {
+          "id": "user_abc123def456",
+          "email": "johndoe@example.com",
+          "name": "John Doe",
+          "role": "student",
+          "created_at": "2023-01-01T00:00:00Z"
+        }
+      }
+    }
+  },
+  "invalid_credentials": {
+    "input": {
+      "email": "johndoe@example.com",
+      "password": "wrongpassword"
+    },
+    "output": {
+      "auth_result": {
+        "success": false,
+        "message": "Invalid credentials",
+        "auth_token": null,
+        "user_profile": {}
+      }
+    }
+  },
+  "account_not_found": {
+    "input": {
+      "email": "nonexistent@example.com",
+      "password": "anypassword"
+    },
+    "output": {
+      "auth_result": {
+        "success": false,
+        "message": "Account not found",
+        "auth_token": null,
+        "user_profile": {}
+      }
+    }
+  },
+  "api_failure": {
+    "input": {
+      "email": "johndoe@example.com",
+      "password": "SecurePass123!"
+    },
+    "output": {
+      "auth_result": {
+        "success": false,
+        "message": "API error: 500 - Internal server error",
+        "auth_token": null,
+        "user_profile": {}
+      }
+    }
+  }
+}

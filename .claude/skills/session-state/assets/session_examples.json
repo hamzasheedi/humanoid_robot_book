@@ -1,0 +1,67 @@
+{
+  "create_new_session": {
+    "input": {
+      "user_id": "user_123",
+      "session_id": null,
+      "context": "Hello, how can I help you today?"
+    },
+    "output": {
+      "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "context_history": ["Hello, how can I help you today?"]
+    }
+  },
+  "add_to_existing_session": {
+    "input": {
+      "user_id": "user_123",
+      "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "context": "I'm looking for information about humanoid robotics"
+    },
+    "output": {
+      "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "context_history": [
+        "Hello, how can I help you today?",
+        "I'm looking for information about humanoid robotics"
+      ]
+    }
+  },
+  "retrieve_session": {
+    "input": {
+      "user_id": "user_123",
+      "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "context": null
+    },
+    "output": {
+      "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      "context_history": [
+        "Hello, how can I help you today?",
+        "I'm looking for information about humanoid robotics"
+      ]
+    }
+  },
+  "error_cases": {
+    "database_unavailable": {
+      "input": {
+        "user_id": "user_123",
+        "session_id": null,
+        "context": "Hello"
+      },
+      "output": {
+        "session_id": null,
+        "context_history": [],
+        "error": "Database connection failed"
+      }
+    },
+    "session_not_found": {
+      "input": {
+        "user_id": "user_123",
+        "session_id": "invalid-session-id",
+        "context": null
+      },
+      "output": {
+        "session_id": null,
+        "context_history": [],
+        "error": "Session not found"
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@ load_dotenv()
 # Configuration settings
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-NEON_DB_URL = os.getenv("NEON_DB_URL")
+NEON_DB_URL = os.getenv("DATABASE_URL")  # Changed from NEON_DB_URL to DATABASE_URL to match .env file
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 API_KEY = os.getenv("API_KEY")
 
@@ -20,7 +20,7 @@ ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
 # Configuration validation
 def validate_config():
-    required_vars = ["COHERE_API_KEY", "QDRANT_URL", "NEON_DB_URL", "API_KEY"]
+    required_vars = ["COHERE_API_KEY", "QDRANT_URL", "DATABASE_URL", "API_KEY"]  # Changed from NEON_DB_URL to DATABASE_URL
     missing_vars = [var for var in required_vars if not os.getenv(var)]
 
     if missing_vars:

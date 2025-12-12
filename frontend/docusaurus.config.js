@@ -58,20 +58,59 @@ const config = {
       navbar: {
         title: 'Home',
         logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          alt: 'Physical AI & Humanoid Robotics Logo',
+          src: 'img/logo-light.svg',
+          srcDark: 'img/logo-dark.svg',
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
+            to: '/docs/',
             label: 'Textbook',
+            position: 'left',
           },
           {
-            href: 'https://github.com/facebook/docusaurus',
+            to: '/',
+            label: 'Home',
+            position: 'left',
+          },
+          {
+            to: '/docs/modules/',
+            label: 'Modules',
+            position: 'left',
+          },
+          {
+            to: '/docs/exercises/',
+            label: 'Exercises',
+            position: 'left',
+          },
+          {
+            to: '/docs/references/',
+            label: 'Resources',
+            position: 'left',
+          },
+          {
+            href: 'https://github.com/hamzasheedi/humanoid_robot_book/',
             label: 'GitHub',
             position: 'right',
+          },
+          {
+            type: 'dropdown',
+            label: 'Account',
+            position: 'right',
+            items: [
+              {
+                label: 'Sign In',
+                to: '/signin',
+              },
+              {
+                label: 'Sign Up',
+                to: '/signup',
+              },
+              {
+                label: 'Profile',
+                to: '/profile',
+              },
+            ],
           },
         ],
       },

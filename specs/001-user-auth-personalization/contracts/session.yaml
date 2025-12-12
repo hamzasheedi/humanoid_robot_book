@@ -1,0 +1,162 @@
+openapi: 3.0.0
+info:
+  title: Session Management API
+  description: API for managing user sessions
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Local development server
+  - url: https://api.yourdomain.com/api
+    description: Production server
+
+paths:
+  /session/status:
+    get:
+      summary: Check session status
+      description: Checks the current status of the user's session
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Session status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatusResponse'
+        '401':
+          description: Session is invalid or expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/refresh:
+    post:
+      summary: Refresh session
+      description: Refreshes the current user's session to extend its lifetime
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Session refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionRefreshResponse'
+        '401':
+          description: Session is invalid or expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/terminate:
+    post:
+      summary: Terminate session
+      description: Terminates the current user's session
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Session terminated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionTerminateResponse'
+        '401':
+          description: Session is invalid or expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    SessionInfo:
+      type: object
+      properties:
+        session_id:
+          type: string
+          description: Unique identifier for the session
+          example: "session_abc123def456"
+        user_id:
+          type: string
+          description: User ID associated with the session
+          example: "user_xyz789uvw012"
+        created_at:
+          type: string
+          format: date-time
+          description: Session creation timestamp
+          example: "2023-01-01T00:00:00Z"
+        expires_at:
+          type: string
+          format: date-time
+          description: Session expiration timestamp
+          example: "2023-01-01T00:30:00Z"
+        last_activity:
+          type: string
+          format: date-time
+          description: Timestamp of last user activity
+          example: "2023-01-01T00:15:00Z"
+        is_active:
+          type: boolean
+          description: Whether the session is currently active
+          example: true
+        ip_address:
+          type: string
+          description: IP address of the session origin
+          example: "192.168.1.100"
+        user_agent:
+          type: string
+          description: User agent string of the client
+          example: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+
+    SessionStatusResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Session is active"
+        session:
+          $ref: '#/components/schemas/SessionInfo'
+
+    SessionRefreshResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Session refreshed successfully"
+        session:
+          $ref: '#/components/schemas/SessionInfo'
+
+    SessionTerminateResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Session terminated successfully"
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Session has expired"

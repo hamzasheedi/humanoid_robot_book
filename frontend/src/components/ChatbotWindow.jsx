@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { API_CONFIG } from '../config/apiConfig';
 import './ChatbotWindow.css';
 
 const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdChange }) => {
@@ -67,7 +68,7 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
       let data;
       // For testing purposes, use mock responses when backend is not available
       try {
-        const response = await fetch('https://backend-z4du.onrender.com/chat/ask', {
+        const response = await fetch(`${API_CONFIG.BASE_URL}/chat/ask`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -156,7 +157,7 @@ const ChatbotWindow = ({ isOpen, onClose, sessionId: propSessionId, onSessionIdC
       let data;
       // For testing purposes, use mock responses when backend is not available
       try {
-        const response = await fetch('https://backend-z4du.onrender.com/chat/context', {
+        const response = await fetch(`${API_CONFIG.BASE_URL}/chat/context`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

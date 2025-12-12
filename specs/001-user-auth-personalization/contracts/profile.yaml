@@ -1,0 +1,206 @@
+openapi: 3.0.0
+info:
+  title: Profile Management API
+  description: API for managing user profile information
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Local development server
+  - url: https://api.yourdomain.com/api
+    description: Production server
+
+paths:
+  /profile:
+    get:
+      summary: Retrieve user profile
+      description: Retrieves the current user's profile information
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update user profile
+      description: Updates the current user's profile information
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserProfile:
+      type: object
+      description: User profile information
+      properties:
+        user_id:
+          type: string
+          description: Unique identifier for the user
+          example: "user_abc123def456"
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: student@example.com
+        created_at:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+          example: "2023-01-01T00:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Last profile update timestamp
+          example: "2023-01-02T10:30:00Z"
+        os:
+          type: string
+          description: Operating system
+          example: "Windows 10"
+        cpu:
+          type: string
+          description: CPU specifications
+          example: "Intel i7-12700K"
+        gpu:
+          type: string
+          description: GPU specifications
+          example: "NVIDIA RTX 3080"
+        ram_gb:
+          type: integer
+          description: RAM in gigabytes
+          example: 32
+        programming_experience:
+          type: string
+          description: Programming experience level
+          enum: [beginner, intermediate, advanced, expert]
+          example: intermediate
+        robotics_experience:
+          type: string
+          description: Robotics experience level
+          enum: [none, beginner, intermediate, advanced]
+          example: beginner
+        development_environment:
+          type: string
+          description: Preferred development environment
+          example: "Visual Studio Code"
+        primary_language:
+          type: string
+          description: Primary programming language
+          example: "Python"
+        learning_goals:
+          type: array
+          items:
+            type: string
+          description: Array of learning goals
+          example: ["robotics", "AI", "simulation"]
+
+    ProfileUpdateRequest:
+      type: object
+      properties:
+        os:
+          type: string
+          description: Operating system
+          example: "Windows 10"
+        cpu:
+          type: string
+          description: CPU specifications
+          example: "Intel i7-12700K"
+        gpu:
+          type: string
+          description: GPU specifications
+          example: "NVIDIA RTX 3080"
+        ram_gb:
+          type: integer
+          description: RAM in gigabytes
+          example: 32
+        programming_experience:
+          type: string
+          description: Programming experience level
+          enum: [beginner, intermediate, advanced, expert]
+          example: intermediate
+        robotics_experience:
+          type: string
+          description: Robotics experience level
+          enum: [none, beginner, intermediate, advanced]
+          example: beginner
+        development_environment:
+          type: string
+          description: Preferred development environment
+          example: "Visual Studio Code"
+        primary_language:
+          type: string
+          description: Primary programming language
+          example: "Python"
+        learning_goals:
+          type: array
+          items:
+            type: string
+          description: Array of learning goals
+          example: ["robotics", "AI", "simulation"]
+
+    ProfileResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Profile retrieved successfully"
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Invalid profile data"

@@ -49,9 +49,11 @@ def validate_api_key(api_key: str = Depends(lambda: API_KEY)):
 # Include API routes
 from .chat import router as chat_router
 from .textbook import router as textbook_router
+from .auth import router as auth_router
 
 app.include_router(chat_router, prefix="/chat", tags=["chat"])
 app.include_router(textbook_router, prefix="/textbook", tags=["textbook"])
+app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 
 # Health check endpoint
 @app.get("/health")

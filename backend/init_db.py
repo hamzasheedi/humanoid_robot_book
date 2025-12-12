@@ -10,17 +10,54 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-NEON_DB_URL = os.getenv("NEON_DB_URL")
+NEON_DB_URL = os.getenv("DATABASE_URL")
 
 async def init_db():
     conn = await asyncpg.connect(NEON_DB_URL)
-    
+
     try:
+        # Create users table
+        await conn.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id UUID PRIMARY KEY,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                hashed_password VARCHAR(255) NOT NULL,
+                os VARCHAR(100),
+                cpu VARCHAR(100),
+                gpu VARCHAR(100),
+                ram_gb INTEGER,
+                programming_experience VARCHAR(20),
+                robotics_experience VARCHAR(20),
+                development_environment VARCHAR(100),
+                primary_language VARCHAR(50),
+                learning_goals TEXT[],
+                created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+                updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+            )
+        ''')
+        print("+ Created/verified users table")
+
+        # Create sessions table
+        await conn.execute('''
+            CREATE TABLE IF NOT EXISTS sessions (
+                id UUID PRIMARY KEY,
+                user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+                session_token VARCHAR(255) UNIQUE NOT NULL,
+                expires_at TIMESTAMP NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+                updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+                is_active BOOLEAN DEFAULT TRUE,
+                ip_address INET,
+                user_agent TEXT
+            )
+        ''')
+        print("+ Created/verified sessions table")
+
         # Create chat_sessions table
         await conn.execute('''
             CREATE TABLE IF NOT EXISTS chat_sessions (
                 id UUID PRIMARY KEY,
-                user_id UUID,
+                user_id UUID REFERENCES users(id),
                 session_start TIMESTAMP NOT NULL,
                 session_end TIMESTAMP,
                 interaction_count INTEGER DEFAULT 0,
@@ -35,7 +72,7 @@ async def init_db():
                 id UUID PRIMARY KEY,
                 content TEXT NOT NULL,
                 source_context TEXT,
-                user_id UUID,
+                user_id UUID REFERENCES users(id),
                 session_id UUID REFERENCES chat_sessions(id),
                 timestamp TIMESTAMP NOT NULL,
                 metadata JSONB
