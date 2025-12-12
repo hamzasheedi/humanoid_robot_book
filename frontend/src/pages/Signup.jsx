@@ -7,6 +7,14 @@ const SignupPage = () => {
   const [signupResult, setSignupResult] = useState(null);
 
   const handleSignupSuccess = (result) => {
+    // Store authentication tokens in localStorage
+    if (result.auth_token) {
+      localStorage.setItem('auth_token', result.auth_token);
+    }
+    if (result.user_id) {
+      localStorage.setItem('user_id', result.user_id);
+    }
+
     setSignupResult(result);
     setIsSignedUp(true);
   };
@@ -35,7 +43,7 @@ const SignupPage = () => {
         <h1>Create Your Account</h1>
         <p>Join our Physical AI & Humanoid Robotics learning platform</p>
 
-        <SignupForm onSignupSuccess={handleSignupSuccess} />
+        <SignupForm onSignup={handleSignupSuccess} />
 
         <div className="auth-links">
           <p>

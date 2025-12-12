@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProfileEditor from '../components/Auth/ProfileEditor';
+import { API_CONFIG } from '../config/apiConfig';
 import './Profile.css';
 
 const ProfilePage = () => {
@@ -8,47 +9,45 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get user ID from local storage
-    const storedUserId = localStorage.getItem('user_id');
-    if (storedUserId) {
-      setUserId(storedUserId);
-    } else {
-      // Try to get user info from session
-      const fetchUserInfo = async () => {
-        try {
-          const token = localStorage.getItem('auth_token');
-          if (!token) {
-            window.location.href = '/signin';
-            return;
+    // Check for authentication token first
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      window.location.href = '/signin';
+      return;
+    }
+
+    // Try to get user info from session
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH.SESSION_STATUS}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
           }
+        });
 
-          const response = await fetch('/api/auth/session', {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
-
-          if (response.ok) {
-            const sessionData = await response.json();
-            if (sessionData.valid && sessionData.user) {
-              setUserId(sessionData.user.id);
-              setUser(sessionData.user);
-            } else {
-              window.location.href = '/signin';
-            }
+        if (response.ok) {
+          const sessionData = await response.json();
+          if (sessionData.valid && sessionData.user) {
+            setUserId(sessionData.user.id);
+            setUser(sessionData.user);
+            // Also update user_id in localStorage in case it wasn't stored
+            localStorage.setItem('user_id', sessionData.user.id);
           } else {
             window.location.href = '/signin';
           }
-        } catch (error) {
-          console.error('Error fetching user info:', error);
+        } else {
           window.location.href = '/signin';
-        } finally {
-          setIsLoading(false);
         }
-      };
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+        window.location.href = '/signin';
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-      fetchUserInfo();
-    }
+    fetchUserInfo();
   }, []);
 
   const handleProfileSave = (profileData) => {
@@ -62,7 +61,7 @@ const ProfilePage = () => {
     return <div className="profile-loading">Loading profile...</div>;
   }
 
-  if (!userId) {
+  if (!userId && !isLoading) {
     return <div className="profile-error">Please sign in to view your profile.</div>;
   }
 

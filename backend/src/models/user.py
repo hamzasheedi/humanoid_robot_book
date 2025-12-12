@@ -1,6 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union
 from datetime import datetime
+from uuid import UUID
 
 
 class UserBase(BaseModel):
@@ -19,6 +20,10 @@ class UserCreate(UserBase):
     primary_language: Optional[str] = None
     learning_goals: Optional[list] = []
 
+    class Config:
+        # Allow the model to handle None values properly for learning_goals
+        arbitrary_types_allowed = True
+
 
 class UserUpdate(BaseModel):
     os: Optional[str] = None
@@ -31,9 +36,12 @@ class UserUpdate(BaseModel):
     primary_language: Optional[str] = None
     learning_goals: Optional[list] = None
 
+    class Config:
+        arbitrary_types_allowed = True
+
 
 class User(UserBase):
-    id: str
+    id: Union[str, UUID]  # Can handle both UUID objects and string representations
     created_at: datetime
     updated_at: datetime
     os: Optional[str] = None
@@ -48,3 +56,7 @@ class User(UserBase):
 
     class Config:
         from_attributes = True
+        arbitrary_types_allowed = True
+        json_encoders = {
+            UUID: str
+        }

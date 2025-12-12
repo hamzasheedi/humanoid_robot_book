@@ -6,7 +6,7 @@ import os
 from typing import AsyncGenerator
 
 # Get database URL from environment
-DATABASE_URL = os.getenv("NEON_DB_URL", "postgresql://username:password@localhost:5432/humanoid_robot_book")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://username:password@localhost:5432/humanoid_robot_book")
 
 # For Neon Postgres connection pooling
 pool = ConnectionPool(DATABASE_URL)

@@ -2,8 +2,6 @@ from fastapi import APIRouter
 from typing import List, Dict
 import asyncio
 
-from ..api.main import rag_service, postgres_service
-
 router = APIRouter()
 
 @router.get("/modules")

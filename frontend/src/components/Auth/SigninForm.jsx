@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './SigninForm.css';
+import FrontendAuthService from '../../services/FrontendAuthService';
 
 const SigninForm = ({ onSignin }) => {
   const [formData, setFormData] = useState({
@@ -53,27 +55,15 @@ const SigninForm = ({ onSignin }) => {
     setIsLoading(true);
 
     try {
-      // Call the signin API
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        })
+      // Call the signin API using the service
+      const result = await FrontendAuthService.signin({
+        email: formData.email,
+        password: formData.password
       });
 
-      const result = await response.json();
-
-      if (response.ok) {
-        onSignin(result); // Pass the result to parent component
-      } else {
-        setErrors({ submit: result.message || 'Signin failed' });
-      }
+      onSignin(result); // Pass the result to parent component
     } catch (error) {
-      setErrors({ submit: 'Network error occurred' });
+      setErrors({ submit: error.message || 'Network error occurred' });
     } finally {
       setIsLoading(false);
     }

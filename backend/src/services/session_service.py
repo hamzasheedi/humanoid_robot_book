@@ -1,67 +1,88 @@
 from typing import Optional
 from datetime import datetime, timedelta
-from uuid import uuid4
-
+import uuid
+import asyncpg
 from ..models.session import Session, SessionCreate
+from ..utils.database import db
 
 
 class SessionService:
     @staticmethod
-    async def create_session(user_id: str, ip_address: Optional[str] = None, user_agent: Optional[str] = None) -> Session:
+    async def create_session(user_id: str, ip_address: Optional[str] = None, user_agent: Optional[str] = None) -> Optional[Session]:
         """
-        Create a new session for a user with a timeout.
-        In a real implementation, this would store in Neon Postgres.
+        Create a new session for a user with a timeout in Neon Postgres.
         """
-        # Generate a unique session token
-        session_token = str(uuid4())
+        session_id = str(uuid.uuid4())
+        session_token = str(uuid.uuid4())
+        now = datetime.utcnow()
+        expires_at = now + timedelta(minutes=30)  # 30 minutes timeout
 
-        # Set session to expire after 30 minutes of inactivity
-        expires_at = datetime.utcnow() + timedelta(minutes=30)
+        async with db.get_connection() as conn:
+            try:
+                query = """
+                    INSERT INTO sessions (id, user_id, session_token, expires_at, created_at, updated_at, ip_address, user_agent)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                    RETURNING id, user_id, session_token, created_at, updated_at, expires_at, is_active, ip_address, user_agent
+                """
+                result = await conn.fetchrow(
+                    query,
+                    session_id,
+                    user_id,
+                    session_token,
+                    expires_at,
+                    now,
+                    now,
+                    ip_address,
+                    user_agent
+                )
 
-        # Create session object
-        session_data = SessionCreate(
-            user_id=user_id,
-            session_token=session_token,
-            expires_at=expires_at,
-            ip_address=ip_address,
-            user_agent=user_agent
-        )
-
-        # Create the full session object
-        session = Session(
-            id=str(uuid4()),
-            user_id=session_data.user_id,
-            session_token=session_data.session_token,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
-            expires_at=session_data.expires_at,
-            is_active=True,
-            ip_address=session_data.ip_address,
-            user_agent=session_data.user_agent
-        )
-
-        # In a real implementation, we would store this in Neon Postgres
-        # await database.sessions.insert_one(session.dict())
-
-        return session
+                if result:
+                    return Session(
+                        id=result['id'],
+                        user_id=result['user_id'],
+                        session_token=result['session_token'],
+                        created_at=result['created_at'],
+                        updated_at=result['updated_at'],
+                        expires_at=result['expires_at'],
+                        is_active=result['is_active'],
+                        ip_address=result['ip_address'],
+                        user_agent=result['user_agent']
+                    )
+                return None
+            except Exception as e:
+                print(f"Error creating session: {e}")
+                return None
 
     @staticmethod
     async def get_session_by_token(session_token: str) -> Optional[Session]:
         """
-        Retrieve a session by its token.
-        In a real implementation, this would fetch from Neon Postgres.
+        Retrieve a session by its token from Neon Postgres.
         """
-        # Placeholder implementation
-        # In a real implementation, we would fetch from Neon Postgres:
-        # session_data = await database.sessions.find_one({
-        #     "session_token": session_token,
-        #     "is_active": True,
-        #     "expires_at": {"$gt": datetime.utcnow()}
-        # })
-        # if session_data:
-        #     return Session(**session_data)
-        # return None
-        return None
+        async with db.get_connection() as conn:
+            try:
+                query = """
+                    SELECT id, user_id, session_token, created_at, updated_at, expires_at, is_active, ip_address, user_agent
+                    FROM sessions
+                    WHERE session_token = $1 AND is_active = TRUE AND expires_at > $2
+                """
+                result = await conn.fetchrow(query, session_token, datetime.utcnow())
+
+                if result:
+                    return Session(
+                        id=result['id'],
+                        user_id=result['user_id'],
+                        session_token=result['session_token'],
+                        created_at=result['created_at'],
+                        updated_at=result['updated_at'],
+                        expires_at=result['expires_at'],
+                        is_active=result['is_active'],
+                        ip_address=result['ip_address'],
+                        user_agent=result['user_agent']
+                    )
+                return None
+            except Exception as e:
+                print(f"Error getting session by token: {e}")
+                return None
 
     @staticmethod
     async def validate_session(session_token: str) -> bool:
@@ -76,38 +97,60 @@ class SessionService:
     @staticmethod
     async def invalidate_session(session_token: str) -> bool:
         """
-        Mark a session as inactive (logout).
-        In a real implementation, this would update Neon Postgres.
+        Mark a session as inactive (logout) in Neon Postgres.
         """
-        # Placeholder implementation
-        # In a real implementation, we would update in Neon Postgres:
-        # result = await database.sessions.update_one(
-        #     {"session_token": session_token},
-        #     {"$set": {"is_active": False, "updated_at": datetime.utcnow()}}
-        # )
-        # return result.modified_count > 0
-        return True
+        async with db.get_connection() as conn:
+            try:
+                query = """
+                    UPDATE sessions
+                    SET is_active = FALSE, updated_at = $2
+                    WHERE session_token = $1
+                    RETURNING id
+                """
+                result = await conn.fetchval(query, session_token, datetime.utcnow())
+                return result is not None
+            except Exception as e:
+                print(f"Error invalidating session: {e}")
+                return False
 
     @staticmethod
     async def refresh_session(session_token: str) -> Optional[Session]:
         """
-        Extend the expiration time of an active session.
-        In a real implementation, this would update Neon Postgres.
+        Extend the expiration time of an active session in Neon Postgres.
         """
-        session = await SessionService.get_session_by_token(session_token)
-        if session:
-            # Extend session by 30 minutes from now
-            new_expires_at = datetime.utcnow() + timedelta(minutes=30)
+        async with db.get_connection() as conn:
+            try:
+                # First, get the current session
+                current_session = await SessionService.get_session_by_token(session_token)
+                if not current_session:
+                    return None
 
-            # Update the session expiration
-            session.expires_at = new_expires_at
-            session.updated_at = datetime.utcnow()
+                # Extend session by 30 minutes from now
+                new_expires_at = datetime.utcnow() + timedelta(minutes=30)
+                now = datetime.utcnow()
 
-            # In a real implementation, we would update in Neon Postgres:
-            # await database.sessions.update_one(
-            #     {"id": session.id},
-            #     {"$set": {"expires_at": new_expires_at, "updated_at": datetime.utcnow()}}
-            # )
+                # Update the session in the database
+                query = """
+                    UPDATE sessions
+                    SET expires_at = $2, updated_at = $3
+                    WHERE session_token = $1
+                    RETURNING id, user_id, session_token, created_at, updated_at, expires_at, is_active, ip_address, user_agent
+                """
+                result = await conn.fetchrow(query, session_token, new_expires_at, now)
 
-            return session
-        return None
+                if result:
+                    return Session(
+                        id=result['id'],
+                        user_id=result['user_id'],
+                        session_token=result['session_token'],
+                        created_at=result['created_at'],
+                        updated_at=result['updated_at'],
+                        expires_at=result['expires_at'],
+                        is_active=result['is_active'],
+                        ip_address=result['ip_address'],
+                        user_agent=result['user_agent']
+                    )
+                return None
+            except Exception as e:
+                print(f"Error refreshing session: {e}")
+                return None

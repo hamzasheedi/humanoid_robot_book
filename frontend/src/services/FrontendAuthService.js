@@ -1,9 +1,21 @@
 // FrontendAuthService.js
 // Service for handling authentication API calls
+import { initializeApiConfig, API_CONFIG } from '../config/apiConfig';
+
+// Initialize the API config with the backend URL from environment if available
+// Wrap in try-catch to handle cases where process is not available during build
+try {
+  if (typeof process !== 'undefined' && process.env && process.env.REACT_APP_BACKEND_URL) {
+    initializeApiConfig(process.env.REACT_APP_BACKEND_URL);
+  }
+} catch (error) {
+  // If process is not defined (e.g., during browser execution), continue with default config
+  console.warn('Environment variable access failed, using default config:', error.message);
+}
 
 class FrontendAuthService {
   constructor() {
-    this.baseUrl = process.env.REACT_APP_BACKEND_URL || '';
+    this.baseUrl = API_CONFIG.BASE_URL;
   }
 
   // Sign up a new user
@@ -98,7 +110,7 @@ class FrontendAuthService {
         return { valid: false, user: null };
       }
 
-      const response = await fetch(`${this.baseUrl}/api/auth/session`, {
+      const response = await fetch(`${this.baseUrl}/api/auth/session-status`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -126,7 +138,7 @@ class FrontendAuthService {
         throw new Error('No token available for refresh');
       }
 
-      const response = await fetch(`${this.baseUrl}/api/auth/refresh`, {
+      const response = await fetch(`${this.baseUrl}/api/auth/refresh-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

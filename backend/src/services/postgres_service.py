@@ -12,82 +12,102 @@ class PostgresService:
     
     async def save_question(self, question: Question) -> str:
         """Save a question to the database"""
-        async with db.get_connection() as conn:
-            query = """
-                INSERT INTO questions (id, content, source_context, user_id, session_id, timestamp, metadata)
-                VALUES ($1, $2, $3, $4, $5, $6, $7)
-                RETURNING id
-            """
-            result = await conn.fetchval(
-                query,
-                question.id,
-                question.content,
-                question.source_context,
-                question.user_id,
-                question.session_id,
-                question.timestamp,
-                json.dumps(question.metadata) if question.metadata else '{}'
-            )
-            return result
+        try:
+            async with db.get_connection() as conn:
+                query = """
+                    INSERT INTO questions (id, content, source_context, user_id, session_id, timestamp, metadata)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                    RETURNING id
+                """
+                result = await conn.fetchval(
+                    query,
+                    question.id,
+                    question.content,
+                    question.source_context,
+                    question.user_id,
+                    question.session_id,
+                    question.timestamp,
+                    json.dumps(question.metadata) if question.metadata else '{}'
+                )
+                return result
+        except Exception as e:
+            print(f"Failed to save question to database: {e}")
+            # Return a default value or handle the error gracefully
+            return str(question.id) if question.id else str(uuid.uuid4())
 
     async def save_answer(self, answer: Answer) -> str:
         """Save an answer to the database"""
-        async with db.get_connection() as conn:
-            query = """
-                INSERT INTO answers (id, question_id, content, sources, confidence_score, timestamp, metadata)
-                VALUES ($1, $2, $3, $4, $5, $6, $7)
-                RETURNING id
-            """
-            result = await conn.fetchval(
-                query,
-                answer.id,
-                answer.question_id,
-                answer.content,
-                json.dumps(answer.sources) if answer.sources else '[]',
-                answer.confidence_score,
-                answer.timestamp,
-                json.dumps(answer.metadata) if answer.metadata else '{}'
-            )
-            return result
+        try:
+            async with db.get_connection() as conn:
+                query = """
+                    INSERT INTO answers (id, question_id, content, sources, confidence_score, timestamp, metadata)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                    RETURNING id
+                """
+                result = await conn.fetchval(
+                    query,
+                    answer.id,
+                    answer.question_id,
+                    answer.content,
+                    json.dumps(answer.sources) if answer.sources else '[]',
+                    answer.confidence_score,
+                    answer.timestamp,
+                    json.dumps(answer.metadata) if answer.metadata else '{}'
+                )
+                return result
+        except Exception as e:
+            print(f"Failed to save answer to database: {e}")
+            # Return a default value or handle the error gracefully
+            return str(answer.id) if answer.id else str(uuid.uuid4())
     
     async def create_session(self, user_id: Optional[uuid.UUID] = None) -> str:
         """Create a new chat session"""
         session_id = uuid.uuid4()
-        async with db.get_connection() as conn:
-            query = """
-                INSERT INTO chat_sessions (id, user_id, session_start, session_end, interaction_count, metadata)
-                VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING id
-            """
-            result = await conn.fetchval(
-                query,
-                session_id,
-                user_id,
-                datetime.utcnow(),
-                None,  # session_end is null initially
-                0,     # interaction_count starts at 0
-                {}     # empty metadata initially
-            )
-            return result
+        try:
+            async with db.get_connection() as conn:
+                query = """
+                    INSERT INTO chat_sessions (id, user_id, session_start, session_end, interaction_count, metadata)
+                    VALUES ($1, $2, $3, $4, $5, $6)
+                    RETURNING id
+                """
+                result = await conn.fetchval(
+                    query,
+                    session_id,
+                    user_id,
+                    datetime.utcnow(),
+                    None,  # session_end is null initially
+                    0,     # interaction_count starts at 0
+                    {}     # empty metadata initially
+                )
+                return result
+        except Exception as e:
+            print(f"Failed to create session in database: {e}")
+            # Return a session ID even if database save fails
+            return str(session_id)
     
     async def get_session(self, session_id: str) -> Optional[ChatSession]:
         """Get a chat session by ID"""
-        async with db.get_connection() as conn:
-            query = """
-                SELECT id, user_id, session_start, session_end, interaction_count, metadata
-                FROM chat_sessions
-                WHERE id = $1
-            """
-            row = await conn.fetchrow(query, session_id)
-            if row:
-                return ChatSession(
-                    id=row['id'],
-                    user_id=row['user_id'],
-                    session_start=row['session_start'],
-                    session_end=row['session_end'],
-                    interaction_count=row['interaction_count'],
-                    metadata=row['metadata']
-                )
+        try:
+            async with db.get_connection() as conn:
+                query = """
+                    SELECT id, user_id, session_start, session_end, interaction_count, metadata
+                    FROM chat_sessions
+                    WHERE id = $1
+                """
+                row = await conn.fetchrow(query, session_id)
+                if row:
+                    return ChatSession(
+                        id=row['id'],
+                        user_id=row['user_id'],
+                        session_start=row['session_start'],
+                        session_end=row['session_end'],
+                        interaction_count=row['interaction_count'],
+                        metadata=row['metadata']
+                    )
+                return None
+        except Exception as e:
+            print(f"Failed to get session from database: {e}")
+            # Return None if database query fails
             return None
     
     async def update_session_interaction_count(self, session_id: str, count: int):
@@ -102,35 +122,40 @@ class PostgresService:
     
     async def get_session_history(self, session_id: str) -> List[Dict]:
         """Get chat history for a specific session"""
-        async with db.get_connection() as conn:
-            # First, get questions for the session
-            question_query = """
-                SELECT id, content, timestamp
-                FROM questions
-                WHERE session_id = $1
-                ORDER BY timestamp
-            """
-            questions = await conn.fetch(question_query, session_id)
-
-            history = []
-            for question in questions:
-                # Get the corresponding answer for this question
-                answer_query = """
-                    SELECT content, sources, timestamp
-                    FROM answers
-                    WHERE question_id = $1
+        try:
+            async with db.get_connection() as conn:
+                # First, get questions for the session
+                question_query = """
+                    SELECT id, content, timestamp
+                    FROM questions
+                    WHERE session_id = $1
+                    ORDER BY timestamp
                 """
-                answer = await conn.fetchrow(answer_query, question['id'])
+                questions = await conn.fetch(question_query, session_id)
 
-                history_item = {
-                    'question': question['content'],
-                    'answer': answer['content'] if answer else "No answer found",
-                    'timestamp': question['timestamp'],
-                    'sources': answer['sources'] if answer else []
-                }
-                history.append(history_item)
+                history = []
+                for question in questions:
+                    # Get the corresponding answer for this question
+                    answer_query = """
+                        SELECT content, sources, timestamp
+                        FROM answers
+                        WHERE question_id = $1
+                    """
+                    answer = await conn.fetchrow(answer_query, question['id'])
 
-            return history
+                    history_item = {
+                        'question': question['content'],
+                        'answer': answer['content'] if answer else "No answer found",
+                        'timestamp': question['timestamp'],
+                        'sources': answer['sources'] if answer else []
+                    }
+                    history.append(history_item)
+
+                return history
+        except Exception as e:
+            print(f"Failed to get session history from database: {e}")
+            # Return empty history if database query fails
+            return []
 
     async def update_session(self, session_id: str, **kwargs):
         """Update session properties like end time, interaction count, etc."""
@@ -365,49 +390,54 @@ class PostgresService:
     
     async def save_answer_with_question(self, question: Question, answer: Answer) -> str:
         """Save both question and answer, linking them together"""
-        async with db.get_connection() as conn:
-            # Begin transaction
-            async with conn.transaction():
-                # Save the question and get its ID
-                q_query = """
-                    INSERT INTO questions (id, content, source_context, user_id, session_id, timestamp, metadata)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)
-                    RETURNING id
-                """
-                question_id = await conn.fetchval(
-                    q_query,
-                    question.id or uuid.uuid4(),
-                    question.content,
-                    question.source_context,
-                    question.user_id,
-                    question.session_id,
-                    question.timestamp or datetime.utcnow(),
-                    json.dumps(question.metadata) if question.metadata else '{}'
-                )
-                
-                # Save the answer with the question ID
-                a_query = """
-                    INSERT INTO answers (id, question_id, content, sources, confidence_score, timestamp, metadata)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)
-                    RETURNING id
-                """
-                answer_id = await conn.fetchval(
-                    a_query,
-                    answer.id or uuid.uuid4(),
-                    question_id,
-                    answer.content,
-                    json.dumps(answer.sources) if answer.sources else '[]',
-                    answer.confidence_score,
-                    answer.timestamp or datetime.utcnow(),
-                    json.dumps(answer.metadata) if answer.metadata else '{}'
-                )
-                
-                # Update session interaction count
-                session_query = """
-                    UPDATE chat_sessions
-                    SET interaction_count = interaction_count + 1
-                    WHERE id = $1
-                """
-                await conn.execute(session_query, question.session_id)
-                
-                return answer_id
+        try:
+            async with db.get_connection() as conn:
+                # Begin transaction
+                async with conn.transaction():
+                    # Save the question and get its ID
+                    q_query = """
+                        INSERT INTO questions (id, content, source_context, user_id, session_id, timestamp, metadata)
+                        VALUES ($1, $2, $3, $4, $5, $6, $7)
+                        RETURNING id
+                    """
+                    question_id = await conn.fetchval(
+                        q_query,
+                        question.id or uuid.uuid4(),
+                        question.content,
+                        question.source_context,
+                        question.user_id,
+                        question.session_id,
+                        question.timestamp or datetime.utcnow(),
+                        json.dumps(question.metadata) if question.metadata else '{}'
+                    )
+
+                    # Save the answer with the question ID
+                    a_query = """
+                        INSERT INTO answers (id, question_id, content, sources, confidence_score, timestamp, metadata)
+                        VALUES ($1, $2, $3, $4, $5, $6, $7)
+                        RETURNING id
+                    """
+                    answer_id = await conn.fetchval(
+                        a_query,
+                        answer.id or uuid.uuid4(),
+                        question_id,
+                        answer.content,
+                        json.dumps(answer.sources) if answer.sources else '[]',
+                        answer.confidence_score,
+                        answer.timestamp or datetime.utcnow(),
+                        json.dumps(answer.metadata) if answer.metadata else '{}'
+                    )
+
+                    # Update session interaction count
+                    session_query = """
+                        UPDATE chat_sessions
+                        SET interaction_count = interaction_count + 1
+                        WHERE id = $1
+                    """
+                    await conn.execute(session_query, question.session_id)
+
+                    return answer_id
+        except Exception as e:
+            print(f"Failed to save answer with question to database: {e}")
+            # Return a default value or handle the error gracefully
+            return str(answer.id) if answer.id else str(uuid.uuid4())

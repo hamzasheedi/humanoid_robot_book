@@ -7,6 +7,14 @@ const SigninPage = () => {
   const [signinResult, setSigninResult] = useState(null);
 
   const handleSigninSuccess = (result) => {
+    // Store authentication tokens in localStorage
+    if (result.auth_token) {
+      localStorage.setItem('auth_token', result.auth_token);
+    }
+    if (result.user_id) {
+      localStorage.setItem('user_id', result.user_id);
+    }
+
     setSigninResult(result);
     setIsSignedIn(true);
 
@@ -32,7 +40,7 @@ const SigninPage = () => {
         <h1>Sign In to Your Account</h1>
         <p>Access your personalized Physical AI & Humanoid Robotics learning experience</p>
 
-        <SigninForm onSigninSuccess={handleSigninSuccess} />
+        <SigninForm onSignin={handleSigninSuccess} />
 
         <div className="auth-links">
           <p>

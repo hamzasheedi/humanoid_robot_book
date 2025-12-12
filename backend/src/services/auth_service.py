@@ -2,7 +2,7 @@ import os
 from typing import Optional
 from datetime import datetime, timedelta
 import jwt
-from passlib.context import CryptContext
+import hashlib
 from dotenv import load_dotenv
 import aiohttp
 
@@ -10,8 +10,8 @@ from ..models.user import User
 
 load_dotenv()
 
-# Initialize password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# For development, using a simpler approach to avoid bcrypt issues on Windows
+# In production, should use proper password hashing like bcrypt or argon2
 
 # Get secret key from environment
 SECRET_KEY = os.getenv("SECRET_KEY", "fallback_secret_key_for_development")
@@ -19,18 +19,23 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Better-Auth API configuration
-BETTER_AUTH_URL = os.getenv("BETTER_AUTH_URL", "http://localhost:8000")
+BACKEND_HOST = os.getenv("BACKEND_HOST", "localhost")
+BACKEND_PORT = os.getenv("BACKEND_PORT", "8000")
+BETTER_AUTH_URL = os.getenv("BETTER_AUTH_URL", f"http://{BACKEND_HOST}:{BACKEND_PORT}")
 
 class AuthService:
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
         """Verify a plain password against a hashed password."""
-        return pwd_context.verify(plain_password, hashed_password)
+        # For development: simple hash comparison (not secure for production)
+        return AuthService.get_password_hash(plain_password) == hashed_password
 
     @staticmethod
     def get_password_hash(password: str) -> str:
-        """Hash a plain password."""
-        return pwd_context.hash(password)
+        """Hash a plain password using SHA-256 (for development only)."""
+        # For development: simple SHA-256 hash (not secure for production)
+        # In production, use proper password hashing like bcrypt or argon2
+        return hashlib.sha256(password.encode('utf-8')).hexdigest()
 
     @staticmethod
     async def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:

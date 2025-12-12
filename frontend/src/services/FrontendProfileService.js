@@ -1,9 +1,21 @@
 // FrontendProfileService.js
 // Service for handling profile API calls
+import { initializeApiConfig, API_CONFIG } from '../config/apiConfig';
+
+// Initialize the API config with the backend URL from environment if available
+// Wrap in try-catch to handle cases where process is not available during build
+try {
+  if (typeof process !== 'undefined' && process.env && process.env.REACT_APP_BACKEND_URL) {
+    initializeApiConfig(process.env.REACT_APP_BACKEND_URL);
+  }
+} catch (error) {
+  // If process is not defined (e.g., during browser execution), continue with default config
+  console.warn('Environment variable access failed, using default config:', error.message);
+}
 
 class FrontendProfileService {
   constructor() {
-    this.baseUrl = process.env.REACT_APP_BACKEND_URL || '';
+    this.baseUrl = API_CONFIG.BASE_URL;
   }
 
   // Get user profile by user ID

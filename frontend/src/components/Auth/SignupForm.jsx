@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './SignupForm.css';
+import FrontendAuthService from '../../services/FrontendAuthService';
 
 const SignupForm = ({ onSignup }) => {
   const [formData, setFormData] = useState({
@@ -93,38 +94,24 @@ const SignupForm = ({ onSignup }) => {
     setIsLoading(true);
 
     try {
-      // Call the signup API
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          profile: {
-            os: formData.os,
-            cpu: formData.cpu,
-            gpu: formData.gpu,
-            ram_gb: parseInt(formData.ram_gb) || null,
-            programming_experience: formData.programming_experience,
-            robotics_experience: formData.robotics_experience,
-            development_environment: formData.development_environment,
-            primary_language: formData.primary_language,
-            learning_goals: formData.learning_goals
-          }
-        })
+      // Call the signup API using the service
+      const result = await FrontendAuthService.signup({
+        email: formData.email,
+        password: formData.password,
+        os: formData.os,
+        cpu: formData.cpu,
+        gpu: formData.gpu,
+        ram_gb: parseInt(formData.ram_gb) || null,
+        programming_experience: formData.programming_experience,
+        robotics_experience: formData.robotics_experience,
+        development_environment: formData.development_environment,
+        primary_language: formData.primary_language,
+        learning_goals: formData.learning_goals
       });
 
-      const result = await response.json();
-
-      if (response.ok) {
-        onSignup(result); // Pass the result to parent component
-      } else {
-        setErrors({ submit: result.message || 'Signup failed' });
-      }
+      onSignup(result); // Pass the result to parent component
     } catch (error) {
-      setErrors({ submit: 'Network error occurred' });
+      setErrors({ submit: error.message || 'Network error occurred' });
     } finally {
       setIsLoading(false);
     }
