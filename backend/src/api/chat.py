@@ -40,7 +40,7 @@ async def ask_question(request: Request, req: ChatRequest):
     try:
         # Create or use existing session
         if not session_id:
-            from ..main import postgres_service
+            from .main import postgres_service
             session_id = str(await postgres_service.create_session())
 
         # Create question object
@@ -55,7 +55,7 @@ async def ask_question(request: Request, req: ChatRequest):
         )
 
         # Get answer using RAG service
-        from ..main import rag_service
+        from .main import rag_service
         answer_obj = await rag_service.get_answer(question, selected_text, session_id)
 
         # Complete answer object with proper IDs
@@ -63,7 +63,7 @@ async def ask_question(request: Request, req: ChatRequest):
         answer_obj.question_id = question_obj.id
 
         # Save to database
-        from ..main import postgres_service
+        from .main import postgres_service
         await postgres_service.save_answer_with_question(question_obj, answer_obj)
 
         # Prepare response
@@ -112,7 +112,7 @@ async def get_context_from_selection(request: Request, req: ContextRequest):
 
     try:
         # Get context using RAG service
-        from ..main import rag_service
+        from .main import rag_service
         context = await rag_service.get_context_for_selection(selected_text, session_id)
 
         if not context or context.startswith("No relevant content"):
@@ -145,7 +145,7 @@ async def get_chat_history(request: Request, session_id: str):
         raise HTTPException(status_code=400, detail="Session ID is required")
 
     try:
-        from ..main import postgres_service
+        from .main import postgres_service
         history = await postgres_service.get_session_history(session_id)
 
         if not history:
@@ -177,7 +177,7 @@ async def get_session_history(session_id: str):
         raise HTTPException(status_code=400, detail="Session ID is required")
 
     try:
-        from ..main import postgres_service
+        from .main import postgres_service
         history = await postgres_service.get_session_history(session_id)
 
         if not history:
