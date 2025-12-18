@@ -3,7 +3,7 @@
 
 // Global variable to hold the backend URL
 // Check if process is available (Node.js environment) or use default
-let BACKEND_URL = 'https://backend-z4du.onrender.com;
+let BACKEND_URL = 'https://backend-z4du.onrender.com';
 
 // Try to get backend URL from environment if available
 if (typeof process !== 'undefined' && process.env && process.env.REACT_APP_BACKEND_URL) {
